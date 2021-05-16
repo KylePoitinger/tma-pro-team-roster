@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import main.java.entity.ProPlayerEntity;
-import main.java.entity.ProTeamEntity;
 import main.java.service.ProPlayerService;
 
 @RestController
