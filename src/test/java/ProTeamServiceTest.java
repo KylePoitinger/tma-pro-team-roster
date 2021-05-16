@@ -1,34 +1,33 @@
 package test.java;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import main.java.entity.ProTeamEntity;
 import main.java.repository.ProTeamRepo;
 import main.java.service.ProTeamService;
 
+
 public class ProTeamServiceTest {
 
-	private ProTeamService proTeamService;
+	@Autowired
 	private ProTeamRepo proTeamRepo;
 
-	@Mock
-	private ProTeamEntity proTeam;
+	@Autowired
+	private ProTeamService proTeamService;	
 
+	ProTeamEntity proTeam = new ProTeamEntity();
+	
 	@Before
-	public void setupMock() {
-		proTeamService = new ProTeamService(proTeamRepo);
-		MockitoAnnotations.initMocks(this);
-	}
-
-	@Test
-	public void testMockCreation() {
-		assertNotNull(proTeam);
+	public void setUp() {
+		this.proTeamService = new ProTeamService(proTeamRepo); 
+		proTeam.teamId = 10;
+		proTeam.city = "CharlotteLight";
+		proTeam.name = "HornetsTail";
+		proTeam.mascot = "Giant Bee Thing";
 	}
 
 	@Test
