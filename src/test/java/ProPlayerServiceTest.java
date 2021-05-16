@@ -1,6 +1,8 @@
-package test.java;
-
-public class ProPlayerServiceTest {
+//package test.java;
+//
+//@RunWith(SpringRunner.class)
+//@WebMvcTest(ProPlayerService.class)
+//public class ProPlayerServiceTest {
 
 //	private ProPlayerService proPlayerService;
 //	private ProPlayerRepo proPlayerRepo;
@@ -45,5 +47,5 @@ public class ProPlayerServiceTest {
 //		ProPlayerService.deleteProPlayer(proPlayer.playerId);
 //		assertTrue(ProPlayerService.getProPlayer(proPlayer.playerId) == null);
 //	}
-
-}
+//
+//}
