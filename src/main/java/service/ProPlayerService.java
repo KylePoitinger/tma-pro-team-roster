@@ -20,21 +20,33 @@ public class ProPlayerService {
 		return proPlayerRepo.getOneByPlayerId(playerId);
 	}
 
-	public static ProPlayerEntity createProPlayer() {
-		return null;
-		// TODO Auto-generated method stub
-
+	public static ProPlayerEntity createProPlayer(ProPlayerEntity createPlayerReq) {
+		return proPlayerRepo.save(createPlayerReq);
 	}
 
-	public static ProPlayerEntity updateProPlayer() {
-		return null;
-		// TODO Auto-generated method stub
-
+	public static ProPlayerEntity updateProPlayer(long playerId, ProPlayerEntity updatePlayerReq) {
+		return proPlayerRepo.findById(playerId).map(player -> {
+			player.name = updatePlayerReq.name;
+			player.position = updatePlayerReq.position;
+			player.teamName = updatePlayerReq.teamName;
+			player.age = updatePlayerReq.age;
+			player.height = updatePlayerReq.height;
+			player.weight = updatePlayerReq.weight;
+			player.college = updatePlayerReq.college;
+			player.salary = updatePlayerReq.salary;
+			return proPlayerRepo.save(player);
+		}).orElseGet(() -> {
+			return proPlayerRepo.save(updatePlayerReq);
+		});
 	}
 
-	public static ProPlayerEntity deleteProPlayer() {
-		return null;
-		// TODO Auto-generated method stub
-
+	public static String deleteProPlayer(long playerId) {
+		try {
+			proPlayerRepo.deletePlayerById(playerId);
+		} catch (Exception e) {
+			return "Delete was unsuccessful with error: " + e.toString();
+		}
+		return "Delete was successful for team:" + playerId;
 	}
+
 }

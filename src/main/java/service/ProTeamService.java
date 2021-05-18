@@ -38,21 +38,29 @@ public class ProTeamService {
 			return null;
 	}
 
-	public static ProTeamEntity createTeam() {
-		return null;
-		// TODO Auto-generated method stub
-
+	public static ProTeamEntity createTeam(ProTeamEntity createTeamReq) {
+		return proTeamRepo.save(createTeamReq);
 	}
 
-	public static ProTeamEntity updateTeam() {
-		return null;
-		// TODO Auto-generated method stub
+	public static ProTeamEntity updateTeam(long teamId, ProTeamEntity updateTeamReq) {
 
+		return proTeamRepo.findById(teamId).map(team -> {
+			team.city = updateTeamReq.city;
+			team.mascot = updateTeamReq.mascot;
+			team.name = updateTeamReq.name;
+			return proTeamRepo.save(team);
+		}).orElseGet(() -> {
+			return proTeamRepo.save(updateTeamReq);
+		});
 	}
 
-	public static ProTeamEntity deleteTeam() {
-		return null;
-		// TODO Auto-generated method stub
+	public static String deleteTeam(long teamId) {
+		try {
+			proTeamRepo.deleteTeamById(teamId);
+		} catch (Exception e) {
+			return "Delete was unsuccessful with error: " + e.toString();
+		}
+		return "Delete was successful for team:" + teamId;
 
 	}
 

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,21 +39,22 @@ public class ProTeamController {
 	// posts
 
 	@PostMapping("/teams")
-	public ProTeamEntity createTeam() {
-		return ProTeamService.createTeam();
+	public ProTeamEntity createTeam(@RequestBody ProTeamEntity createTeamReq) {
+		return ProTeamService.createTeam(createTeamReq);
 	}
 
 	// puts
 
 	@PutMapping("/teams/{teamId}")
-	public ProTeamEntity updateTeam() {
-		return ProTeamService.updateTeam();
+	public ProTeamEntity updateTeam(@PathVariable(value = "teamId") long teamId,
+			@RequestBody ProTeamEntity updateTeamReq) {
+		return ProTeamService.updateTeam(teamId, updateTeamReq);
 	}
 
 	// deletes
 
 	@DeleteMapping("/teams/{teamId}")
-	public ProTeamEntity deleteTeam() {
-		return ProTeamService.deleteTeam();
+	public String deleteTeam(@PathVariable(value = "teamId") long teamId) {
+		return ProTeamService.deleteTeam(teamId);
 	}
 }

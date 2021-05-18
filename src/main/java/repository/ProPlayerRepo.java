@@ -10,4 +10,6 @@ public interface ProPlayerRepo extends JpaRepository<ProPlayerEntity, Long> {
 
 	ProPlayerEntity getOneByPlayerId(long playerId);
 
+	void deletePlayerById(long playerId);
+
 }

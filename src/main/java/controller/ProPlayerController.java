@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import main.java.entity.ProPlayerEntity;
@@ -22,23 +23,24 @@ public class ProPlayerController {
 
 	// posts
 
-	@PostMapping("/teams/{teamId}/players")
-	public ProPlayerEntity createProPlayer() {
-		return ProPlayerService.createProPlayer();
+	@PostMapping("/players")
+	public ProPlayerEntity createProPlayer(@RequestBody ProPlayerEntity createPlayerReq) {
+		return ProPlayerService.createProPlayer(createPlayerReq);
 	}
 
 	// puts
 
-	@PutMapping("/teams/{teamId}/players/{playerId}")
-	public ProPlayerEntity updateProPlayer() {
-		return ProPlayerService.updateProPlayer();
+	@PutMapping("/players/{playerId}")
+	public ProPlayerEntity updateProPlayer(@PathVariable(value = "playerId") long playerId,
+			@RequestBody ProPlayerEntity updatePlayerReq) {
+		return ProPlayerService.updateProPlayer(playerId, updatePlayerReq);
 	}
 
 	// deletes
 
-	@DeleteMapping("/teams/{teamId}/players/{playerId}")
-	public ProPlayerEntity deleteProPlayer() {
-		return ProPlayerService.deleteProPlayer();
+	@DeleteMapping("players/{playerId}")
+	public String deleteProPlayer(@PathVariable(value = "playerId") long playerId) {
+		return ProPlayerService.deleteProPlayer(playerId);
 	}
 
 }
