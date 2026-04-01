@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import main.java.entity.ProTeamEntity;
 
@@ -24,6 +25,7 @@ public interface ProTeamRepo extends JpaRepository<ProTeamEntity, Long> {
 	List<ProTeamEntity> getTeamsByMascot(String mascot);
 
 	@Modifying
+	@Transactional
 	@Query("delete from ProTeamEntity b where b.teamId=:teamId")
 	void deleteTeamById(@Param("teamId") long teamId);
 }

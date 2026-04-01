@@ -1,9 +1,13 @@
 C:\Users\TheAr\eclipse-workspace\tma-pro-team-roster\src\main\java\ProTeamRosterApplication.java
-C:\Users\TheAr\eclipse-workspace\tma-pro-team-roster\src\main\java\service\ProPlayerService.java
 C:\Users\TheAr\eclipse-workspace\tma-pro-team-roster\src\main\java\controller\ProTeamController.java
 C:\Users\TheAr\eclipse-workspace\tma-pro-team-roster\src\main\java\repository\ProTeamRepo.java
-C:\Users\TheAr\eclipse-workspace\tma-pro-team-roster\src\main\java\entity\ProPlayerEntity.java
+C:\Users\TheAr\eclipse-workspace\tma-pro-team-roster\src\main\java\service\ProMascotService.java
+C:\Users\TheAr\eclipse-workspace\tma-pro-team-roster\src\main\java\repository\ProMascotRepo.java
 C:\Users\TheAr\eclipse-workspace\tma-pro-team-roster\src\main\java\repository\ProPlayerRepo.java
+C:\Users\TheAr\eclipse-workspace\tma-pro-team-roster\src\main\java\entity\ProMascotEntity.java
 C:\Users\TheAr\eclipse-workspace\tma-pro-team-roster\src\main\java\controller\ProPlayerController.java
 C:\Users\TheAr\eclipse-workspace\tma-pro-team-roster\src\main\java\entity\ProTeamEntity.java
 C:\Users\TheAr\eclipse-workspace\tma-pro-team-roster\src\main\java\service\ProTeamService.java
+C:\Users\TheAr\eclipse-workspace\tma-pro-team-roster\src\main\java\service\ProPlayerService.java
+C:\Users\TheAr\eclipse-workspace\tma-pro-team-roster\src\main\java\entity\ProPlayerEntity.java
+C:\Users\TheAr\eclipse-workspace\tma-pro-team-roster\src\main\java\controller\ProMascotController.java
