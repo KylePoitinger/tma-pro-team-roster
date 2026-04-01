@@ -9,8 +9,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import main.java.entity.ProMascotEntity;
 import main.java.entity.ProPlayerEntity;
 import main.java.entity.ProTeamEntity;
+import main.java.repository.ProMascotRepo;
 import main.java.repository.ProPlayerRepo;
 import main.java.repository.ProTeamRepo;
 
@@ -27,10 +29,13 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 
 	private final ProPlayerRepo proPlayerRepo;
 
+	private final ProMascotRepo proMascotRepo;
+
 	@Autowired
-	public ProTeamRosterApplication(ProTeamRepo proTeamRepo, ProPlayerRepo proPlayerRepo) {
+	public ProTeamRosterApplication(ProTeamRepo proTeamRepo, ProPlayerRepo proPlayerRepo, ProMascotRepo proMascotRepo) {
 		this.proTeamRepo = proTeamRepo;
 		this.proPlayerRepo = proPlayerRepo;
+		this.proMascotRepo = proMascotRepo;
 	}
 
 	@Override
@@ -89,6 +94,29 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 		proPlayerRepo.save(player1);
 		proPlayerRepo.save(player2);
 		proPlayerRepo.save(player3);
+		LOG.info("Inserting mascot data in DB.");
+		ProMascotEntity mascot1 = new ProMascotEntity();
+		mascot1.mascotId = 1;
+		mascot1.name = "Hornsby";
+		mascot1.teamName = "Hornets";
+		mascot1.description = "A giant bee mascot";
+		mascot1.costume = "Yellow and black striped";
+		ProMascotEntity mascot2 = new ProMascotEntity();
+		mascot2.mascotId = 2;
+		mascot2.name = "Switchly";
+		mascot2.teamName = "Switch";
+		mascot2.description = "A stick mascot";
+		mascot2.costume = "Brown wood texture";
+		ProMascotEntity mascot3 = new ProMascotEntity();
+		mascot3.mascotId = 3;
+		mascot3.name = "Rocky";
+		mascot3.teamName = "Apps";
+		mascot3.description = "A mountain mascot";
+		mascot3.costume = "Gray boulder suit";
+		LOG.info("saving mascot data in DB.");
+		proMascotRepo.save(mascot1);
+		proMascotRepo.save(mascot2);
+		proMascotRepo.save(mascot3);
 	}
 
 }
