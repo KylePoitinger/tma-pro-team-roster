@@ -1,5 +1,7 @@
 package main.java.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,7 @@ import main.java.entity.ProPlayerEntity;
 import main.java.service.ProPlayerService;
 
 @RestController
+@Tag(name = "Pro Player Controller", description = "Endpoints for managing professional athletes")
 public class ProPlayerController {
 
 	@Autowired
@@ -21,6 +24,7 @@ public class ProPlayerController {
 	// gets
 
 	@GetMapping("/players/{playerId}")
+	@Operation(summary = "Get player by ID", description = "Returns detailed information about a single player")
 	public ProPlayerEntity getProPlayer(@PathVariable(value = "playerId") long playerId) {
 		return proPlayerService.getProPlayer(playerId);
 	}

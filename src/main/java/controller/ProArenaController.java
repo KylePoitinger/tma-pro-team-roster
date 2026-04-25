@@ -2,6 +2,8 @@ package main.java.controller;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,12 +19,14 @@ import main.java.service.ProArenaService;
 
 @RestController
 @RequestMapping("/arenas")
+@Tag(name = "Pro Arena Controller", description = "Endpoints for managing sports venues and arenas")
 public class ProArenaController {
 
 	@Autowired
 	private ProArenaService proArenaService;
 
 	@GetMapping
+	@Operation(summary = "Get all arenas", description = "Returns a list of all sports venues in the database")
 	public List<ProArenaEntity> getArenas() {
 		return proArenaService.getArenas();
 	}

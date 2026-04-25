@@ -26,6 +26,9 @@ mvn test                            # Run all tests
 ### Database
 - **H2 in-memory** database; data resets on restart.
 - **Console:** http://localhost:8080/h2-console (enabled in `application.properties`).
+- **Swagger Documentation:**
+    - **UI:** http://localhost:8080/swagger-ui.html
+    - **API Docs (OpenAPI 3):** http://localhost:8080/v3/api-docs
 - **Initialization:** Automatic via `ProTeamRosterApplication.run()` (implements CommandLineRunner).
 - **Scale:** Seeds 5 arenas, 8 teams, 11 players per team (88 total), 8 mascots, and 8 schedules on startup.
 - **Timezone:** America/New_York (set in main method)
@@ -64,6 +67,7 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
 | Dependency | Version | Scope | Purpose |
 |-----------|---------|-------|---------|
 | Spring Boot | 2.4.4 | compile | Core framework + autoconfiguration |
+| Springdoc OpenAPI | 1.5.7 | compile | OpenAPI 3 / Swagger Documentation |
 | Lombok | 1.18.30 | provided | Boilerplate reduction (@Data) |
 | H2 Database | (inherited) | runtime | In-memory database |
 | JUnit 5 | (inherited) | test | Testing framework |
@@ -83,6 +87,26 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
 1. **H2 transient** – All data lost on restart; no persistence.
 2. **Java 1.8** – Legacy version; avoid Java 9+ features.
 3. **Testing** – Ensure tests are run with Maven to avoid environment-specific issues.
+4. **Python Integration** – A separate Python dashboard is located in `src/main/python`. It uses Streamlit for data visualization.
+---
+## Python Analytics (Experimental)
+### Prerequisites
+- **Python 3.7+** must be installed (download from [python.org](https://www.python.org/downloads/)).
+- Ensure Python and pip are in your system PATH.
+
+### Setup & Run
+1. **Install dependencies:**
+   ```powershell
+   cd src/main/python
+   python -m pip install -r requirements.txt
+   ```
+2. **Run the dashboard:**
+   ```powershell
+   python -m streamlit run dashboard.py
+   ```
+   *Note: Using `python -m` ensures you use the version of streamlit linked to your current Python installation.*
+### Purpose
+Provides "visually cool" analytics and interactive dashboards for the Team Roster data, demonstrating how to integrate Python with a Java-based backend.
 ---
 ## AI Agent Hints
 - **For changes:** Modify controller → service → repository (in order).

@@ -2,6 +2,8 @@ package main.java.controller;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,7 @@ import main.java.entity.ProMascotEntity;
 import main.java.service.ProMascotService;
 
 @RestController
+@Tag(name = "Pro Mascot Controller", description = "Endpoints for managing team mascots")
 public class ProMascotController {
 
 	@Autowired
@@ -24,6 +27,7 @@ public class ProMascotController {
 	// gets
 
 	@GetMapping("/mascots/{mascotId}")
+	@Operation(summary = "Get mascot by ID", description = "Returns details for a single mascot")
 	public ProMascotEntity getProMascot(@PathVariable(value = "mascotId") long mascotId) {
 		return proMascotService.getProMascot(mascotId);
 	}
