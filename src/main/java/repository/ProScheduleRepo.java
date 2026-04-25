@@ -7,6 +7,6 @@ import java.util.List;
 
 @Repository
 public interface ProScheduleRepo extends JpaRepository<ProScheduleEntity, Long> {
-    List<ProScheduleEntity> findByPlayerId(long playerId);
-    List<ProScheduleEntity> findByArenaId(long arenaId);
+    List<ProScheduleEntity> findByPlayer_PlayerId(long playerId);
+    List<ProScheduleEntity> findByArena_ArenaId(long arenaId);
 }

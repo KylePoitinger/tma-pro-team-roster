@@ -24,7 +24,7 @@ public class ProPlayerService {
 		return proPlayerRepo.findById(playerId).map(player -> {
 			player.name = updatePlayerReq.name;
 			player.position = updatePlayerReq.position;
-			player.teamName = updatePlayerReq.teamName;
+			player.team = updatePlayerReq.team;
 			player.age = updatePlayerReq.age;
 			player.height = updatePlayerReq.height;
 			player.weight = updatePlayerReq.weight;

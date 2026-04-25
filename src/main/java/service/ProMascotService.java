@@ -18,8 +18,8 @@ public class ProMascotService {
 		return proMascotRepo.getOneByMascotId(mascotId);
 	}
 
-	public List<ProMascotEntity> getMascotsByTeam(String teamName) {
-		return proMascotRepo.getMascotsByTeamName(teamName);
+	public List<ProMascotEntity> getMascotsByTeam(long teamId) {
+		return proMascotRepo.findByTeam_TeamId(teamId);
 	}
 
 	public ProMascotEntity createProMascot(ProMascotEntity createMascotReq) {
@@ -29,7 +29,7 @@ public class ProMascotService {
 	public ProMascotEntity updateProMascot(long mascotId, ProMascotEntity updateMascotReq) {
 		return proMascotRepo.findById(mascotId).map(mascot -> {
 			mascot.name = updateMascotReq.name;
-			mascot.teamName = updateMascotReq.teamName;
+			mascot.team = updateMascotReq.team;
 			mascot.description = updateMascotReq.description;
 			mascot.costume = updateMascotReq.costume;
 			return proMascotRepo.save(mascot);

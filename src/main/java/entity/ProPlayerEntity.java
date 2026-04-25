@@ -1,7 +1,6 @@
 package main.java.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import lombok.Data;
 
@@ -16,7 +15,10 @@ public class ProPlayerEntity {
 
 	public String position;
 
-	public String teamName;
+	@ManyToOne
+	@JoinColumn(name = "team_id")
+	@com.fasterxml.jackson.annotation.JsonBackReference
+	public ProTeamEntity team;
 
 	public int age;
 
@@ -46,7 +48,7 @@ public class ProPlayerEntity {
 				"playerId=" + playerId +
 				", name='" + name + '\'' +
 				", position='" + position + '\'' +
-				", teamName='" + teamName + '\'' +
+				", team=" + (team != null ? team.name : "null") +
 				", age=" + age +
 				", height=" + height +
 				", weight=" + weight +

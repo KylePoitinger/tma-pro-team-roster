@@ -47,62 +47,25 @@ public class ScaleDataIntegrationTest {
 
     @Test
     public void testScaleExpansion() {
-        LOG.info("[DEBUG_LOG] Starting Scale Expansion Test: 10 Teams, 5 Arenas, 11 Players per Team");
+        LOG.info("[DEBUG_LOG] Starting Scale Expansion Test: 8 Teams, 5 Arenas, 11 Players per Team");
 
-        // 1. Create 10 Teams
-        for (int i = 1; i <= 10; i++) {
-            ProTeamEntity team = new ProTeamEntity();
-            team.teamId = (long) i;
-            team.name = "Team " + i;
-            team.city = "City " + i;
-            team.mascot = "Mascot " + i;
-            
-            ResponseEntity<ProTeamEntity> response = restTemplate.postForEntity(getBaseUrl() + "/teams", new HttpEntity<>(team, getHeaders()), ProTeamEntity.class);
-            assertEquals(HttpStatus.OK, response.getStatusCode());
-            LOG.info("[DEBUG_LOG] Created Team: {}", team.name);
+        // 1. Verify 5 Arenas
+        ResponseEntity<List> arenasResponse = restTemplate.getForEntity(getBaseUrl() + "/arenas", List.class);
+        assertEquals(5, arenasResponse.getBody().size());
+        LOG.info("[DEBUG_LOG] Verified 5 arenas exist.");
 
-            // 2. Create 11 Players for each team
-            for (int j = 1; j <= 11; j++) {
-                ProPlayerEntity player = new ProPlayerEntity();
-                player.playerId = (long) (i * 100 + j);
-                player.name = "Player " + player.playerId;
-                player.teamName = team.name; // Link to team
-                player.position = "Position " + j;
-                
-                ResponseEntity<ProPlayerEntity> playerResponse = restTemplate.postForEntity(getBaseUrl() + "/players", new HttpEntity<>(player, getHeaders()), ProPlayerEntity.class);
-                assertEquals(HttpStatus.OK, playerResponse.getStatusCode());
-            }
-            LOG.info("[DEBUG_LOG] Created 11 players for {}", team.name);
-        }
-
-        // 3. Create 5 Arenas
-        for (int i = 1; i <= 5; i++) {
-            ProArenaEntity arena = new ProArenaEntity();
-            arena.arenaId = (long) i;
-            arena.name = "Arena " + i;
-            arena.location = "Location " + i;
-            arena.capacity = 10000 * i;
-            
-            // Note: ProArenaController seems to be missing based on file structure check earlier, 
-            // but let's check ProArenaController.java existence. 
-            // Actually it exists: src\main\java\controller\ProArenaController.java
-            
-            ResponseEntity<ProArenaEntity> response = restTemplate.postForEntity(getBaseUrl() + "/arenas", new HttpEntity<>(arena, getHeaders()), ProArenaEntity.class);
-            // If /arenas endpoint exists. Let's verify mapping in ProArenaController if possible or just try.
-            assertEquals(HttpStatus.OK, response.getStatusCode());
-            LOG.info("[DEBUG_LOG] Created Arena: {}", arena.name);
-        }
-
-        // Verification
+        // 2. Verify 8 Teams
         ResponseEntity<List> teamsResponse = restTemplate.getForEntity(getBaseUrl() + "/teams", List.class);
-        assertEquals(10, teamsResponse.getBody().size());
-        LOG.info("[DEBUG_LOG] Verified 10 teams exist.");
+        assertEquals(8, teamsResponse.getBody().size());
+        LOG.info("[DEBUG_LOG] Verified 8 teams exist.");
 
-        // Check roster for one team
-        ResponseEntity<Map> rosterResponse = restTemplate.getForEntity(getBaseUrl() + "/teams/1/roster", Map.class);
-        List players = (List) rosterResponse.getBody().get("proPlayers");
-        assertNotNull(players);
-        assertEquals(11, players.size());
-        LOG.info("[DEBUG_LOG] Verified Team 1 has 11 players.");
+        // 3. Verify 11 Players for each team
+        for (int i = 1; i <= 8; i++) {
+            ResponseEntity<Map> rosterResponse = restTemplate.getForEntity(getBaseUrl() + "/teams/" + i + "/roster", Map.class);
+            List players = (List) rosterResponse.getBody().get("proPlayers");
+            assertNotNull(players);
+            assertEquals(11, players.size());
+            LOG.info("[DEBUG_LOG] Verified Team {} has 11 players.", i);
+        }
     }
 }

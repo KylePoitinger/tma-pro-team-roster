@@ -29,8 +29,8 @@ public class ProMascotController {
 	}
 
 	@GetMapping("/mascots/team")
-	public List<ProMascotEntity> getMascotsByTeam(@RequestParam(value = "team-name", required = false) String teamName) {
-		return proMascotService.getMascotsByTeam(teamName);
+	public List<ProMascotEntity> getMascotsByTeam(@RequestParam(value = "team-id", required = false) long teamId) {
+		return proMascotService.getMascotsByTeam(teamId);
 	}
 
 	// posts

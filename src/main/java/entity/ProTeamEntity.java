@@ -27,7 +27,9 @@ public class ProTeamEntity implements Serializable {
 
 	public int foundedYear;
 
-	public String stadium;
+	@ManyToOne
+	@JoinColumn(name = "arena_id")
+	public ProArenaEntity arena;
 
 	public int championships;
 
@@ -37,9 +39,9 @@ public class ProTeamEntity implements Serializable {
 
 	public String website;
 
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name = "teamName", referencedColumnName = "name")
-	public List<main.java.entity.ProPlayerEntity> proPlayers;
+	@OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
+	@com.fasterxml.jackson.annotation.JsonManagedReference
+	public List<ProPlayerEntity> proPlayers;
 
 	@Override
 	public String toString() {
@@ -49,7 +51,7 @@ public class ProTeamEntity implements Serializable {
 				", city='" + city + '\'' +
 				", mascot='" + mascot + '\'' +
 				", foundedYear=" + foundedYear +
-				", stadium='" + stadium + '\'' +
+				", arena=" + (arena != null ? arena.name : "null") +
 				", championships=" + championships +
 				", owner='" + owner + '\'' +
 				", colors='" + colors + '\'' +

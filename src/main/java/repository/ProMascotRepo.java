@@ -16,7 +16,7 @@ public interface ProMascotRepo extends JpaRepository<ProMascotEntity, Long> {
 
 	ProMascotEntity getOneByMascotId(long mascotId);
 
-	List<ProMascotEntity> getMascotsByTeamName(String teamName);
+	List<ProMascotEntity> findByTeam_TeamId(long teamId);
 
 	List<ProMascotEntity> getMascotsByName(String name);
 

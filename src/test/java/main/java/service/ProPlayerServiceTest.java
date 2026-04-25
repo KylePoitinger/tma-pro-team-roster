@@ -32,7 +32,6 @@ public class ProPlayerServiceTest {
         player.playerId = 1L;
         player.name = "Test Player";
         player.position = "QB";
-        player.teamName = "Test Team";
         player.age = 25;
         player.height = 72;
         player.weight = 200;

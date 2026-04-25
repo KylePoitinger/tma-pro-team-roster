@@ -21,11 +21,11 @@ public class ProScheduleService {
     }
 
     public List<ProScheduleEntity> getSchedulesByPlayer(long playerId) {
-        return proScheduleRepo.findByPlayerId(playerId);
+        return proScheduleRepo.findByPlayer_PlayerId(playerId);
     }
 
     public List<ProScheduleEntity> getSchedulesByArena(long arenaId) {
-        return proScheduleRepo.findByArenaId(arenaId);
+        return proScheduleRepo.findByArena_ArenaId(arenaId);
     }
 
     public ProScheduleEntity createSchedule(ProScheduleEntity schedule) {
@@ -34,8 +34,8 @@ public class ProScheduleService {
 
     public ProScheduleEntity updateSchedule(long scheduleId, ProScheduleEntity updateReq) {
         return proScheduleRepo.findById(scheduleId).map(schedule -> {
-            schedule.playerId = updateReq.playerId;
-            schedule.arenaId = updateReq.arenaId;
+            schedule.player = updateReq.player;
+            schedule.arena = updateReq.arena;
             schedule.scheduledDate = updateReq.scheduledDate;
             schedule.ticketPrice = updateReq.ticketPrice;
             return proScheduleRepo.save(schedule);

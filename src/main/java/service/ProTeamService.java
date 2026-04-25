@@ -39,11 +39,11 @@ public class ProTeamService {
 	}
 
 	public ProTeamEntity updateTeam(long teamId, ProTeamEntity updateTeamReq) {
-
 		return proTeamRepo.findById(teamId).map(team -> {
 			team.city = updateTeamReq.city;
 			team.mascot = updateTeamReq.mascot;
 			team.name = updateTeamReq.name;
+			team.arena = updateTeamReq.arena;
 			return proTeamRepo.save(team);
 		}).orElseGet(() -> {
 			return proTeamRepo.save(updateTeamReq);

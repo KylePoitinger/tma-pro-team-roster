@@ -2,10 +2,7 @@ package main.java.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -15,9 +12,13 @@ public class ProScheduleEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long scheduleId;
 
-    public long playerId;
+    @ManyToOne
+    @JoinColumn(name = "playerId")
+    public ProPlayerEntity player;
 
-    public long arenaId;
+    @ManyToOne
+    @JoinColumn(name = "arenaId")
+    public ProArenaEntity arena;
 
     public String scheduledDate;
 
@@ -27,8 +28,8 @@ public class ProScheduleEntity {
     public String toString() {
         return "ProScheduleEntity{" +
                 "scheduleId=" + scheduleId +
-                ", playerId=" + playerId +
-                ", arenaId=" + arenaId +
+                ", player=" + (player != null ? player.playerId : "null") +
+                ", arena=" + (arena != null ? arena.arenaId : "null") +
                 ", scheduledDate='" + scheduledDate + '\'' +
                 ", ticketPrice=" + ticketPrice +
                 '}';

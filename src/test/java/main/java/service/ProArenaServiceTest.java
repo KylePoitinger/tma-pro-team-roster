@@ -47,7 +47,6 @@ public class ProArenaServiceTest {
 		arena.name = "Test Arena";
 		arena.location = "Test City";
 		arena.capacity = 20000;
-		arena.teamName = "Test Team";
 		when(proArenaRepo.save(arena)).thenReturn(arena);
 		ProArenaEntity created = proArenaService.createArena(arena);
 		LOG.info("Created arena: {}", created.name);

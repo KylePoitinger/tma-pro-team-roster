@@ -18,8 +18,6 @@ public class ProArenaEntity {
 
     public int capacity;
 
-    public String teamName;
-
     public String address;
 
     public int openedYear;
@@ -37,7 +35,6 @@ public class ProArenaEntity {
                 ", name='" + name + '\'' +
                 ", location='" + location + '\'' +
                 ", capacity=" + capacity +
-                ", teamName='" + teamName + '\'' +
                 ", address='" + address + '\'' +
                 ", openedYear=" + openedYear +
                 ", surface='" + surface + '\'' +

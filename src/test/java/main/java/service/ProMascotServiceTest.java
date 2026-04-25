@@ -31,7 +31,6 @@ public class ProMascotServiceTest {
         ProMascotEntity mascot = new ProMascotEntity();
         mascot.mascotId = 1L;
         mascot.name = "Test Mascot";
-        mascot.teamName = "Test Team";
         mascot.description = "Test Description";
         mascot.costume = "Test Costume";
         when(proMascotRepo.save(mascot)).thenReturn(mascot);

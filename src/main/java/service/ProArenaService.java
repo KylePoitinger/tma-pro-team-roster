@@ -26,12 +26,11 @@ public class ProArenaService {
         return proArenaRepo.save(createArenaReq);
     }
 
-    public ProArenaEntity updateArena(long arenaId, ProArenaEntity updateArenaReq) {
+   	public ProArenaEntity updateArena(long arenaId, ProArenaEntity updateArenaReq) {
         return proArenaRepo.findById(arenaId).map(arena -> {
             arena.name = updateArenaReq.name;
             arena.location = updateArenaReq.location;
             arena.capacity = updateArenaReq.capacity;
-            arena.teamName = updateArenaReq.teamName;
             return proArenaRepo.save(arena);
         }).orElseGet(() -> {
             return proArenaRepo.save(updateArenaReq);
