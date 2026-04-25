@@ -12,21 +12,21 @@ import main.java.repository.ProArenaRepo;
 public class ProArenaService {
 
     @Autowired
-    private static ProArenaRepo proArenaRepo;
+    private ProArenaRepo proArenaRepo;
 
-    public static List<ProArenaEntity> getArenas() {
+    public List<ProArenaEntity> getArenas() {
         return proArenaRepo.findAll();
     }
 
-    public static ProArenaEntity getArena(long arenaId) {
+    public ProArenaEntity getArena(long arenaId) {
         return proArenaRepo.getOneByArenaId(arenaId);
     }
 
-    public static ProArenaEntity createArena(ProArenaEntity createArenaReq) {
+    public ProArenaEntity createArena(ProArenaEntity createArenaReq) {
         return proArenaRepo.save(createArenaReq);
     }
 
-    public static ProArenaEntity updateArena(long arenaId, ProArenaEntity updateArenaReq) {
+    public ProArenaEntity updateArena(long arenaId, ProArenaEntity updateArenaReq) {
         return proArenaRepo.findById(arenaId).map(arena -> {
             arena.name = updateArenaReq.name;
             arena.location = updateArenaReq.location;
@@ -38,7 +38,7 @@ public class ProArenaService {
         });
     }
 
-    public static String deleteArena(long arenaId) {
+    public String deleteArena(long arenaId) {
         try {
             proArenaRepo.deleteArenaById(arenaId);
         } catch (Exception e) {

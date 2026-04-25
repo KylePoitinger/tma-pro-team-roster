@@ -2,6 +2,7 @@ package main.java.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,28 +19,31 @@ import main.java.service.ProArenaService;
 @RequestMapping("/arenas")
 public class ProArenaController {
 
-    @GetMapping
-    public List<ProArenaEntity> getArenas() {
-        return ProArenaService.getArenas();
-    }
+	@Autowired
+	private ProArenaService proArenaService;
 
-    @GetMapping("/{arenaId}")
-    public ProArenaEntity getArena(@PathVariable long arenaId) {
-        return ProArenaService.getArena(arenaId);
-    }
+	@GetMapping
+	public List<ProArenaEntity> getArenas() {
+		return proArenaService.getArenas();
+	}
 
-    @PostMapping
-    public ProArenaEntity createArena(@RequestBody ProArenaEntity arena) {
-        return ProArenaService.createArena(arena);
-    }
+	@GetMapping("/{arenaId}")
+	public ProArenaEntity getArena(@PathVariable long arenaId) {
+		return proArenaService.getArena(arenaId);
+	}
 
-    @PutMapping("/{arenaId}")
-    public ProArenaEntity updateArena(@PathVariable long arenaId, @RequestBody ProArenaEntity arena) {
-        return ProArenaService.updateArena(arenaId, arena);
-    }
+	@PostMapping
+	public ProArenaEntity createArena(@RequestBody ProArenaEntity arena) {
+		return proArenaService.createArena(arena);
+	}
 
-    @DeleteMapping("/{arenaId}")
-    public String deleteArena(@PathVariable long arenaId) {
-        return ProArenaService.deleteArena(arenaId);
-    }
+	@PutMapping("/{arenaId}")
+	public ProArenaEntity updateArena(@PathVariable long arenaId, @RequestBody ProArenaEntity arena) {
+		return proArenaService.updateArena(arenaId, arena);
+	}
+
+	@DeleteMapping("/{arenaId}")
+	public String deleteArena(@PathVariable long arenaId) {
+		return proArenaService.deleteArena(arenaId);
+	}
 }
