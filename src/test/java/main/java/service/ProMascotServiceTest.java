@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -21,8 +23,11 @@ public class ProMascotServiceTest {
     @InjectMocks
     private ProMascotService proMascotService;
 
+    private static final Logger LOG = LoggerFactory.getLogger(ProMascotServiceTest.class);
+
     @Test
     public void testCreateProMascot() {
+        LOG.info("Testing createProMascot method");
         ProMascotEntity mascot = new ProMascotEntity();
         mascot.mascotId = 1L;
         mascot.name = "Test Mascot";
@@ -31,6 +36,7 @@ public class ProMascotServiceTest {
         mascot.costume = "Test Costume";
         when(proMascotRepo.save(mascot)).thenReturn(mascot);
         ProMascotEntity created = proMascotService.createProMascot(mascot);
+        LOG.info("Created mascot: {}", created.name);
         assertNotNull(created);
         assertEquals("Test Mascot", created.name);
     }
