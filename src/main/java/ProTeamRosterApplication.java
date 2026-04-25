@@ -103,12 +103,14 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 
 		LOG.info("Inserting mascot data in DB.");
 		String[] mascotNames = {"Spike", "Jack", "Benny", "Lucky", "Thunder", "BrooklyKnight", "Chuck", "Burnie"};
+		String[] mascotSpecies = {"Reptile", "Dog", "Bull", "Leprechaun", "Superhero", "Knight", "Pelican", "Sun"};
 		String[] performers = {"John Smith", "Mike Jones", "Chris Rock", "Dave Chappelle", "Bill Burr", "Kevin Hart", "Jerry Seinfeld", "Adam Sandler"};
 
 		for (int i = 0; i < teams.size(); i++) {
 			ProTeamEntity team = teams.get(i);
 			ProMascotEntity mascot = new ProMascotEntity();
 			mascot.name = mascotNames[i];
+			mascot.species = mascotSpecies[i];
 			mascot.team = team;
 			mascot.description = "The energetic and fan-favorite mascot of the " + team.name;
 			mascot.costume = team.name + " themed outfit";

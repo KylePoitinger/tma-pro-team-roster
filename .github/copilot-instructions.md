@@ -135,6 +135,27 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
 ### Purpose
 Provides "visually cool" analytics and interactive dashboards for the Team Roster data, demonstrating how to integrate Python with a Java-based backend.
 ---
+## AI Tool Usage & Logging
+### Mandatory Changelog Updates
+Every time an AI tool (Junie or GitHub Copilot) is used to generate or modify code, the developer MUST update `.github/CHANGELOG.md`.
+
+### Agent Distinction
+- **GitHub Copilot:** Use this agent name for code completions, chat-based suggestions, or small refactors initiated via the Copilot plugin. Entries should be placed under the `### GitHub Copilot` section.
+- **Junie:** Use this agent name for autonomous task execution, multi-file refactors, or complex feature implementations performed by Junie. Entries should be placed under the `### Junie` section.
+
+### Entry Format
+Add a new row to the appropriate table using the following structure:
+| timestamp | agent | action | files | summary | details |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+
+- **timestamp:** ISO 8601 format (e.g., `2026-04-25T17:23:00`).
+- **agent:** Either `GitHub Copilot` or `Junie`.
+- **action:** `created`, `modified`, `deleted`, `renamed`, `expanded`, or `enhanced`.
+- **files:** Backtick-enclosed file paths (e.g., `src/main/java/service/ProTeamService.java`). Use commas for multiple files.
+- **summary:** Short description of the change.
+- **details:** Comprehensive explanation of what was changed and why.
+
+---
 ## AI Agent Hints
 - **For changes:** Modify controller → service → repository (in order).
 - **For data scale:** Check `ProTeamRosterApplication.java` for the current seeding logic.

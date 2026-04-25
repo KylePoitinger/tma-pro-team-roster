@@ -144,6 +144,7 @@ public class EndpointIntegrationTest {
         ResponseEntity<Map> response = restTemplate.getForEntity(getBaseUrl() + "/mascots/1", Map.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
+        assertNotNull(response.getBody().get("species"));
     }
 
     @Test

@@ -14,6 +14,8 @@ public class ProMascotEntity {
 
 	public String name;
 
+	public String species;
+
 	@OneToOne
 	@JoinColumn(name = "team_id")
 	public ProTeamEntity team;
@@ -39,6 +41,7 @@ public class ProMascotEntity {
 		return "ProMascotEntity{" +
 				"mascotId=" + mascotId +
 				", name='" + name + '\'' +
+				", species='" + species + '\'' +
 				", team=" + (team != null ? team.name : "null") +
 				", description='" + description + '\'' +
 				", costume='" + costume + '\'' +

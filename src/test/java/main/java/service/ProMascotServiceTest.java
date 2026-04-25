@@ -36,6 +36,7 @@ public class ProMascotServiceTest {
         ProMascotEntity mascot = new ProMascotEntity();
         mascot.mascotId = 1L;
         mascot.name = "Test Mascot";
+        mascot.species = "Test Species";
         mascot.description = "Test Description";
         mascot.costume = "Test Costume";
         when(proMascotRepo.save(mascot)).thenReturn(mascot);
@@ -88,6 +89,7 @@ public class ProMascotServiceTest {
 
         ProMascotEntity updateReq = new ProMascotEntity();
         updateReq.name = "New Mascot";
+        updateReq.species = "New Species";
         updateReq.description = "New Description";
         updateReq.costume = "New Costume";
 
