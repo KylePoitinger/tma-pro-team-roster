@@ -44,6 +44,9 @@ Maintain the structure and integrity of `CHANGELOG.md`.
 
 - Prepend new entries at the top (newest first).
 - Group entries under date-level headings (`## 2026-04-25`).
+- Within each date, separate changes into two sections:
+    - `### Junie` for changes made by the Junie agent.
+    - `### GitHub Copilot` for changes made by GitHub Copilot.
 - Prevent duplicate entries for the same change event.
 - Create `CHANGELOG.md` at the project root if it does not already exist.
 

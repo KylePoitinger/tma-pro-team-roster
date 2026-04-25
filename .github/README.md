@@ -28,17 +28,19 @@ This folder contains consolidated documentation for the TMA Pro Team Roster proj
 ### 2. **SKILLS.md**
 **Purpose:** Comprehensive codebase analysis with visual hierarchies and data flows
 
+**Location:** `.github/skills/SKILLS.md`
+
 **Contents (10 Skills):**
 - **Skill 1:** Project hierarchy overview
 - **Skill 2:** Three-layer architecture with data flows
-- **Skill 3:** Detailed Controller → Service → Repository patterns
-- **Skill 4:** Test suite architecture (current limitations)
-- **Skill 5:** Request flows by entity type
-- **Skill 6:** Entity relationships and string-based FKs
-- **Skill 7:** Code organization and design patterns
-- **Skill 8:** H2 database schema
-- **Skill 9:** Maven build configuration
-- **Skill 10:** Common development workflows
+- Skill 3: Detailed Controller → Service → Repository patterns
+- Skill 4: Test suite architecture (current limitations)
+- Skill 5: Request flows by entity type
+- Skill 6: Entity relationships and string-based FKs
+- Skill 7: Code organization and design patterns
+- Skill 8: H2 database schema
+- Skill 9: Maven build configuration
+- Skill 10: Common development workflows
 
 **Best For:** Understanding complete system architecture, visual learners, debugging workflows
 
@@ -51,43 +53,39 @@ This folder contains consolidated documentation for the TMA Pro Team Roster proj
 
 ---
 
-### 3. **MASCOT_FEATURE_SUMMARY.md**
-**Purpose:** Documentation of the ProMascot feature implementation
+### 3. **AGENTS.md**
+**Purpose:** Standardized machine-readable instructions for AI agents
+
+**Location:** `.github/agents/AGENTS.md`
 
 **Contents:**
-- Overview of feature scope
-- 4 files created (Entity, Repository, Service, Controller)
-- Integration with main application
-- API testing results (all CRUD ops verified)
-- Architecture consistency table
-- Build & run instructions
+- Technical context for AI coding assistants
+- Coding standards and project constraints
+- Tool and environment specifications
 
-**Best For:** Understanding how to implement a complete feature following project patterns
-
-**Perfect Example Of:** Following the three-layer architecture in this codebase
+**Best For:** AI agents (Cursor, Windsurf, Cline, etc.) to understand project-specific rules
 
 ---
 
-### 4. **JAVA_PROJECT_ANALYSIS.md**
-**Purpose:** Structured analysis of project structure, dependencies, testing, and logging
+### 4. **HistoryAgent.md**
+**Purpose:** Guidelines for automated changelog management
+
+**Location:** `.github/agents/HistoryAgent.md`
 
 **Contents:**
-- Project hierarchy analysis
-- External dependencies table
-- Test coverage assessment
-- Logging strategy
-- Observations and risks
-- Recommendations for improvements
-- AI automation hooks
+- Change detection skills
+- Log entry composition rules
+- Changelog management (agent-specific sections)
+- Execution patterns
 
-**Best For:** Technical leadership, architectural reviews, identifying technical debt
+---
 
-**Key Insights:**
-- Unusual package naming (main.java.*)
-- Static service methods (intentional but unusual)
-- Test infrastructure not wired
-- No validation/error handling
-- Java 1.8 (legacy)
+### 5. **CHANGELOG.md**
+**Purpose:** Chronological log of all code changes
+
+**Location:** `.github/CHANGELOG.md`
+
+**Best For:** Tracking project evolution and agent actions (Junie & GitHub Copilot)
 
 ---
 
@@ -96,13 +94,13 @@ This folder contains consolidated documentation for the TMA Pro Team Roster proj
 ### **I want to...**
 
 - **Get started contributing** → Read `copilot-instructions.md`
-- **Understand the complete architecture** → Read `SKILLS.md` (Skills 1-3)
-- **Learn how to test** → See `SKILLS.md` (Skill 4)
-- **Implement a new feature** → Study `MASCOT_FEATURE_SUMMARY.md` + `SKILLS.md` (Skill 3)
+- **Understand the complete architecture** → Read `SKILLS.md`
+- **Learn about AI Agents** → Read `AGENTS.md`
+- **View recent changes** → Check `CHANGELOG.md`
+- **Understand logging/history rules** → Read `HistoryAgent.md`
 - **Add a REST endpoint** → See `SKILLS.md` (Skill 10.1)
 - **Add an entity field** → See `SKILLS.md` (Skill 10.2)
 - **Debug issues** → See `SKILLS.md` (Skill 10.3)
-- **Review technical quality** → Read `JAVA_PROJECT_ANALYSIS.md`
 - **Understand database schema** → See `SKILLS.md` (Skill 8)
 - **View design patterns** → See `SKILLS.md` (Skill 7)
 
@@ -139,12 +137,12 @@ BUILD & RUN:
 - mvn clean install
 - mvn spring-boot:run
 - Application on http://localhost:8080
-- Tests: mvn test (not properly wired)
+- Tests: mvn test (some tests exist in src/test but build may fail due to environment)
 
 TESTING STRATEGY:
 - Manual REST testing via curl/Postman
 - H2 console for data verification
-- No automatic test infrastructure (see copilot-instructions.md)
+- JUnit tests available in src/test/java (partially wired)
 ```
 
 ---
@@ -163,29 +161,29 @@ SKILLS.md
     ├──→ Shows code examples & flows
     └──→ Provides debugging workflows
 
-MASCOT_FEATURE_SUMMARY.md
-    ↓ (Implementation Template)
-    ├──→ Real example of feature implementation
-    ├──→ Shows three-layer pattern in action
-    └──→ Verification of API endpoints
+AGENTS.md
+    ↓ (Automation Guide)
+    ├──→ Instructions for creating AI agents
+    ├──→ Standardizes machine-readable rules
+    └──→ References SKILLS.md for patterns
 
-JAVA_PROJECT_ANALYSIS.md
-    ↓ (Quality Assessment)
-    ├──→ Identifies technical debt
-    ├──→ Lists recommendations
-    └──→ Baseline for improvements
+HistoryAgent.md & CHANGELOG.md
+    ↓ (Traceability)
+    ├──→ Tracks all agent-driven changes
+    └──→ Separates work by Junie vs Copilot
 ```
 
 ---
 
 ## 📝 Document Metadata
 
-| Document | Last Updated | Scope | Audience |
-|----------|--------------|-------|----------|
-| copilot-instructions.md | April 25, 2026 | AI Guidelines | Developers, Copilot |
-| SKILLS.md | April 25, 2026 | Architecture Analysis | All Developers |
-| MASCOT_FEATURE_SUMMARY.md | April 25, 2026 | Feature Implementation | Feature Developers |
-| JAVA_PROJECT_ANALYSIS.md | April 25, 2026 | Quality Assessment | Tech Leads |
+| Document | Location | Last Updated | Scope |
+|----------|----------|--------------|-------|
+| copilot-instructions.md | `.github/` | April 25, 2026 | AI Guidelines |
+| SKILLS.md | `.github/skills/` | April 25, 2026 | Architecture Analysis |
+| AGENTS.md | `.github/agents/` | April 25, 2026 | Agent Creation |
+| HistoryAgent.md | `.github/agents/` | April 25, 2026 | Changelog Rules |
+| CHANGELOG.md | `.github/` | April 25, 2026 | Change History |
 
 ---
 
@@ -193,10 +191,13 @@ JAVA_PROJECT_ANALYSIS.md
 
 1. **New to the project?**
    - Start with `copilot-instructions.md` (5 min read)
-   - Then review `SKILLS.md` Skills 1-3 (15 min read)
+   - Then review `SKILLS.md` (15 min read)
 
-2. **Implementing a feature?**
-   - Study `MASCOT_FEATURE_SUMMARY.md` as template
+2. **Developing with Agents?**
+   - Read `AGENTS.md` for creation guidelines
+   - Follow `HistoryAgent.md` for logging changes
+
+3. **Implementing a feature?**
    - Follow patterns in `SKILLS.md` Skill 3
    - Reference endpoints in `copilot-instructions.md`
 
@@ -206,8 +207,8 @@ JAVA_PROJECT_ANALYSIS.md
    - Review entity relationships in `SKILLS.md` Skill 6
 
 4. **Planning improvements?**
-   - Read `JAVA_PROJECT_ANALYSIS.md` Section 5-6
    - Cross-reference with `copilot-instructions.md` constraints
+   - Review architectural patterns in `SKILLS.md`
 
 ---
 
@@ -215,7 +216,7 @@ JAVA_PROJECT_ANALYSIS.md
 
 Refer to the relevant documentation section or reach out to the development team with specific questions about:
 - Architecture: See `SKILLS.md`
-- Patterns: See `MASCOT_FEATURE_SUMMARY.md`
+- AI Agents: See `AGENTS.md`
 - Guidelines: See `copilot-instructions.md`
-- Quality: See `JAVA_PROJECT_ANALYSIS.md`
+- Change History: See `CHANGELOG.md`
 
