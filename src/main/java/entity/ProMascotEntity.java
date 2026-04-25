@@ -55,6 +55,9 @@ public class ProMascotEntity {
 	}
 
 	public String getImageUrl() {
+		if (imageUrl == null || imageUrl.isEmpty()) {
+			return "/images/random-mascot";
+		}
 		return imageUrl;
 	}
 

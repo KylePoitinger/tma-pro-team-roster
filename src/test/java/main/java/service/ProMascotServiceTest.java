@@ -95,6 +95,7 @@ public class ProMascotServiceTest {
         updateReq.species = "New Species";
         updateReq.description = "New Description";
         updateReq.costume = "New Costume";
+        updateReq.setImageUrl("http://newimage.jpg");
 
         when(proMascotRepo.findById(1L)).thenReturn(Optional.of(existingMascot));
         when(proMascotRepo.save(any(ProMascotEntity.class))).thenReturn(existingMascot);
@@ -104,6 +105,45 @@ public class ProMascotServiceTest {
         assertEquals("New Mascot", result.name);
         assertEquals("New Description", result.description);
         assertEquals("New Costume", result.costume);
+        assertEquals("http://newimage.jpg", result.getImageUrl());
+    }
+
+    @Test
+    public void testUpdateProMascotPartial() {
+        LOG.info("Testing updateProMascot method - partial update");
+        ProMascotEntity existingMascot = new ProMascotEntity();
+        existingMascot.mascotId = 1L;
+        existingMascot.name = "Old Mascot";
+
+        ProMascotEntity updateReq = new ProMascotEntity();
+        updateReq.name = null; // Should not update name
+        updateReq.species = "New Species";
+
+        when(proMascotRepo.findById(1L)).thenReturn(Optional.of(existingMascot));
+        when(proMascotRepo.save(any(ProMascotEntity.class))).thenReturn(existingMascot);
+
+        ProMascotEntity result = proMascotService.updateProMascot(1L, updateReq);
+        assertNotNull(result);
+        assertEquals("Old Mascot", result.name);
+        assertEquals("New Species", result.species);
+    }
+
+    @Test
+    public void testUpdateProMascotWithDefaultImage() {
+        LOG.info("Testing updateProMascot method - with default image");
+        ProMascotEntity existingMascot = new ProMascotEntity();
+        existingMascot.mascotId = 1L;
+        existingMascot.setImageUrl("old_url");
+
+        ProMascotEntity updateReq = new ProMascotEntity();
+        updateReq.setImageUrl(null); // Should not update image to "/images/random-mascot" via getImageUrl() if we use setter
+
+        when(proMascotRepo.findById(1L)).thenReturn(Optional.of(existingMascot));
+        when(proMascotRepo.save(any(ProMascotEntity.class))).thenReturn(existingMascot);
+
+        ProMascotEntity result = proMascotService.updateProMascot(1L, updateReq);
+        assertNotNull(result);
+        assertEquals("old_url", result.getImageUrl());
     }
 
     @Test

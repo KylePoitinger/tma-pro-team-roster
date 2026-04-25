@@ -37,11 +37,14 @@ public class ProMascotService {
 
 	public ProMascotEntity updateProMascot(long mascotId, ProMascotEntity updateMascotReq) {
 		return proMascotRepo.findById(mascotId).map(mascot -> {
-			mascot.name = updateMascotReq.name;
-			mascot.species = updateMascotReq.species;
-			mascot.team = updateMascotReq.team;
-			mascot.description = updateMascotReq.description;
-			mascot.costume = updateMascotReq.costume;
+			if (updateMascotReq.name != null) mascot.name = updateMascotReq.name;
+			if (updateMascotReq.species != null) mascot.species = updateMascotReq.species;
+			if (updateMascotReq.team != null) mascot.team = updateMascotReq.team;
+			if (updateMascotReq.description != null) mascot.description = updateMascotReq.description;
+			if (updateMascotReq.costume != null) mascot.costume = updateMascotReq.costume;
+			if (updateMascotReq.getImageUrl() != null && !updateMascotReq.getImageUrl().equals("/images/random-mascot")) {
+				mascot.setImageUrl(updateMascotReq.getImageUrl());
+			}
 			return proMascotRepo.save(mascot);
 		}).orElseThrow(() -> new ResourceNotFoundException("Mascot not found for this id :: " + mascotId));
 	}
