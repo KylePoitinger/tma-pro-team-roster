@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file, following t
 
 | timestamp | agent | action | files | summary | details |
 | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-04-25T16:35:00 | Junie | deleted | \CHANGELOG.md\ | Removed redundant root changelog | Deleted the redundant \CHANGELOG.md\ file from the project root and consolidated history into \.github/CHANGELOG.md\. |
+| 2026-04-25T16:30:00 | Junie | modified | \.github/copilot-instructions.md\, \pom.xml\, \scripts/update_docs.py\ | Integrated Swagger and Automated Docs | Added OpenAPI 3 support with interactive UI and implemented an automated documentation agent to sync instructions. |
 | 2026-04-25T14:58:00 | Junie | modified | \src/main/java/entity/ProScheduleEntity.java\, \src/main/java/service/ProScheduleService.java\, \src/main/java/controller/ProScheduleController.java\ | Changed Schedule relationship to Teams | Refactored \ProScheduleEntity\ to link directly to \ProTeamEntity\ instead of \ProPlayerEntity\, as players are now accessed through teams. |
 | 2026-04-25T14:38:00 | Junie | modified | \src/main/java/entity/ProScheduleEntity.java\, \src/main/java/service/ProScheduleService.java\, \src/main/java/repository/ProScheduleRepo.java\ | Return nested data for schedules | Updated the \/schedules\ endpoint to return full player and arena objects instead of IDs by using JPA \@ManyToOne\ relationships. |
 | 2026-04-25T14:32:00 | Junie | modified | \src/main/java/ProTeamRosterApplication.java\ | Populated all entity fields on startup | Updated the application startup to populate all available fields in entities, including the new ProScheduleEntity, with realistic data. |

@@ -10,10 +10,10 @@ Spring Boot REST API managing professional sports teams and player rosters. In-m
 3. **Repositories** (`src/main/java/repository/`) – JPA interfaces extending `JpaRepository`.
 ### Data Models & Relationships
 - **ProArenaEntity**: Top-level entity for venues.
-- **ProTeamEntity**: Teams associated with an Arena (`@ManyToOne`). Has a list of Players (`@OneToMany`) and a Mascot (`@OneToOne`).
-- **ProPlayerEntity**: Players linked to a Team (`@ManyToOne`).
 - **ProMascotEntity**: Mascots linked to a Team (`@OneToOne`).
+- **ProPlayerEntity**: Players linked to a Team (`@ManyToOne`).
 - **ProScheduleEntity**: Schedules linking a Team and an Arena (`@ManyToOne` for both).
+- **ProTeamEntity**: Teams associated with an Arena (`@ManyToOne`). Has a list of Players (`@OneToMany`) and a Mascot (`@OneToOne`).
 - **Serialization:** Use `@JsonManagedReference` (in Team) and `@JsonBackReference` (in Player) to prevent infinite recursion in JSON responses.
 ---
 ## Critical Developer Workflows
@@ -29,6 +29,7 @@ mvn test                            # Run all tests
 - **Swagger Documentation:**
     - **UI:** http://localhost:8080/swagger-ui.html
     - **API Docs (OpenAPI 3):** http://localhost:8080/v3/api-docs
+- **Changelog:** [.github/CHANGELOG.md](.github/CHANGELOG.md) (Records all notable architectural and feature changes).
 - **Initialization:** Automatic via `ProTeamRosterApplication.run()` (implements CommandLineRunner).
 - **Scale:** Seeds 5 arenas, 8 teams, 11 players per team (88 total), 8 mascots, and 8 schedules on startup.
 - **Timezone:** America/New_York (set in main method)
@@ -54,10 +55,36 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
 - `ProTeamRepo.getOneByTeamId()` – auto-derived.
 - `deleteTeamById()` uses `@Modifying @Query`.
 ### REST Endpoint Patterns
-- `GET /teams` – list all  
-- `GET /teams/{teamId}/roster` – team + players
+- `DELETE /arenas/{arenaId}`: API Endpoint
+- `DELETE /mascots/{mascotId}`: API Endpoint
+- `DELETE /schedules/{scheduleId}`: API Endpoint
+- `DELETE /teams/{teamId}`: API Endpoint
+- `DELETE players/{playerId}`: API Endpoint
+- `GET /arenas`: API Endpoint
+- `GET /arenas/{arenaId}`: API Endpoint
+- `GET /health`: API Endpoint
+- `GET /images`: API Endpoint
+- `GET /mascots/team`: API Endpoint
+- `GET /mascots/{mascotId}`: API Endpoint
+- `GET /players/{playerId}`: API Endpoint
 - `GET /schedules` – returns schedules with nested Team and Arena data.
+- `GET /schedules/arena/{arenaId}`: API Endpoint
 - `GET /schedules/team/{teamId}` – filtered schedules.
+- `GET /schedules/{scheduleId}`: API Endpoint
+- `GET /teams` – list all  
+- `GET /teams/fields`: API Endpoint
+- `GET /teams/{teamId}/roster` – team + players
+- `POST /arenas`: API Endpoint
+- `POST /mascots`: API Endpoint
+- `POST /players`: API Endpoint
+- `POST /schedules`: API Endpoint
+- `POST /teams`: API Endpoint
+- `PUT /arenas/{arenaId}`: API Endpoint
+- `PUT /mascots/{mascotId}`: API Endpoint
+- `PUT /players/{playerId}`: API Endpoint
+- `PUT /schedules/{scheduleId}`: API Endpoint
+- `PUT /teams/{teamId}`: API Endpoint
+
 ### Entity Annotations
 - Use Lombok `@Data` (generates getters, setters, toString, etc.).
 - `@Entity` for JPA mapping.
