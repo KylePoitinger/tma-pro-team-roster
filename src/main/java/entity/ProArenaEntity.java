@@ -20,6 +20,16 @@ public class ProArenaEntity {
 
     public String teamName;
 
+    public String address;
+
+    public int openedYear;
+
+    public String surface;
+
+    public String amenities;
+
+    public double cost;
+
     @Override
     public String toString() {
         return "ProArenaEntity{" +
@@ -28,6 +38,11 @@ public class ProArenaEntity {
                 ", location='" + location + '\'' +
                 ", capacity=" + capacity +
                 ", teamName='" + teamName + '\'' +
+                ", address='" + address + '\'' +
+                ", openedYear=" + openedYear +
+                ", surface='" + surface + '\'' +
+                ", amenities='" + amenities + '\'' +
+                ", cost=" + cost +
                 '}';
     }
 }

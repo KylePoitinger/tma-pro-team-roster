@@ -28,6 +28,18 @@ public class ProPlayerEntity {
 
 	public double salary;
 
+	public int jerseyNumber;
+
+	public String nationality;
+
+	public int contractYears;
+
+	public String injuryStatus;
+
+	public String stats;
+
+	public String debutDate;
+
 	@Override
 	public String toString() {
 		return "ProPlayerEntity{" +
@@ -40,6 +52,12 @@ public class ProPlayerEntity {
 				", weight=" + weight +
 				", college='" + college + '\'' +
 				", salary=" + salary +
+				", jerseyNumber=" + jerseyNumber +
+				", nationality='" + nationality + '\'' +
+				", contractYears=" + contractYears +
+				", injuryStatus='" + injuryStatus + '\'' +
+				", stats='" + stats + '\'' +
+				", debutDate='" + debutDate + '\'' +
 				'}';
 	}
 }

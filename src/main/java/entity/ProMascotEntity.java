@@ -20,6 +20,16 @@ public class ProMascotEntity {
 
 	public String costume;
 
+	public double height;
+
+	public double weight;
+
+	public String personality;
+
+	public String firstAppearance;
+
+	public String performerName;
+
 	private String imageUrl;
 
 	@Override
@@ -30,6 +40,11 @@ public class ProMascotEntity {
 				", teamName='" + teamName + '\'' +
 				", description='" + description + '\'' +
 				", costume='" + costume + '\'' +
+				", height=" + height +
+				", weight=" + weight +
+				", personality='" + personality + '\'' +
+				", firstAppearance='" + firstAppearance + '\'' +
+				", performerName='" + performerName + '\'' +
 				", imageUrl='" + imageUrl + '\'' +
 				'}';
 	}
