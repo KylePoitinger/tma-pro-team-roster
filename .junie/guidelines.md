@@ -7,6 +7,7 @@
 
 ## Maven Testing Guidelines
 - Run high level tests first.
+- Ignore Jacoco coverage reports, unless otherwise specified.
 - Shorten command outputs to focus on the most relevant information.
 
 ## Output File Analysis

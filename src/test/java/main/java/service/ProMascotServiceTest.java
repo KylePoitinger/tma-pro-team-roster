@@ -275,14 +275,14 @@ public class ProMascotServiceTest {
         ProMascotEntity mascot = new ProMascotEntity();
         mascot.mascotId = 1L;
         mascot.name = "Random Mascot";
-        mascot.setImageUrl("old_url");
+        mascot.setImageUrl("/images/random-mascot");
 
         when(proMascotRepo.findRandomMascot()).thenReturn(mascot);
         when(mascotImageService.fetchRandomMascotImage()).thenThrow(new RuntimeException("API Down"));
 
         ProMascotEntity result = proMascotService.getRandomMascot();
         assertNotNull(result);
-        assertEquals("old_url", result.getImageUrl());
+        assertEquals("/images/random-mascot", result.getImageUrl());
         verify(proMascotRepo, never()).save(any());
     }
 }

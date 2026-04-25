@@ -26,36 +26,49 @@ public class ProMascotService {
 		List<ProMascotEntity> mascots = proMascotRepo.findAll();
 		java.util.Set<String> usedImages = new java.util.HashSet<>();
 		for (ProMascotEntity mascot : mascots) {
-			String currentUrl = mascot.getImageUrl();
-			if (currentUrl == null || currentUrl.equals("/images/random-mascot") || usedImages.contains(currentUrl)) {
-				try {
-					String newImageUrl = mascotImageService.fetchRandomMascotImage();
-					// Simple check to avoid duplicates in the same batch
-					int retries = 0;
-					while (usedImages.contains(newImageUrl) && retries < 5) {
-						newImageUrl = mascotImageService.fetchRandomMascotImage();
-						retries++;
-					}
-					mascot.setImageUrl(newImageUrl);
-					proMascotRepo.save(mascot);
-					usedImages.add(newImageUrl);
-				} catch (Exception e) {
-					// Fallback
-				}
-			} else {
-				usedImages.add(currentUrl);
+			ensureMascotHasImage(mascot, usedImages);
+			if (mascot.getImageUrl() != null) {
+				usedImages.add(mascot.getImageUrl());
 			}
 		}
 		return mascots;
 	}
 
+	private void ensureMascotHasImage(ProMascotEntity mascot, java.util.Set<String> usedInBatch) {
+		String currentUrl = mascot.getImageUrl();
+		if (currentUrl == null || currentUrl.equals("/images/random-mascot") || (usedInBatch != null && usedInBatch.contains(currentUrl))) {
+			try {
+				String newImageUrl = mascotImageService.fetchRandomMascotImage();
+				int retries = 0;
+				while (usedInBatch != null && usedInBatch.contains(newImageUrl) && retries < 3) {
+					newImageUrl = mascotImageService.fetchRandomMascotImage();
+					retries++;
+				}
+				mascot.setImageUrl(newImageUrl);
+				proMascotRepo.save(mascot);
+			} catch (Throwable t) {
+				// Fallback to default or existing, but don't crash
+			}
+		}
+	}
+
 	public ProMascotEntity getProMascot(long mascotId) {
-		return Optional.ofNullable(proMascotRepo.getOneByMascotId(mascotId))
+		ProMascotEntity mascot = Optional.ofNullable(proMascotRepo.getOneByMascotId(mascotId))
 				.orElseThrow(() -> new ResourceNotFoundException("Mascot not found for this id :: " + mascotId));
+		ensureMascotHasImage(mascot, null);
+		return mascot;
 	}
 
 	public List<ProMascotEntity> getMascotsByTeam(long teamId) {
-		return proMascotRepo.findByTeam_TeamId(teamId);
+		List<ProMascotEntity> mascots = proMascotRepo.findByTeam_TeamId(teamId);
+		java.util.Set<String> usedImages = new java.util.HashSet<>();
+		for (ProMascotEntity mascot : mascots) {
+			ensureMascotHasImage(mascot, usedImages);
+			if (mascot.getImageUrl() != null) {
+				usedImages.add(mascot.getImageUrl());
+			}
+		}
+		return mascots;
 	}
 
 	public ProMascotEntity createProMascot(ProMascotEntity createMascotReq) {
@@ -87,13 +100,7 @@ public class ProMascotService {
 	public ProMascotEntity getRandomMascot() {
 		ProMascotEntity mascot = proMascotRepo.findRandomMascot();
 		if (mascot != null) {
-			try {
-				String imageUrl = mascotImageService.fetchRandomMascotImage();
-				mascot.setImageUrl(imageUrl);
-				proMascotRepo.save(mascot);
-			} catch (Exception e) {
-				// Fallback to existing image or leave as is if service fails
-			}
+			ensureMascotHasImage(mascot, null);
 		}
 		return mascot;
 	}

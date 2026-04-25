@@ -20,13 +20,16 @@ public class MascotImageController {
 
     @GetMapping(value = "/random-mascot", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getRandomMascotImage() {
-        String imageUrl = mascotImageService.fetchRandomMascotImage();
-
-        byte[] imageBytes = restTemplate.getForObject(imageUrl, byte[].class);
-
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(imageBytes);
+        try {
+            String imageUrl = mascotImageService.fetchRandomMascotImage();
+            byte[] imageBytes = restTemplate.getForObject(imageUrl, byte[].class);
+            return ResponseEntity
+                    .ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(imageBytes);
+        } catch (Exception e) {
+            // Return a 204 No Content or a generic 404 if we can't get an image
+            return ResponseEntity.notFound().build();
+        }
     }
 }

@@ -3,8 +3,18 @@ import pandas as pd
 import requests
 import plotly.express as px
 from datetime import datetime
+import os
 
 st.set_page_config(page_title="Pro Team Roster Dashboard", layout="wide")
+
+def load_css():
+    """Loads custom CSS from the style.css file."""
+    css_path = os.path.join(os.path.dirname(__file__), "style.css")
+    if os.path.exists(css_path):
+        with open(css_path) as f:
+            st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+load_css()
 
 # Constants
 BASE_URL = "http://localhost:8080"
@@ -24,6 +34,22 @@ def get_health():
     if data:
         return data.get("status", "DOWN")
     return "OFFLINE"
+
+def render_mascot_image(mascot, caption=None):
+    """Renders a mascot image with consistent URL handling and accessibility."""
+    if not mascot:
+        return
+    image_url = mascot.get('imageUrl')
+    # If no caption provided, use a descriptive one for ADA compliance
+    if not caption:
+        caption = f"Official Mascot: {mascot.get('name', 'Mascot')} - a {mascot.get('species', 'friendly creature')}"
+    
+    if image_url:
+        if image_url.startswith('/'):
+            image_url = f"{BASE_URL}{image_url}"
+        st.image(image_url, caption=caption, use_container_width=True)
+    else:
+        st.info(f"Image for {mascot.get('name', 'this mascot')} is currently unavailable.")
 
 # Sidebar
 st.sidebar.title("🏀 Pro Team Roster")
@@ -64,18 +90,14 @@ if page == "Team Analytics":
 
         # Mascot Section
         st.subheader("🐾 Team Mascot")
-        mascot_data = fetch_data(f"mascots/team?team-id={team_id}")
+        # Use timestamp to bypass cache for mascot data
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        mascot_data = fetch_data("mascots/team", params={"team-id": team_id, "t": timestamp})
         if mascot_data and len(mascot_data) > 0:
             m = mascot_data[0]
             mcol1, mcol2 = st.columns([1, 2])
             with mcol1:
-                image_url = m.get('imageUrl')
-                if image_url:
-                    if image_url.startswith('/'):
-                        image_url = f"{BASE_URL}{image_url}"
-                    st.image(image_url, use_container_width=True)
-                else:
-                    st.info("No image available")
+                render_mascot_image(m)
             with mcol2:
                 st.markdown(f"**Name:** {m['name']}")
                 st.markdown(f"**Species:** {m['species']}")
@@ -92,11 +114,9 @@ if page == "Team Analytics":
             timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
             random_m = fetch_data("mascots/random", params={"t": timestamp})
             if random_m:
-                image_url = random_m.get('imageUrl')
-                if image_url and image_url.startswith('/'):
-                    image_url = f"{BASE_URL}{image_url}"
-                st.sidebar.image(image_url, caption=f"{random_m['name']} ({random_m['species']})")
-                st.sidebar.write(f"*{random_m['personality']}*")
+                with st.sidebar:
+                    render_mascot_image(random_m, caption=f"{random_m['name']} ({random_m['species']})")
+                    st.write(f"*{random_m['personality']}*")
             else:
                 st.sidebar.error("Failed to fetch mascot")
 
