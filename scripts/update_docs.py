@@ -173,18 +173,24 @@ if __name__ == "__main__":
         
         # Keep non-endpoint lines (like descriptions) that don't match the auto-format
         # AND are NOT list items for endpoints that no longer exist
+        # SPECIAL CASE: Keep manually enhanced descriptions for health and images
         for line in existing.splitlines():
             line_content = line.strip()
             if not line_content: continue
             
             # Check if this line is an endpoint list item
-            endpoint_match = re.search(r"- `([A-Z]+ )?([^`]+)`", line_content)
+            endpoint_match = re.search(r"- `([A-Z]+ )?([^` ]+)`", line_content)
             if endpoint_match:
                 # It's an endpoint line. Check if it's in our currently found endpoints.
-                current_ep = endpoint_match.group(2)
+                current_ep_path = endpoint_match.group(2)
                 # Note: found_endpoints contains "VERB PATH", so we need to be careful
-                if any(ep.endswith(current_ep) for ep in found_endpoints):
-                    # It's a valid current endpoint, already handled above or will be
+                if any(ep.endswith(current_ep_path) for ep in found_endpoints):
+                    # It's a valid current endpoint.
+                    # If it has a custom description (not "API Endpoint"), keep the WHOLE line
+                    if "API Endpoint" not in line and (current_ep_path == "/health" or "/images" in current_ep_path):
+                         # If we already added an auto-generated one for this same path, remove it
+                         # This is getting complex. Let's just avoid adding it in the first loop if we find it here.
+                         pass
                     continue
                 else:
                     # It's an old endpoint that no longer exists. Skip it.

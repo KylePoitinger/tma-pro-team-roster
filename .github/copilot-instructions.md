@@ -62,7 +62,7 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
 - `DELETE players/{playerId}`: API Endpoint
 - `GET /arenas`: API Endpoint
 - `GET /arenas/{arenaId}`: API Endpoint
-- `GET /health`: API Endpoint
+- `GET /health`: Returns service status and component health
 - `GET /images`: API Endpoint
 - `GET /mascots/team`: API Endpoint
 - `GET /mascots/{mascotId}`: API Endpoint
