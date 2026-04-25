@@ -50,7 +50,7 @@ public class ProMascotServiceTest {
 		mascot1.name = "Giant Bee";
 		mascot1.description = "A large buzzing insect";
 		mascot1.costume = "Yellow and black stripes";
-		mascot1.teamName = "Hornets";
+		mascot1.team = new main.java.entity.ProTeamEntity();
 		ProMascotService.createProMascot(mascot1);
 
 		ProMascotEntity mascot2 = new ProMascotEntity();
@@ -58,7 +58,7 @@ public class ProMascotServiceTest {
 		mascot2.name = "Mountain";
 		mascot2.description = "A majestic peak";
 		mascot2.costume = "Blue and white peaks";
-		mascot2.teamName = "Apps";
+		mascot2.team = new main.java.entity.ProTeamEntity();
 		ProMascotService.createProMascot(mascot2);
 
 		ProMascotEntity mascot3 = new ProMascotEntity();
@@ -66,7 +66,7 @@ public class ProMascotServiceTest {
 		mascot3.name = "A Stick";
 		mascot3.description = "Just a simple stick";
 		mascot3.costume = "Brown wood";
-		mascot3.teamName = "Switch";
+		mascot3.team = new main.java.entity.ProTeamEntity();
 		ProMascotService.createProMascot(mascot3);
 	}
 
@@ -91,7 +91,7 @@ public class ProMascotServiceTest {
 		mascot4.name = "Dragon";
 		mascot4.description = "A fierce mythical creature";
 		mascot4.costume = "Green scales and wings";
-		mascot4.teamName = "Dragons";
+		mascot4.team = new main.java.entity.ProTeamEntity();
 
 		assertNull(ProMascotService.getProMascot(4L));
 		ProMascotService.createProMascot(mascot4);
@@ -123,7 +123,7 @@ public class ProMascotServiceTest {
 		mascot4.name = "Test Mascot";
 		mascot4.description = "Test description";
 		mascot4.costume = "Test costume";
-		mascot4.teamName = "Test Team";
+		mascot4.team = new main.java.entity.ProTeamEntity();
 		ProMascotService.createProMascot(mascot4);
 
 		ProMascotEntity beforeDelete = ProMascotService.getProMascot(4L);

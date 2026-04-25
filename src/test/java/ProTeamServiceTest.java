@@ -30,21 +30,21 @@ public class ProTeamServiceTest {
 		team1.teamId = 1L;
 		team1.city = "Charlotte";
 		team1.name = "Hornets";
-		team1.mascot = "Giant Bee";
+		team1.mascot =  new main.java.entity.ProMascotEntity();
 		ProTeamService.createTeam(team1);
 
 		ProTeamEntity team2 = new ProTeamEntity();
 		team2.teamId = 2L;
 		team2.city = "Hickory";
 		team2.name = "Switch";
-		team2.mascot = "A Stick";
+		team2.mascot = new main.java.entity.ProMascotEntity();
 		ProTeamService.createTeam(team2);
 
 		ProTeamEntity team3 = new ProTeamEntity();
 		team3.teamId = 3L;
 		team3.city = "Asheville";
 		team3.name = "Apps";
-		team3.mascot = "Mountain";
+		team3.mascot = new main.java.entity.ProMascotEntity();
 		ProTeamService.createTeam(team3);
 	}
 
@@ -73,7 +73,7 @@ public class ProTeamServiceTest {
 		team4.teamId = 14L;
 		team4.city = "Morganton";
 		team4.name = "Shadows";
-		team4.mascot = "Dirt Roads";
+		team4.mascot = new main.java.entity.ProMascotEntity();
 		ProTeamService.createTeam(team4);
 
 		ProTeamEntity retrieved = ProTeamService.getSingleTeamAndRoster(14L);
@@ -87,7 +87,7 @@ public class ProTeamServiceTest {
 		team1.teamId = 1L;
 		team1.city = "Space";
 		team1.name = "Hornets";
-		team1.mascot = "Giant Bee";
+		team1.mascot = new main.java.entity.ProMascotEntity();
 
 		ProTeamEntity beforeUpdate = ProTeamService.getSingleTeamAndRoster(1L);
 		assertNotNull(beforeUpdate);

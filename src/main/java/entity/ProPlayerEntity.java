@@ -28,4 +28,18 @@ public class ProPlayerEntity {
 
 	public double salary;
 
+	@Override
+	public String toString() {
+		return "ProPlayerEntity{" +
+				"playerId=" + playerId +
+				", name='" + name + '\'' +
+				", position='" + position + '\'' +
+				", teamName='" + teamName + '\'' +
+				", age=" + age +
+				", height=" + height +
+				", weight=" + weight +
+				", college='" + college + '\'' +
+				", salary=" + salary +
+				'}';
+	}
 }

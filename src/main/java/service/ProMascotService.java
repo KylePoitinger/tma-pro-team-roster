@@ -33,7 +33,7 @@ public class ProMascotService {
 	public static ProMascotEntity updateProMascot(long mascotId, ProMascotEntity updateMascotReq) {
 		return proMascotRepo.findById(mascotId).map(mascot -> {
 			mascot.name = updateMascotReq.name;
-			mascot.teamName = updateMascotReq.teamName;
+			mascot.team = updateMascotReq.team;
 			mascot.description = updateMascotReq.description;
 			mascot.costume = updateMascotReq.costume;
 			return proMascotRepo.save(mascot);

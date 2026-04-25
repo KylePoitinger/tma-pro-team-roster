@@ -45,21 +45,19 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 		team1.teamId = 1;
 		team1.city = "Charlotte";
 		team1.name = "Hornets";
-		team1.mascot = "Giant Bee";
 		ProTeamEntity team2 = new ProTeamEntity();
 		team2.teamId = 2;
 		team2.city = "Hickory";
 		team2.name = "Switch";
-		team2.mascot = "A Stick";
 		ProTeamEntity team3 = new ProTeamEntity();
 		team3.teamId = 3;
 		team3.city = "Asheville";
 		team3.name = "Apps";
-		team3.mascot = "Mountain";
 		LOG.info("saving team data in DB.");
 		proTeamRepo.save(team1);
 		proTeamRepo.save(team2);
 		proTeamRepo.save(team3);
+		LOG.info("Inserting teams: {" + team1, team2, team3 + "}");
 		LOG.info("Inserting player data in DB.");
 		ProPlayerEntity player1 = new ProPlayerEntity();
 		player1.playerId = 1;
@@ -94,29 +92,28 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 		proPlayerRepo.save(player1);
 		proPlayerRepo.save(player2);
 		proPlayerRepo.save(player3);
+		LOG.info("Inserting players: {" + player1, player2, player3 + "}");
 		LOG.info("Inserting mascot data in DB.");
 		ProMascotEntity mascot1 = new ProMascotEntity();
 		mascot1.mascotId = 1;
 		mascot1.name = "Hornsby";
-		mascot1.teamName = "Hornets";
 		mascot1.description = "A giant bee mascot";
 		mascot1.costume = "Yellow and black striped";
 		ProMascotEntity mascot2 = new ProMascotEntity();
 		mascot2.mascotId = 2;
 		mascot2.name = "Switchly";
-		mascot2.teamName = "Switch";
 		mascot2.description = "A stick mascot";
 		mascot2.costume = "Brown wood texture";
 		ProMascotEntity mascot3 = new ProMascotEntity();
 		mascot3.mascotId = 3;
 		mascot3.name = "Rocky";
-		mascot3.teamName = "Apps";
 		mascot3.description = "A mountain mascot";
 		mascot3.costume = "Gray boulder suit";
 		LOG.info("saving mascot data in DB.");
 		proMascotRepo.save(mascot1);
 		proMascotRepo.save(mascot2);
 		proMascotRepo.save(mascot3);
+		LOG.info("Inserting mascots: {" + mascot1, mascot2, mascot3 + "}");
 	}
 
 }
