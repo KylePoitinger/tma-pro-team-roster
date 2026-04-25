@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import main.java.entity.ProArenaEntity;
-import main.java.entity.ProPlayerEntity;
+import main.java.entity.ProTeamEntity;
 import main.java.entity.ProScheduleEntity;
 import main.java.repository.ProScheduleRepo;
 
@@ -33,26 +33,26 @@ public class ProScheduleServiceTest {
     public void testGetAllSchedules() {
         LOG.info("[DEBUG_LOG] Testing getAllSchedules method with multiple entries");
         
-        // Mocking multiple players, teams (implicitly by IDs), and arenas
-        ProPlayerEntity p1 = new ProPlayerEntity(); p1.playerId = 1L;
-        ProPlayerEntity p2 = new ProPlayerEntity(); p2.playerId = 2L;
+        // Mocking multiple teams and arenas
+        ProTeamEntity t1 = new ProTeamEntity(); t1.teamId = 1L;
+        ProTeamEntity t2 = new ProTeamEntity(); t2.teamId = 2L;
         ProArenaEntity a1 = new ProArenaEntity(); a1.arenaId = 101L;
         ProArenaEntity a2 = new ProArenaEntity(); a2.arenaId = 102L;
 
         ProScheduleEntity s1 = new ProScheduleEntity();
-        s1.player = p1; // Player 1
+        s1.team = t1; // Team 1
         s1.arena = a1; // Arena 1
         s1.scheduledDate = "2026-05-01";
         s1.ticketPrice = 50.0;
         
         ProScheduleEntity s2 = new ProScheduleEntity();
-        s2.player = p2; // Player 2
+        s2.team = t2; // Team 2
         s2.arena = a2; // Arena 2
         s2.scheduledDate = "2026-05-15";
         s2.ticketPrice = 60.0;
 
         ProScheduleEntity s3 = new ProScheduleEntity();
-        s3.player = p1; // Player 1 again
+        s3.team = t1; // Team 1 again
         s3.arena = a2; // Arena 2
         s3.scheduledDate = "2026-06-01";
         s3.ticketPrice = 55.0;
@@ -66,43 +66,43 @@ public class ProScheduleServiceTest {
     }
 
     @Test
-    public void testGetSchedulesByPlayer() {
-        LOG.info("[DEBUG_LOG] Testing getSchedulesByPlayer method with multiple players");
-        ProPlayerEntity p1 = new ProPlayerEntity(); p1.playerId = 1L;
+    public void testGetSchedulesByTeam() {
+        LOG.info("[DEBUG_LOG] Testing getSchedulesByTeam method");
+        ProTeamEntity t1 = new ProTeamEntity(); t1.teamId = 1L;
         ProArenaEntity a1 = new ProArenaEntity(); a1.arenaId = 101L;
         ProArenaEntity a2 = new ProArenaEntity(); a2.arenaId = 102L;
 
         ProScheduleEntity s1 = new ProScheduleEntity();
-        s1.player = p1;
+        s1.team = t1;
         s1.arena = a1;
         
         ProScheduleEntity s2 = new ProScheduleEntity();
-        s2.player = p1;
+        s2.team = t1;
         s2.arena = a2;
 
-        when(proScheduleRepo.findByPlayer_PlayerId(1L)).thenReturn(Arrays.asList(s1, s2));
-        when(proScheduleRepo.findByPlayer_PlayerId(2L)).thenReturn(Arrays.asList(new ProScheduleEntity())); // Player 2 has 1 schedule
+        when(proScheduleRepo.findByTeam_TeamId(1L)).thenReturn(Arrays.asList(s1, s2));
+        when(proScheduleRepo.findByTeam_TeamId(2L)).thenReturn(Arrays.asList(new ProScheduleEntity())); // Team 2 has 1 schedule
         
-        List<ProScheduleEntity> resultP1 = proScheduleService.getSchedulesByPlayer(1L);
-        List<ProScheduleEntity> resultP2 = proScheduleService.getSchedulesByPlayer(2L);
+        List<ProScheduleEntity> resultT1 = proScheduleService.getSchedulesByTeam(1L);
+        List<ProScheduleEntity> resultT2 = proScheduleService.getSchedulesByTeam(2L);
         
-        assertEquals(2, resultP1.size());
-        assertEquals(1, resultP2.size());
+        assertEquals(2, resultT1.size());
+        assertEquals(1, resultT2.size());
     }
 
     @Test
     public void testGetSchedulesByArena() {
         LOG.info("[DEBUG_LOG] Testing getSchedulesByArena method with multiple arenas");
-        ProPlayerEntity p1 = new ProPlayerEntity(); p1.playerId = 1L;
-        ProPlayerEntity p2 = new ProPlayerEntity(); p2.playerId = 2L;
+        ProTeamEntity t1 = new ProTeamEntity(); t1.teamId = 1L;
+        ProTeamEntity t2 = new ProTeamEntity(); t2.teamId = 2L;
         ProArenaEntity a1 = new ProArenaEntity(); a1.arenaId = 101L;
 
         ProScheduleEntity s1 = new ProScheduleEntity();
-        s1.player = p1;
+        s1.team = t1;
         s1.arena = a1;
         
         ProScheduleEntity s2 = new ProScheduleEntity();
-        s2.player = p2;
+        s2.team = t2;
         s2.arena = a1;
 
         when(proScheduleRepo.findByArena_ArenaId(101L)).thenReturn(Arrays.asList(s1, s2));
@@ -118,11 +118,11 @@ public class ProScheduleServiceTest {
     @Test
     public void testCreateSchedule() {
         LOG.info("[DEBUG_LOG] Testing createSchedule method");
-        ProPlayerEntity p1 = new ProPlayerEntity(); p1.playerId = 1L;
+        ProTeamEntity t1 = new ProTeamEntity(); t1.teamId = 1L;
         ProArenaEntity a1 = new ProArenaEntity(); a1.arenaId = 1L;
 
         ProScheduleEntity schedule = new ProScheduleEntity();
-        schedule.player = p1;
+        schedule.team = t1;
         schedule.arena = a1;
         schedule.scheduledDate = "2026-05-01";
         schedule.ticketPrice = 50.0;
@@ -132,7 +132,7 @@ public class ProScheduleServiceTest {
         ProScheduleEntity result = proScheduleService.createSchedule(schedule);
         
         assertNotNull(result);
-        assertEquals(1L, result.player.playerId);
+        assertEquals(1L, result.team.teamId);
         assertEquals(50.0, result.ticketPrice);
     }
 }

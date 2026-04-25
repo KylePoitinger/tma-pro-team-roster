@@ -13,8 +13,8 @@ public class ProScheduleEntity {
     public long scheduleId;
 
     @ManyToOne
-    @JoinColumn(name = "playerId")
-    public ProPlayerEntity player;
+    @JoinColumn(name = "teamId")
+    public ProTeamEntity team;
 
     @ManyToOne
     @JoinColumn(name = "arenaId")
@@ -28,7 +28,7 @@ public class ProScheduleEntity {
     public String toString() {
         return "ProScheduleEntity{" +
                 "scheduleId=" + scheduleId +
-                ", player=" + (player != null ? player.playerId : "null") +
+                ", team=" + (team != null ? team.teamId : "null") +
                 ", arena=" + (arena != null ? arena.arenaId : "null") +
                 ", scheduledDate='" + scheduledDate + '\'' +
                 ", ticketPrice=" + ticketPrice +

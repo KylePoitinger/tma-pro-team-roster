@@ -59,7 +59,7 @@ public class EndpointIntegrationTest {
 
     @Test
     public void testCreateAndGetSchedule() {
-        String scheduleJson = "{\"player\":{\"playerId\":1},\"arena\":{\"arenaId\":1},\"scheduledDate\":\"2026-06-01\",\"ticketPrice\":75.0}";
+        String scheduleJson = "{\"team\":{\"teamId\":1},\"arena\":{\"arenaId\":1},\"scheduledDate\":\"2026-06-01\",\"ticketPrice\":75.0}";
         ResponseEntity<Map> postResponse = restTemplate.postForEntity(getBaseUrl() + "/schedules",
             new org.springframework.http.HttpEntity<>(scheduleJson, createJsonHeaders()), Map.class);
 
@@ -71,9 +71,9 @@ public class EndpointIntegrationTest {
         ResponseEntity<Map> getResponse = restTemplate.getForEntity(getBaseUrl() + "/schedules/" + scheduleId, Map.class);
         assertEquals(HttpStatus.OK, getResponse.getStatusCode());
         
-        Map player = (Map) getResponse.getBody().get("player");
-        assertNotNull(player);
-        assertEquals(1, player.get("playerId"));
+        Map team = (Map) getResponse.getBody().get("team");
+        assertNotNull(team);
+        assertEquals(1, team.get("teamId"));
         
         Map arena = (Map) getResponse.getBody().get("arena");
         assertNotNull(arena);

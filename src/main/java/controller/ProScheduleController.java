@@ -24,9 +24,9 @@ public class ProScheduleController {
         return proScheduleService.getSchedule(scheduleId);
     }
 
-    @GetMapping("/player/{playerId}")
-    public List<ProScheduleEntity> getSchedulesByPlayer(@PathVariable long playerId) {
-        return proScheduleService.getSchedulesByPlayer(playerId);
+    @GetMapping("/team/{teamId}")
+    public List<ProScheduleEntity> getSchedulesByTeam(@PathVariable long teamId) {
+        return proScheduleService.getSchedulesByTeam(teamId);
     }
 
     @GetMapping("/arena/{arenaId}")

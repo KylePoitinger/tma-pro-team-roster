@@ -20,8 +20,8 @@ public class ProScheduleService {
         return proScheduleRepo.findById(scheduleId).orElse(null);
     }
 
-    public List<ProScheduleEntity> getSchedulesByPlayer(long playerId) {
-        return proScheduleRepo.findByPlayer_PlayerId(playerId);
+    public List<ProScheduleEntity> getSchedulesByTeam(long teamId) {
+        return proScheduleRepo.findByTeam_TeamId(teamId);
     }
 
     public List<ProScheduleEntity> getSchedulesByArena(long arenaId) {
@@ -34,7 +34,7 @@ public class ProScheduleService {
 
     public ProScheduleEntity updateSchedule(long scheduleId, ProScheduleEntity updateReq) {
         return proScheduleRepo.findById(scheduleId).map(schedule -> {
-            schedule.player = updateReq.player;
+            schedule.team = updateReq.team;
             schedule.arena = updateReq.arena;
             schedule.scheduledDate = updateReq.scheduledDate;
             schedule.ticketPrice = updateReq.ticketPrice;

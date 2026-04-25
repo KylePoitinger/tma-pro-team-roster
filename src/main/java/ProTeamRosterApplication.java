@@ -136,11 +136,11 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 		}
 
 		LOG.info("Inserting schedule data in DB.");
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < teams.size(); i++) {
+			ProTeamEntity team = teams.get(i);
 			ProScheduleEntity schedule = new ProScheduleEntity();
-			ProPlayerEntity randomPlayer = allPlayers.get(i * 5 % allPlayers.size());
-			schedule.player = randomPlayer;
-			schedule.arena = randomPlayer.team.arena;
+			schedule.team = team;
+			schedule.arena = team.arena;
 			schedule.scheduledDate = "2026-05-" + (10 + i);
 			schedule.ticketPrice = 50.00 + (i * 5);
 			proScheduleRepo.save(schedule);
