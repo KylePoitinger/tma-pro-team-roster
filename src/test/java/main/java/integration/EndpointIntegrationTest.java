@@ -57,6 +57,23 @@ public class EndpointIntegrationTest {
         assertEquals("Test Team", getResponse.getBody().get("name"));
     }
 
+    @Test
+    public void testCreateAndGetSchedule() {
+        String scheduleJson = "{\"playerId\":1,\"arenaId\":1,\"scheduledDate\":\"2026-06-01\",\"ticketPrice\":75.0}";
+        ResponseEntity<Map> postResponse = restTemplate.postForEntity(getBaseUrl() + "/schedules",
+            new org.springframework.http.HttpEntity<>(scheduleJson, createJsonHeaders()), Map.class);
+
+        assertEquals(HttpStatus.OK, postResponse.getStatusCode());
+        assertNotNull(postResponse.getBody());
+        Object scheduleId = postResponse.getBody().get("scheduleId");
+        assertNotNull(scheduleId);
+
+        ResponseEntity<Map> getResponse = restTemplate.getForEntity(getBaseUrl() + "/schedules/" + scheduleId, Map.class);
+        assertEquals(HttpStatus.OK, getResponse.getStatusCode());
+        assertEquals(1, getResponse.getBody().get("playerId"));
+        assertEquals(75.0, getResponse.getBody().get("ticketPrice"));
+    }
+
     private org.springframework.http.HttpHeaders createJsonHeaders() {
         org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
         headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);

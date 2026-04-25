@@ -7,6 +7,10 @@ All notable changes to this project will be documented in this file, following t
 
 | timestamp | agent | action | files | summary | details |
 | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-04-25T14:25:00 | Junie | modified | \src/test/java/main/java/integration/ScaleDataIntegrationTest.java\ | Fixed data pollution in scale test | Added \@DirtiesContext\ to ensure a clean database state for the scale verification test. |
+| 2026-04-25T14:22:00 | Junie | created | \src/test/java/main/java/integration/ScaleDataIntegrationTest.java\ | Expanded data scale to 10 teams, 5 arenas, and 11 players per team | Created a new integration test to verify the system can handle larger data volumes as requested. |
+| 2026-04-25T14:18:00 | Junie | modified | \src/test/java/main/java/service/ProScheduleServiceTest.java\ | Expanded ProSchedule service tests | Added test cases covering multiple players and arenas to ensure the service correctly handles diverse scheduling scenarios. |
+| 2026-04-25T14:15:00 | Junie | created | \src/main/java/*/ProSchedule*.java\ | Created ProSchedule service | Implemented Entity, Repository, Service, and Controller for Player Schedules, including ticket prices and arena mappings. |
 | 2026-04-25T14:05:00 | Junie | modified | \src/test/java/main/java/integration/EndpointIntegrationTest.java\ | Fixed Connection Refused error in integration tests | Switched to \WebEnvironment.RANDOM_PORT\ to ensure the application starts correctly during tests. |
 | 2026-04-25T14:00:00 | Junie | created | \src/test/java/main/java/integration/EndpointIntegrationTest.java\ | Added endpoint integration tests | Created a new integration test suite to verify REST endpoints against a running Spring Boot instance. |
 | 2026-04-25T13:45:00 | Junie | modified | \src/test/java/main/java/service/*.java\ | Added SLF4J log statements to test classes | Inserted \LOG.info\ calls in \ProTeamServiceTest\, \ProPlayerServiceTest\, \ProMascotServiceTest\, \ProArenaServiceTest\, and \MascotImageServiceTest\ for better visibility. |
