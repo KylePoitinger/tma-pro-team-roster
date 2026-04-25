@@ -59,4 +59,10 @@ public class ProMascotController {
 		return proMascotService.deleteProMascot(mascotId);
 	}
 
+	@GetMapping("/mascots/random")
+	@Operation(summary = "Get a random mascot", description = "Returns details for a random mascot with a fresh image")
+	public ProMascotEntity getRandomMascot() {
+		return proMascotService.getRandomMascot();
+	}
+
 }

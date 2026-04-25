@@ -11,11 +11,16 @@ import main.java.entity.ProMascotEntity;
 import main.java.exception.ResourceNotFoundException;
 import main.java.repository.ProMascotRepo;
 
+import java.util.Random;
+
 @Service
 public class ProMascotService {
 
 	@Autowired
 	private ProMascotRepo proMascotRepo;
+
+	@Autowired
+	private MascotImageService mascotImageService;
 
 	public ProMascotEntity getProMascot(long mascotId) {
 		return Optional.ofNullable(proMascotRepo.getOneByMascotId(mascotId))
@@ -47,6 +52,20 @@ public class ProMascotService {
 
 		proMascotRepo.delete(mascot);
 		return "Delete was successful for mascot:" + mascotId;
+	}
+
+	public ProMascotEntity getRandomMascot() {
+		ProMascotEntity mascot = proMascotRepo.findRandomMascot();
+		if (mascot != null) {
+			try {
+				String imageUrl = mascotImageService.fetchRandomMascotImage();
+				mascot.setImageUrl(imageUrl);
+				proMascotRepo.save(mascot);
+			} catch (Exception e) {
+				// Fallback to existing image or leave as is if service fails
+			}
+		}
+		return mascot;
 	}
 
 }

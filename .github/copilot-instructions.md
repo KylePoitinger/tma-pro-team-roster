@@ -67,6 +67,7 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
 - `GET /arenas/{arenaId}`: API Endpoint
 - `GET /health`: Returns service status and component health
 - `GET /images`: API Endpoint
+- `GET /mascots/random`: API Endpoint
 - `GET /mascots/team`: API Endpoint
 - `GET /mascots/{mascotId}`: API Endpoint
 - `GET /players/{playerId}`: API Endpoint

@@ -25,6 +25,9 @@ public class ProMascotServiceTest {
     @Mock
     private ProMascotRepo proMascotRepo;
 
+    @Mock
+    private MascotImageService mascotImageService;
+
     @InjectMocks
     private ProMascotService proMascotService;
 
@@ -129,5 +132,47 @@ public class ProMascotServiceTest {
         LOG.info("Testing deleteProMascot method - not found");
         when(proMascotRepo.getOneByMascotId(999L)).thenReturn(null);
         assertThrows(ResourceNotFoundException.class, () -> proMascotService.deleteProMascot(999L));
+    }
+
+    @Test
+    public void testGetRandomMascot() {
+        LOG.info("Testing getRandomMascot method");
+        ProMascotEntity mascot = new ProMascotEntity();
+        mascot.mascotId = 1L;
+        mascot.name = "Random Mascot";
+
+        when(proMascotRepo.findRandomMascot()).thenReturn(mascot);
+        when(mascotImageService.fetchRandomMascotImage()).thenReturn("http://example.com/image.jpg");
+        when(proMascotRepo.save(any(ProMascotEntity.class))).thenReturn(mascot);
+
+        ProMascotEntity result = proMascotService.getRandomMascot();
+        assertNotNull(result);
+        assertEquals("Random Mascot", result.name);
+        assertEquals("http://example.com/image.jpg", result.getImageUrl());
+    }
+
+    @Test
+    public void testGetRandomMascotNotFound() {
+        LOG.info("Testing getRandomMascot method - not found");
+        when(proMascotRepo.findRandomMascot()).thenReturn(null);
+        ProMascotEntity result = proMascotService.getRandomMascot();
+        assertNull(result);
+    }
+
+    @Test
+    public void testGetRandomMascotImageServiceException() {
+        LOG.info("Testing getRandomMascot method - image service exception");
+        ProMascotEntity mascot = new ProMascotEntity();
+        mascot.mascotId = 1L;
+        mascot.name = "Random Mascot";
+        mascot.setImageUrl("old_url");
+
+        when(proMascotRepo.findRandomMascot()).thenReturn(mascot);
+        when(mascotImageService.fetchRandomMascotImage()).thenThrow(new RuntimeException("API Down"));
+
+        ProMascotEntity result = proMascotService.getRandomMascot();
+        assertNotNull(result);
+        assertEquals("old_url", result.getImageUrl());
+        verify(proMascotRepo, never()).save(any());
     }
 }

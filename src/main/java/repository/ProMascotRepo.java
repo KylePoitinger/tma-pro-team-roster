@@ -25,5 +25,8 @@ public interface ProMascotRepo extends JpaRepository<ProMascotEntity, Long> {
 	@Query("delete from ProMascotEntity m where m.mascotId=:mascotId")
 	void deleteMascotById(@Param("mascotId") long mascotId);
 
+	@Query(value = "SELECT * FROM pro_mascot_entity ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
+	ProMascotEntity findRandomMascot();
+
 }
 

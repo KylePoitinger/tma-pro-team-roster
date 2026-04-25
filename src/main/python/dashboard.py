@@ -10,9 +10,9 @@ st.set_page_config(page_title="Pro Team Roster Dashboard", layout="wide")
 BASE_URL = "http://localhost:8080"
 
 @st.cache_data(ttl=60)
-def fetch_data(endpoint):
+def fetch_data(endpoint, params=None):
     try:
-        response = requests.get(f"{BASE_URL}/{endpoint}")
+        response = requests.get(f"{BASE_URL}/{endpoint}", params=params)
         if response.status_code == 200:
             return response.json()
     except Exception as e:
@@ -67,13 +67,32 @@ if page == "Team Analytics":
         mascot_data = fetch_data(f"mascots/team?team-id={team_id}")
         if mascot_data and len(mascot_data) > 0:
             m = mascot_data[0]
-            mcol1, mcol2, mcol3 = st.columns(3)
-            mcol1.markdown(f"**Name:** {m['name']}")
-            mcol2.markdown(f"**Species:** {m['species']}")
-            mcol3.markdown(f"**Personality:** {m['personality']}")
-            st.info(f"**Description:** {m['description']}")
+            mcol1, mcol2 = st.columns([1, 2])
+            with mcol1:
+                if m.get('imageUrl'):
+                    st.image(m['imageUrl'], use_container_width=True)
+                else:
+                    st.info("No image available")
+            with mcol2:
+                st.markdown(f"**Name:** {m['name']}")
+                st.markdown(f"**Species:** {m['species']}")
+                st.markdown(f"**Personality:** {m['personality']}")
+                st.info(f"**Description:** {m['description']}")
         else:
             st.write("No mascot data available.")
+
+        # Random Mascot Spotlight
+        st.sidebar.markdown("---")
+        st.sidebar.subheader("🌟 Mascot Spotlight")
+        if st.sidebar.button("Fetch Random Mascot"):
+            # Use timestamp to bypass cache for random mascot
+            timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+            random_m = fetch_data("mascots/random", params={"t": timestamp})
+            if random_m:
+                st.sidebar.image(random_m.get('imageUrl'), caption=f"{random_m['name']} ({random_m['species']})")
+                st.sidebar.write(f"*{random_m['personality']}*")
+            else:
+                st.sidebar.error("Failed to fetch mascot")
 
         # Roster Section
         st.subheader("📋 Roster Details")
