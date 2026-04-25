@@ -1,9 +1,14 @@
 package main.java.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import main.java.entity.ProScheduleEntity;
+import main.java.exception.ResourceNotFoundException;
 import main.java.repository.ProScheduleRepo;
+
 import java.util.List;
 
 @Service
@@ -17,7 +22,8 @@ public class ProScheduleService {
     }
 
     public ProScheduleEntity getSchedule(long scheduleId) {
-        return proScheduleRepo.findById(scheduleId).orElse(null);
+        return proScheduleRepo.findById(scheduleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Schedule not found for this id :: " + scheduleId));
     }
 
     public List<ProScheduleEntity> getSchedulesByTeam(long teamId) {
@@ -39,18 +45,14 @@ public class ProScheduleService {
             schedule.scheduledDate = updateReq.scheduledDate;
             schedule.ticketPrice = updateReq.ticketPrice;
             return proScheduleRepo.save(schedule);
-        }).orElseGet(() -> {
-            updateReq.scheduleId = scheduleId;
-            return proScheduleRepo.save(updateReq);
-        });
+        }).orElseThrow(() -> new ResourceNotFoundException("Schedule not found for this id :: " + scheduleId));
     }
 
     public String deleteSchedule(long scheduleId) {
-        try {
-            proScheduleRepo.deleteById(scheduleId);
-            return "Delete was successful for schedule:" + scheduleId;
-        } catch (Exception e) {
-            return "Delete was unsuccessful with error: " + e.toString();
-        }
+        ProScheduleEntity schedule = proScheduleRepo.findById(scheduleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Schedule not found for this id :: " + scheduleId));
+
+        proScheduleRepo.delete(schedule);
+        return "Delete was successful for schedule:" + scheduleId;
     }
 }

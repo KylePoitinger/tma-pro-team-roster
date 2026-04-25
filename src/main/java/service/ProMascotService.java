@@ -2,10 +2,13 @@ package main.java.service;
 
 import java.util.List;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import main.java.entity.ProMascotEntity;
+import main.java.exception.ResourceNotFoundException;
 import main.java.repository.ProMascotRepo;
 
 @Service
@@ -15,7 +18,8 @@ public class ProMascotService {
 	private ProMascotRepo proMascotRepo;
 
 	public ProMascotEntity getProMascot(long mascotId) {
-		return proMascotRepo.getOneByMascotId(mascotId);
+		return Optional.ofNullable(proMascotRepo.getOneByMascotId(mascotId))
+				.orElseThrow(() -> new ResourceNotFoundException("Mascot not found for this id :: " + mascotId));
 	}
 
 	public List<ProMascotEntity> getMascotsByTeam(long teamId) {
@@ -33,17 +37,14 @@ public class ProMascotService {
 			mascot.description = updateMascotReq.description;
 			mascot.costume = updateMascotReq.costume;
 			return proMascotRepo.save(mascot);
-		}).orElseGet(() -> {
-			return proMascotRepo.save(updateMascotReq);
-		});
+		}).orElseThrow(() -> new ResourceNotFoundException("Mascot not found for this id :: " + mascotId));
 	}
 
 	public String deleteProMascot(long mascotId) {
-		try {
-			proMascotRepo.deleteMascotById(mascotId);
-		} catch (Exception e) {
-			return "Delete was unsuccessful with error: " + e.toString();
-		}
+		ProMascotEntity mascot = Optional.ofNullable(proMascotRepo.getOneByMascotId(mascotId))
+				.orElseThrow(() -> new ResourceNotFoundException("Mascot not found for this id :: " + mascotId));
+
+		proMascotRepo.delete(mascot);
 		return "Delete was successful for mascot:" + mascotId;
 	}
 

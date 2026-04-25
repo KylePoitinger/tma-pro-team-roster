@@ -58,6 +58,14 @@ public class EndpointIntegrationTest {
     }
 
     @Test
+    public void testGetNonExistentTeam() {
+        ResponseEntity<Map> response = restTemplate.getForEntity(getBaseUrl() + "/teams/999/roster", Map.class);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("Team not found for this id :: 999", response.getBody().get("message"));
+    }
+
+    @Test
     public void testCreateAndGetSchedule() {
         String scheduleJson = "{\"team\":{\"teamId\":1},\"arena\":{\"arenaId\":1},\"scheduledDate\":\"2026-06-01\",\"ticketPrice\":75.0}";
         ResponseEntity<Map> postResponse = restTemplate.postForEntity(getBaseUrl() + "/schedules",

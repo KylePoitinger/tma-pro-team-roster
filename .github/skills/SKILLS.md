@@ -16,32 +16,40 @@ tma-pro-team-roster (Maven Project)
 │   ├── ProTeamRosterApplication.java          # Entry point + CommandLineRunner (seeds DB)
 │   │
 │   ├── controller/                            # Layer 1: REST Endpoints
-│   │   ├── ProTeamController.java             # Team endpoints (GET/POST/PUT/DELETE)
-│   │   ├── ProPlayerController.java           # Player endpoints (GET/POST/PUT/DELETE)
-│   │   ├── ProMascotController.java           # Mascot endpoints (GET/POST/PUT/DELETE)
+│   │   ├── ProTeamController.java             # Team endpoints
+│   │   ├── ProPlayerController.java           # Player endpoints
+│   │   ├── ProMascotController.java           # Mascot endpoints
+│   │   ├── ProArenaController.java           # Arena endpoints
+│   │   ├── ProScheduleController.java        # Schedule endpoints
 │   │   ├── HealthCheckController.java         # Health check endpoint
-│   │   └─�� MascotImageController.java         # Mascot image handling (auxiliary)
+│   │   └── MascotImageController.java         # Mascot image handling
 │   │
-│   ├── service/                               # Layer 2: Business Logic (Static Methods)
-│   │   ├── ProTeamService.java                # Team service (static methods)
-│   │   ├── ProPlayerService.java              # Player service (static methods)
-│   │   ├── ProMascotService.java              # Mascot service (static methods)
-│   │   └── MascotImageService.java            # Image service (auxiliary)
+│   ├── service/                               # Layer 2: Business Logic
+│   │   ├── ProTeamService.java                # Team service
+│   │   ├── ProPlayerService.java              # Player service
+│   │   ├── ProMascotService.java              # Mascot service
+│   │   ├── ProArenaService.java               # Arena service
+│   │   ├── ProScheduleService.java            # Schedule service
+│   │   └── MascotImageService.java            # Image service
 │   │
 │   ├── repository/                            # Layer 3: Data Access (JPA)
-│   │   ├── ProTeamRepo.java                   # Team repository interface
-│   │   ├── ProPlayerRepo.java                 # Player repository interface
-│   │   └── ProMascotRepo.java                 # Mascot repository interface
+│   │   ├── ProTeamRepo.java                   # Team repository
+│   │   ├── ProPlayerRepo.java                 # Player repository
+│   │   ├── ProMascotRepo.java                 # Mascot repository
+│   │   ├── ProArenaRepo.java                 # Arena repository
+│   │   └── ProScheduleRepo.java               # Schedule repository
 │   │
 │   └── entity/                                # Data Models (JPA Entities)
-│       ├── ProTeamEntity.java                 # Team entity (OneToMany relationship)
-│       ├── ProPlayerEntity.java               # Player entity (String-based FK)
-│       └── ProMascotEntity.java               # Mascot entity (String-based FK)
+│       ├── ProTeamEntity.java                 # Team entity
+│       ├── ProPlayerEntity.java               # Player entity
+│       ├── ProMascotEntity.java               # Mascot entity
+│       ├── ProArenaEntity.java               # Arena entity
+│       └── ProScheduleEntity.java             # Schedule entity
 │
-├── src/test/java                              # Test Code (Not Properly Wired)
-│   ├── main/java/test/
-│   ├── io/test/
-│   └── test/
+├── src/test/java                              # Functional Tests
+│   └── main/java/integration/
+│       ├── EndpointIntegrationTest.java       # Integration tests
+│       └── ScaleDataIntegrationTest.java      # Scale verification
 │
 └── src/main/resources
     └── application.properties                 # Spring Boot config (H2 enabled)
@@ -76,12 +84,12 @@ tma-pro-team-roster (Maven Project)
          │  Methods:                                              │
          │  • Receive HTTP requests via @GetMapping, etc.        │
          │  • Extract path/query parameters                      │
-         │  • Call Service layer (static methods)                │
+         │  • Call Service layer                                 │
          │  • Return Entity or List response                     │
          └────────────────────────┬─────────────────────────────┘
                                   │
                     Service Layer Invocation
-                    ProTeamService.getSingleTeam(teamId)
+                    proTeamService.getSingleTeamAndRoster(teamId)
                                   │
                                   ▼
          ┌────────────────────────────────────────────────────────┐
@@ -92,16 +100,16 @@ tma-pro-team-roster (Maven Project)
          │  @Service                                              │
          │  public class ProTeamService {                         │
          │    @Autowired                                          │
-         │    private ProTeamRepo proTeamRepo;  // Static         │
+         │    private ProTeamRepo proTeamRepo;                    │
          │                                                        │
          │    public ProTeamEntity getSingleTeam(long teamId) {   │
          │      return proTeamRepo.getOneByTeamId(teamId);        │
          │    }                                                   │
          │  }                                                     │
          │                                                        │
-         │  Design Pattern: STATIC METHODS (Intentional)          │
-         │  • All methods are static for simplicity              │
-         │  • Repositories autowired at class level              │
+         │  Design Pattern: Spring Beans                          │
+         │  • standard @Service components                       │
+         │  • Repositories autowired                             │
          │  • Handles data transformation/validation             │
          │  • Implements custom business logic                   │
          └────────────────────────┬─────────────────────────────┘
@@ -154,8 +162,8 @@ tma-pro-team-roster (Maven Project)
          │    public String city;          // City location       │
          │    public String mascot;        // Mascot name         │
          │                                                        │
-         │    @OneToMany(fetch = FetchType.LAZY)                 │
-         │    @JoinColumn(name="teamName", ...)                  │
+         │    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY) │
+         │    @JsonManagedReference                               │
          │    public List<ProPlayerEntity> proPlayers;           │
          │  }                                                     │
          │                                                        │
@@ -164,7 +172,7 @@ tma-pro-team-roster (Maven Project)
          │  • @Entity: JPA persistence mapping                   │
          │  • OneToMany: team has multiple players               │
          │  • LAZY loading: optimal query performance            │
-         │  • String-based FK: teamName (non-traditional)        │
+         │  • Proper JPA relationships                           │
          └────────────────────────┬─────────────────────────────┘
                                   │
                      H2 Database Table

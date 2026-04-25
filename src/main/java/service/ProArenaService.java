@@ -2,10 +2,13 @@ package main.java.service;
 
 import java.util.List;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import main.java.entity.ProArenaEntity;
+import main.java.exception.ResourceNotFoundException;
 import main.java.repository.ProArenaRepo;
 
 @Service
@@ -19,7 +22,8 @@ public class ProArenaService {
     }
 
     public ProArenaEntity getArena(long arenaId) {
-        return proArenaRepo.getOneByArenaId(arenaId);
+        return Optional.ofNullable(proArenaRepo.getOneByArenaId(arenaId))
+                .orElseThrow(() -> new ResourceNotFoundException("Arena not found for this id :: " + arenaId));
     }
 
     public ProArenaEntity createArena(ProArenaEntity createArenaReq) {
@@ -32,17 +36,14 @@ public class ProArenaService {
             arena.location = updateArenaReq.location;
             arena.capacity = updateArenaReq.capacity;
             return proArenaRepo.save(arena);
-        }).orElseGet(() -> {
-            return proArenaRepo.save(updateArenaReq);
-        });
+        }).orElseThrow(() -> new ResourceNotFoundException("Arena not found for this id :: " + arenaId));
     }
 
     public String deleteArena(long arenaId) {
-        try {
-            proArenaRepo.deleteArenaById(arenaId);
-        } catch (Exception e) {
-            return "Delete was unsuccessful with error: " + e.toString();
-        }
+        ProArenaEntity arena = Optional.ofNullable(proArenaRepo.getOneByArenaId(arenaId))
+                .orElseThrow(() -> new ResourceNotFoundException("Arena not found for this id :: " + arenaId));
+
+        proArenaRepo.delete(arena);
         return "Delete was successful for arena:" + arenaId;
     }
 }

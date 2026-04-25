@@ -2,10 +2,13 @@ package main.java.service;
 
 import java.util.List;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import main.java.entity.ProTeamEntity;
+import main.java.exception.ResourceNotFoundException;
 import main.java.repository.ProTeamRepo;
 
 @Service
@@ -19,8 +22,8 @@ public class ProTeamService {
 	}
 
 	public ProTeamEntity getSingleTeamAndRoster(long teamId) {
-		return proTeamRepo.getOneByTeamId(teamId);
-
+		return Optional.ofNullable(proTeamRepo.getOneByTeamId(teamId))
+				.orElseThrow(() -> new ResourceNotFoundException("Team not found for this id :: " + teamId));
 	}
 
 	public List<ProTeamEntity> getTeamsByFieldLookup(String name, String city, String mascot) {
@@ -30,8 +33,9 @@ public class ProTeamService {
 			return proTeamRepo.getTeamsByCity(city);
 		} else if (mascot != null) {
 			return proTeamRepo.getTeamsByMascot(mascot);
-		} else
-			return null;
+		} else {
+			throw new ResourceNotFoundException("No search criteria provided");
+		}
 	}
 
 	public ProTeamEntity createTeam(ProTeamEntity createTeamReq) {
@@ -45,17 +49,14 @@ public class ProTeamService {
 			team.name = updateTeamReq.name;
 			team.arena = updateTeamReq.arena;
 			return proTeamRepo.save(team);
-		}).orElseGet(() -> {
-			return proTeamRepo.save(updateTeamReq);
-		});
+		}).orElseThrow(() -> new ResourceNotFoundException("Team not found for this id :: " + teamId));
 	}
 
 	public String deleteTeam(long teamId) {
-		try {
-			proTeamRepo.deleteTeamById(teamId);
-		} catch (Exception e) {
+		ProTeamEntity team = Optional.ofNullable(proTeamRepo.getOneByTeamId(teamId))
+				.orElseThrow(() -> new ResourceNotFoundException("Team not found for this id :: " + teamId));
 
-		}
+		proTeamRepo.delete(team);
 		return "Delete was successful for team:" + teamId;
 	}
 

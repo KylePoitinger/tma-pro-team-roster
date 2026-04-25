@@ -53,9 +53,9 @@ Creates complete service implementations (Entity + Repository + Service + Contro
 1. **Structure Analysis**: Reads SKILLS.md to understand three-layer architecture
 2. **Entity Design**: Creates JPA entities with appropriate fields and relationships
 3. **Repository Creation**: Generates JPA repository interfaces with custom queries
-4. **Service Implementation**: Builds static method services following project patterns
+4. **Service Implementation**: Builds Spring `@Service` beans following project patterns
 5. **Controller Development**: Creates REST endpoints with proper mappings
-6. **Test Generation**: Produces unit tests with Mockito mocking
+6. **Test Generation**: Produces integration tests with `@SpringBootTest`
 7. **Integration**: Ensures all components work together
 
 ### Usage Example
@@ -73,9 +73,9 @@ Agent:
 ### Code Generation Rules
 - Follow Java 1.8 compatibility
 - Use Lombok @Data for entities
-- Implement static service methods
+- Implement standard Spring `@Service` beans (instance methods)
 - Include proper error handling
-- Add comprehensive tests
+- Add comprehensive integration tests
 
 ### File Structure
 ```
