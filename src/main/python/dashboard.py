@@ -134,15 +134,63 @@ if page == "Team Analytics":
                 vcol1, vcol2 = st.columns(2)
 
                 with vcol1:
-                    fig_age = px.histogram(players_df, x="age", title="Age Distribution", color_discrete_sequence=['#636EFA'])
+                    fig_age = px.histogram(
+                        players_df, 
+                        x="age", 
+                        title="Age Distribution", 
+                        nbins=10,
+                        color="name",
+                    )
+                    # Increase Y-axis range for better visibility
+                    if not players_df.empty and players_df['age'].nunique() > 1:
+                        max_age_count = players_df.groupby(pd.cut(players_df['age'], bins=10)).size().max()
+                    else:
+                        max_age_count = len(players_df) if not players_df.empty else 5
+
+                    fig_age.update_layout(
+                        yaxis_range=[0, max_age_count * 3],
+                        plot_bgcolor='rgba(0,0,0,0)',
+                        paper_bgcolor='rgba(0,0,0,0)',
+                        font_color='#e0e0e0',
+                        margin=dict(l=20, r=20, t=40, b=20)
+                    )
                     st.plotly_chart(fig_age, use_container_width=True)
 
                 with vcol2:
-                    fig_salary = px.bar(players_df, x="name", y="salary", color="position", title="Player Salaries")
+                    fig_salary = px.bar(
+                        players_df, 
+                        x="name", 
+                        y="salary", 
+                        color="position", 
+                        title="Player Salaries",
+                        color_discrete_sequence=["#00d4ff", "#ff4b2b", "#007bff", "#ff8c00"]
+                    )
+                    # Increase Y-axis range for better visibility
+                    max_salary = players_df['salary'].max() if not players_df.empty else 1000000
+                    fig_salary.update_layout(
+                        yaxis_range=[0, max_salary * 1.15],
+                        plot_bgcolor='rgba(0,0,0,0)',
+                        paper_bgcolor='rgba(0,0,0,0)',
+                        font_color='#e0e0e0',
+                        margin=dict(l=20, r=20, t=40, b=20)
+                    )
                     st.plotly_chart(fig_salary, use_container_width=True)
                 
-                fig_hw = px.scatter(players_df, x="height", y="weight", color="position", 
-                                    size="salary", hover_name="name", title="Height vs Weight (Size = Salary)")
+                fig_hw = px.scatter(
+                    players_df, 
+                    x="height", 
+                    y="weight", 
+                    color="position", 
+                    size="salary", 
+                    hover_name="name", 
+                    title="Height vs Weight (Size = Salary)",
+                    color_discrete_sequence=["#00d4ff", "#ff4b2b", "#007bff", "#ff8c00"]
+                )
+                fig_hw.update_layout(
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    font_color='#e0e0e0'
+                )
                 st.plotly_chart(fig_hw, use_container_width=True)
     else:
         st.info("No teams found. Start the backend to see live data.")
@@ -155,11 +203,37 @@ elif page == "Arena Overview":
         st.dataframe(arenas_df[['name', 'location', 'capacity', 'openedYear', 'surface', 'cost']])
         
         st.subheader("Capacity Comparison")
-        fig_cap = px.bar(arenas_df, x="name", y="capacity", color="location", title="Arena Capacity by Location")
+        fig_cap = px.bar(
+            arenas_df, 
+            x="name", 
+            y="capacity", 
+            color="location", 
+            title="Arena Capacity by Location",
+            color_discrete_sequence=["#00d4ff", "#ff4b2b", "#007bff", "#ff8c00"]
+        )
+        # Increase Y-axis range for better visibility
+        max_cap = arenas_df['capacity'].max() if not arenas_df.empty else 50000
+        fig_cap.update_layout(
+            yaxis_range=[0, max_cap * 1.15],
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            font_color='#e0e0e0'
+        )
         st.plotly_chart(fig_cap, use_container_width=True)
         
         st.subheader("Construction Cost Analysis")
-        fig_cost = px.pie(arenas_df, values='cost', names='name', title='Arena Construction Cost Distribution')
+        fig_cost = px.pie(
+            arenas_df, 
+            values='cost', 
+            names='name', 
+            title='Arena Construction Cost Distribution',
+            color_discrete_sequence=["#00d4ff", "#ff4b2b", "#007bff", "#ff8c00"]
+        )
+        fig_cost.update_layout(
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            font_color='#e0e0e0'
+        )
         st.plotly_chart(fig_cost, use_container_width=True)
     else:
         st.info("No arena data available.")
@@ -183,7 +257,23 @@ elif page == "Schedule Explorer":
         st.dataframe(sched_df.sort_values("Date"))
         
         st.subheader("Ticket Pricing Trends")
-        fig_price = px.line(sched_df.sort_values("Date"), x="Date", y="Ticket Price", markers=True, title="Ticket Prices over Time")
+        sorted_sched = sched_df.sort_values("Date")
+        fig_price = px.line(
+            sorted_sched, 
+            x="Date", 
+            y="Ticket Price", 
+            markers=True, 
+            title="Ticket Prices over Time",
+            color_discrete_sequence=["#ff4b2b"]
+        )
+        # Increase Y-axis range for better visibility
+        max_price = sorted_sched['Ticket Price'].max() if not sorted_sched.empty else 200
+        fig_price.update_layout(
+            yaxis_range=[0, max_price * 1.15],
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            font_color='#e0e0e0'
+        )
         st.plotly_chart(fig_price, use_container_width=True)
     else:
         st.info("No schedule data available.")
