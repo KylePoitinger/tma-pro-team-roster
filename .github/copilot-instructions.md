@@ -34,6 +34,9 @@ mvn test                            # Run all tests
 - **Scale:** Seeds 5 arenas, 8 teams, 11 players per team (88 total), 8 mascots, and 8 schedules on startup.
 - **Timezone:** America/New_York (set in main method)
 ### Testing Strategy
+- **JaCoCo Coverage:** Run JaCoCo coverage every time a new full build is made to ensure code quality and coverage.
+    - **Command:** `mvn clean install` (automatically runs tests and generates coverage) or `mvn test`.
+    - **Report Location:** `target/site/jacoco/index.html`
 - **Integration Tests:** Use `@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)`.
 - **Key Tests:** 
     - `EndpointIntegrationTest`: Verifies health and core entity endpoints.
