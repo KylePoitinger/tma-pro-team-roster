@@ -5,6 +5,8 @@ import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import main.java.entity.ProArenaEntity;
 import main.java.entity.ProTeamEntity;
 import main.java.entity.ProScheduleEntity;
+import main.java.exception.ResourceNotFoundException;
 import main.java.repository.ProScheduleRepo;
 
 @ExtendWith(MockitoExtension.class)
@@ -63,6 +66,25 @@ public class ProScheduleServiceTest {
         
         assertNotNull(result);
         assertEquals(3, result.size());
+    }
+
+    @Test
+    public void testGetScheduleSuccess() {
+        LOG.info("Testing getSchedule method - success");
+        ProScheduleEntity schedule = new ProScheduleEntity();
+        schedule.scheduleId = 1L;
+        schedule.scheduledDate = "2026-05-01";
+        when(proScheduleRepo.findById(1L)).thenReturn(Optional.of(schedule));
+        ProScheduleEntity result = proScheduleService.getSchedule(1L);
+        assertNotNull(result);
+        assertEquals("2026-05-01", result.scheduledDate);
+    }
+
+    @Test
+    public void testGetScheduleNotFound() {
+        LOG.info("Testing getSchedule method - not found");
+        when(proScheduleRepo.findById(999L)).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class, () -> proScheduleService.getSchedule(999L));
     }
 
     @Test
@@ -134,5 +156,63 @@ public class ProScheduleServiceTest {
         assertNotNull(result);
         assertEquals(1L, result.team.teamId);
         assertEquals(50.0, result.ticketPrice);
+    }
+
+    @Test
+    public void testUpdateScheduleSuccess() {
+        LOG.info("Testing updateSchedule method - success");
+        ProTeamEntity t1 = new ProTeamEntity(); t1.teamId = 1L;
+        ProTeamEntity t2 = new ProTeamEntity(); t2.teamId = 2L;
+        ProArenaEntity a1 = new ProArenaEntity(); a1.arenaId = 1L;
+        ProArenaEntity a2 = new ProArenaEntity(); a2.arenaId = 2L;
+
+        ProScheduleEntity existingSchedule = new ProScheduleEntity();
+        existingSchedule.scheduleId = 1L;
+        existingSchedule.team = t1;
+        existingSchedule.arena = a1;
+        existingSchedule.scheduledDate = "2026-05-01";
+        existingSchedule.ticketPrice = 50.0;
+
+        ProScheduleEntity updateReq = new ProScheduleEntity();
+        updateReq.team = t2;
+        updateReq.arena = a2;
+        updateReq.scheduledDate = "2026-06-01";
+        updateReq.ticketPrice = 75.0;
+
+        when(proScheduleRepo.findById(1L)).thenReturn(Optional.of(existingSchedule));
+        when(proScheduleRepo.save(any(ProScheduleEntity.class))).thenReturn(existingSchedule);
+
+        ProScheduleEntity result = proScheduleService.updateSchedule(1L, updateReq);
+        assertNotNull(result);
+        assertEquals("2026-06-01", result.scheduledDate);
+        assertEquals(75.0, result.ticketPrice);
+    }
+
+    @Test
+    public void testUpdateScheduleNotFound() {
+        LOG.info("Testing updateSchedule method - not found");
+        ProScheduleEntity updateReq = new ProScheduleEntity();
+        when(proScheduleRepo.findById(999L)).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class, () -> proScheduleService.updateSchedule(999L, updateReq));
+    }
+
+    @Test
+    public void testDeleteScheduleSuccess() {
+        LOG.info("Testing deleteSchedule method - success");
+        ProScheduleEntity schedule = new ProScheduleEntity();
+        schedule.scheduleId = 1L;
+        schedule.scheduledDate = "2026-05-01";
+        when(proScheduleRepo.findById(1L)).thenReturn(Optional.of(schedule));
+        String result = proScheduleService.deleteSchedule(1L);
+        assertNotNull(result);
+        assertTrue(result.contains("Delete was successful"));
+        verify(proScheduleRepo, times(1)).delete(schedule);
+    }
+
+    @Test
+    public void testDeleteScheduleNotFound() {
+        LOG.info("Testing deleteSchedule method - not found");
+        when(proScheduleRepo.findById(999L)).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class, () -> proScheduleService.deleteSchedule(999L));
     }
 }
