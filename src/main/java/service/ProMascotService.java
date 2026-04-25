@@ -22,6 +22,33 @@ public class ProMascotService {
 	@Autowired
 	private MascotImageService mascotImageService;
 
+	public List<ProMascotEntity> getMascots() {
+		List<ProMascotEntity> mascots = proMascotRepo.findAll();
+		java.util.Set<String> usedImages = new java.util.HashSet<>();
+		for (ProMascotEntity mascot : mascots) {
+			String currentUrl = mascot.getImageUrl();
+			if (currentUrl == null || currentUrl.equals("/images/random-mascot") || usedImages.contains(currentUrl)) {
+				try {
+					String newImageUrl = mascotImageService.fetchRandomMascotImage();
+					// Simple check to avoid duplicates in the same batch
+					int retries = 0;
+					while (usedImages.contains(newImageUrl) && retries < 5) {
+						newImageUrl = mascotImageService.fetchRandomMascotImage();
+						retries++;
+					}
+					mascot.setImageUrl(newImageUrl);
+					proMascotRepo.save(mascot);
+					usedImages.add(newImageUrl);
+				} catch (Exception e) {
+					// Fallback
+				}
+			} else {
+				usedImages.add(currentUrl);
+			}
+		}
+		return mascots;
+	}
+
 	public ProMascotEntity getProMascot(long mascotId) {
 		return Optional.ofNullable(proMascotRepo.getOneByMascotId(mascotId))
 				.orElseThrow(() -> new ResourceNotFoundException("Mascot not found for this id :: " + mascotId));

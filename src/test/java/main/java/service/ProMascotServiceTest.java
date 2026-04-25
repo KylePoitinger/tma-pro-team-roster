@@ -175,6 +175,76 @@ public class ProMascotServiceTest {
     }
 
     @Test
+    public void testGetMascotsUniqueImages() {
+        LOG.info("Testing getMascots method with image fetching");
+        ProMascotEntity m1 = new ProMascotEntity();
+        m1.mascotId = 1L;
+        m1.setImageUrl(null);
+
+        ProMascotEntity m2 = new ProMascotEntity();
+        m2.mascotId = 2L;
+        m2.setImageUrl("/images/random-mascot");
+
+        ProMascotEntity m3 = new ProMascotEntity();
+        m3.mascotId = 3L;
+        m3.setImageUrl("http://existing.com/image.jpg");
+
+        List<ProMascotEntity> mockMascots = Arrays.asList(m1, m2, m3);
+        when(proMascotRepo.findAll()).thenReturn(mockMascots);
+        when(mascotImageService.fetchRandomMascotImage())
+            .thenReturn("http://api.com/img1.jpg")
+            .thenReturn("http://api.com/img2.jpg");
+
+        List<ProMascotEntity> result = proMascotService.getMascots();
+
+        assertEquals(3, result.size());
+        assertEquals("http://api.com/img1.jpg", result.get(0).getImageUrl());
+        assertEquals("http://api.com/img2.jpg", result.get(1).getImageUrl());
+        assertEquals("http://existing.com/image.jpg", result.get(2).getImageUrl());
+        verify(proMascotRepo, times(2)).save(any(ProMascotEntity.class));
+    }
+
+    @Test
+    public void testGetMascotsDuplicateHandling() {
+        LOG.info("Testing getMascots method duplicate image handling");
+        ProMascotEntity m1 = new ProMascotEntity();
+        m1.mascotId = 1L;
+        m1.setImageUrl(null);
+
+        ProMascotEntity m2 = new ProMascotEntity();
+        m2.mascotId = 2L;
+        m2.setImageUrl(null);
+
+        List<ProMascotEntity> mockMascots = Arrays.asList(m1, m2);
+        when(proMascotRepo.findAll()).thenReturn(mockMascots);
+        when(mascotImageService.fetchRandomMascotImage())
+            .thenReturn("http://dup.com/img.jpg") // for m1
+            .thenReturn("http://dup.com/img.jpg") // first try for m2 (duplicate)
+            .thenReturn("http://unique.com/img.jpg"); // second try for m2
+
+        List<ProMascotEntity> result = proMascotService.getMascots();
+
+        assertEquals("http://dup.com/img.jpg", result.get(0).getImageUrl());
+        assertEquals("http://unique.com/img.jpg", result.get(1).getImageUrl());
+    }
+
+    @Test
+    public void testGetMascotsImageServiceException() {
+        LOG.info("Testing getMascots method when image service fails");
+        ProMascotEntity m1 = new ProMascotEntity();
+        m1.mascotId = 1L;
+        m1.setImageUrl(null);
+
+        when(proMascotRepo.findAll()).thenReturn(Arrays.asList(m1));
+        when(mascotImageService.fetchRandomMascotImage()).thenThrow(new RuntimeException("API Down"));
+
+        List<ProMascotEntity> result = proMascotService.getMascots();
+
+        assertEquals("/images/random-mascot", result.get(0).getImageUrl());
+        verify(proMascotRepo, never()).save(any(ProMascotEntity.class));
+    }
+
+    @Test
     public void testGetRandomMascot() {
         LOG.info("Testing getRandomMascot method");
         ProMascotEntity mascot = new ProMascotEntity();

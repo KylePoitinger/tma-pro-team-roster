@@ -26,6 +26,12 @@ public class ProMascotController {
 
 	// gets
 
+	@GetMapping("/mascots")
+	@Operation(summary = "Get all mascots", description = "Returns a list of all professional mascots in the database")
+	public List<ProMascotEntity> getMascots() {
+		return proMascotService.getMascots();
+	}
+
 	@GetMapping("/mascots/{mascotId}")
 	@Operation(summary = "Get mascot by ID", description = "Returns details for a single mascot")
 	public ProMascotEntity getProMascot(@PathVariable(value = "mascotId") long mascotId) {

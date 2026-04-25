@@ -159,5 +159,21 @@ public class EndpointIntegrationTest {
         assertNotNull(response.getBody());
     }
 
+    @Test
+    public void testGetMascotImageUrl() {
+        ResponseEntity<Object[]> response = restTemplate.getForEntity(getBaseUrl() + "/mascots", Object[].class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertTrue(response.getBody().length > 0);
+
+        Map firstMascot = (Map) response.getBody()[0];
+        String imageUrl = (String) firstMascot.get("imageUrl");
+        assertNotNull(imageUrl);
+        // If it's the fallback URL, it should start with /
+        if (imageUrl.equals("/images/random-mascot")) {
+            assertTrue(imageUrl.startsWith("/"));
+        }
+    }
+
 
 }

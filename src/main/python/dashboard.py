@@ -69,8 +69,11 @@ if page == "Team Analytics":
             m = mascot_data[0]
             mcol1, mcol2 = st.columns([1, 2])
             with mcol1:
-                if m.get('imageUrl'):
-                    st.image(m['imageUrl'], use_container_width=True)
+                image_url = m.get('imageUrl')
+                if image_url:
+                    if image_url.startswith('/'):
+                        image_url = f"{BASE_URL}{image_url}"
+                    st.image(image_url, use_container_width=True)
                 else:
                     st.info("No image available")
             with mcol2:
@@ -89,7 +92,10 @@ if page == "Team Analytics":
             timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
             random_m = fetch_data("mascots/random", params={"t": timestamp})
             if random_m:
-                st.sidebar.image(random_m.get('imageUrl'), caption=f"{random_m['name']} ({random_m['species']})")
+                image_url = random_m.get('imageUrl')
+                if image_url and image_url.startswith('/'):
+                    image_url = f"{BASE_URL}{image_url}"
+                st.sidebar.image(image_url, caption=f"{random_m['name']} ({random_m['species']})")
                 st.sidebar.write(f"*{random_m['personality']}*")
             else:
                 st.sidebar.error("Failed to fetch mascot")
