@@ -57,7 +57,7 @@ public class ProTeamService {
 				.orElseThrow(() -> new ResourceNotFoundException("Team not found for this id :: " + teamId));
 
 		proTeamRepo.delete(team);
-		return "Delete was successful for team:" + teamId;
+		return "Delete was successful for homeTeam:" + teamId;
 	}
 
 }

@@ -59,7 +59,7 @@ public class ScaleDataIntegrationTest {
         assertEquals(8, teamsResponse.getBody().size());
         LOG.info("[DEBUG_LOG] Verified 8 teams exist.");
 
-        // 3. Verify 11 Players for each team
+        // 3. Verify 11 Players for each homeTeam
         for (int i = 1; i <= 8; i++) {
             ResponseEntity<Map> rosterResponse = restTemplate.getForEntity(getBaseUrl() + "/teams/" + i + "/roster", Map.class);
             List players = (List) rosterResponse.getBody().get("proPlayers");

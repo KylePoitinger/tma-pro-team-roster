@@ -51,7 +51,7 @@ public class ProTeamServiceTest {
         team.mascot = "Test Mascot";
         when(proTeamRepo.save(team)).thenReturn(team);
         ProTeamEntity created = proTeamService.createTeam(team);
-        LOG.info("Created team: {}", created.name);
+        LOG.info("Created homeTeam: {}", created.name);
         assertNotNull(created);
         assertEquals("Test Team", created.name);
     }

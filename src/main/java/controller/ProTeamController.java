@@ -33,7 +33,7 @@ public class ProTeamController {
 	}
 
 	@GetMapping("/teams/{teamId}/roster")
-	@Operation(summary = "Get team and roster", description = "Returns details for a single team including its full player roster")
+	@Operation(summary = "Get homeTeam and roster", description = "Returns details for a single homeTeam including its full player roster")
 	public ProTeamEntity getSingleTeamAndRoster(@PathVariable(value = "teamId") long teamId) {
 		return proTeamService.getSingleTeamAndRoster(teamId);
 	}

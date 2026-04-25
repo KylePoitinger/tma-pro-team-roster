@@ -98,7 +98,7 @@ public class ProTeamControllerTest {
 
     @Test
     public void testDeleteTeam() {
-        when(proTeamService.deleteTeam(1L)).thenReturn("Delete was successful for team:1");
+        when(proTeamService.deleteTeam(1L)).thenReturn("Delete was successful for homeTeam:1");
 
         String result = proTeamController.deleteTeam(1L);
 

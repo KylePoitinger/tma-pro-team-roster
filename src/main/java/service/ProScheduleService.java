@@ -1,7 +1,5 @@
 package main.java.service;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +25,10 @@ public class ProScheduleService {
     }
 
     public List<ProScheduleEntity> getSchedulesByTeam(long teamId) {
-        return proScheduleRepo.findByTeam_TeamId(teamId);
+        List<ProScheduleEntity> homeSchedules = proScheduleRepo.findByHomeTeam_TeamId(teamId);
+        List<ProScheduleEntity> awaySchedules = proScheduleRepo.findByAwayTeam_TeamId(teamId);
+        homeSchedules.addAll(awaySchedules);
+        return homeSchedules;
     }
 
     public List<ProScheduleEntity> getSchedulesByArena(long arenaId) {
@@ -40,7 +41,8 @@ public class ProScheduleService {
 
     public ProScheduleEntity updateSchedule(long scheduleId, ProScheduleEntity updateReq) {
         return proScheduleRepo.findById(scheduleId).map(schedule -> {
-            schedule.team = updateReq.team;
+            schedule.homeTeam = updateReq.homeTeam;
+            schedule.awayTeam = updateReq.awayTeam;
             schedule.arena = updateReq.arena;
             schedule.scheduledDate = updateReq.scheduledDate;
             schedule.ticketPrice = updateReq.ticketPrice;

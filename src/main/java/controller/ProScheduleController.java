@@ -18,7 +18,7 @@ public class ProScheduleController {
     private ProScheduleService proScheduleService;
 
     @GetMapping
-    @Operation(summary = "Get all schedules", description = "Returns a list of all game schedules including team and arena details")
+    @Operation(summary = "Get all schedules", description = "Returns a list of all game schedules including home and away teams and arena details")
     public List<ProScheduleEntity> getAllSchedules() {
         return proScheduleService.getAllSchedules();
     }

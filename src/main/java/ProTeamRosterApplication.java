@@ -80,7 +80,7 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 			arenas.add(proArenaRepo.save(arena));
 		}
 
-		LOG.info("Inserting team data in DB.");
+		LOG.info("Inserting homeTeam data in DB.");
 		List<ProTeamEntity> teams = new ArrayList<>();
 		String[] teamNames = {"Knicks", "Lakers", "Bulls", "Celtics", "Warriors", "Nets", "Clippers", "Heat"};
 		String[] teamCities = {"New York", "Los Angeles", "Chicago", "Boston", "San Francisco", "Brooklyn", "Los Angeles", "Miami"};
@@ -154,10 +154,12 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 
 		LOG.info("Inserting schedule data in DB.");
 		for (int i = 0; i < teams.size(); i++) {
-			ProTeamEntity team = teams.get(i);
+			ProTeamEntity homeTeam = teams.get(i);
+			ProTeamEntity awayTeam = teams.get((i + 1) % teams.size());
 			ProScheduleEntity schedule = new ProScheduleEntity();
-			schedule.team = team;
-			schedule.arena = team.arena;
+			schedule.homeTeam = homeTeam;
+			schedule.awayTeam = awayTeam;
+			schedule.arena = homeTeam.arena;
 			schedule.scheduledDate = "2026-05-" + (10 + i);
 			schedule.ticketPrice = 50.00 + (i * 5);
 			proScheduleRepo.save(schedule);

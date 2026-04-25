@@ -90,9 +90,14 @@ public class EndpointIntegrationTest {
     // SCHEDULES TESTS
     @Test
     public void testGetAllSchedules() {
-        ResponseEntity<Object[]> response = restTemplate.getForEntity(getBaseUrl() + "/schedules", Object[].class);
+        ResponseEntity<java.util.List> response = restTemplate.getForEntity(getBaseUrl() + "/schedules", java.util.List.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
+        assertTrue(response.getBody().size() > 0);
+        
+        Map firstSchedule = (Map) response.getBody().get(0);
+        assertNotNull(firstSchedule.get("homeTeam"));
+        assertNotNull(firstSchedule.get("awayTeam"));
     }
 
     @Test

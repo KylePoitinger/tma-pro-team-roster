@@ -18,7 +18,7 @@ import main.java.entity.ProMascotEntity;
 import main.java.service.ProMascotService;
 
 @RestController
-@Tag(name = "Pro Mascot Controller", description = "Endpoints for managing team mascots")
+@Tag(name = "Pro Mascot Controller", description = "Endpoints for managing homeTeam mascots")
 public class ProMascotController {
 
 	@Autowired
