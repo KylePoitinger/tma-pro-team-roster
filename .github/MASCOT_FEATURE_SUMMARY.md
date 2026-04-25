@@ -91,4 +91,3 @@ Application runs on `http://localhost:8080` with H2 console at `/h2-console`
 - Test infrastructure remains partially wired but not used (manual REST testing recommended)
 - ProMascot feature is production-ready and follows project conventions
 
-

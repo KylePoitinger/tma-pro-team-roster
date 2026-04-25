@@ -23,9 +23,7 @@ public class ProTeamEntity implements Serializable {
 
 	public String city;
 
-	@OneToOne
-	@JoinColumn(name = "mascot_id")
-	public main.java.entity.ProMascotEntity mascot;
+	public String mascot;
 
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "teamName", referencedColumnName = "name")

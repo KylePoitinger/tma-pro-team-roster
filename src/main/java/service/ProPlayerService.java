@@ -9,22 +9,18 @@ import main.java.repository.ProPlayerRepo;
 @Service
 public class ProPlayerService {
 
-	private static ProPlayerRepo proPlayerRepo;
-
 	@Autowired
-	public ProPlayerService(ProPlayerRepo proPlayerRepo) {
-		ProPlayerService.proPlayerRepo = proPlayerRepo;
-	}
+	private ProPlayerRepo proPlayerRepo;
 
-	public static ProPlayerEntity getProPlayer(long playerId) {
+	public ProPlayerEntity getProPlayer(long playerId) {
 		return proPlayerRepo.getOneByPlayerId(playerId);
 	}
 
-	public static ProPlayerEntity createProPlayer(ProPlayerEntity createPlayerReq) {
+	public ProPlayerEntity createProPlayer(ProPlayerEntity createPlayerReq) {
 		return proPlayerRepo.save(createPlayerReq);
 	}
 
-	public static ProPlayerEntity updateProPlayer(long playerId, ProPlayerEntity updatePlayerReq) {
+	public ProPlayerEntity updateProPlayer(long playerId, ProPlayerEntity updatePlayerReq) {
 		return proPlayerRepo.findById(playerId).map(player -> {
 			player.name = updatePlayerReq.name;
 			player.position = updatePlayerReq.position;
@@ -40,13 +36,13 @@ public class ProPlayerService {
 		});
 	}
 
-	public static String deleteProPlayer(long playerId) {
+	public String deleteProPlayer(long playerId) {
 		try {
 			proPlayerRepo.deletePlayerById(playerId);
 		} catch (Exception e) {
 			return "Delete was unsuccessful with error: " + e.toString();
 		}
-		return "Delete was successful for team:" + playerId;
+		return "Delete was successful for player:" + playerId;
 	}
 
 }

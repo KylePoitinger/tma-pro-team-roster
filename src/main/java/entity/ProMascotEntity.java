@@ -14,8 +14,7 @@ public class ProMascotEntity {
 
 	public String name;
 
-	@OneToOne(mappedBy = "mascot")
-	public main.java.entity.ProTeamEntity team;
+	public String teamName;
 
 	public String description;
 
@@ -28,11 +27,10 @@ public class ProMascotEntity {
 		return "ProMascotEntity{" +
 				"mascotId=" + mascotId +
 				", name='" + name + '\'' +
-				", teamName='" + team + '\'' +
+				", teamName='" + teamName + '\'' +
 				", description='" + description + '\'' +
 				", costume='" + costume + '\'' +
 				", imageUrl='" + imageUrl + '\'' +
 				'}';
 	}
 }
-

@@ -11,23 +11,19 @@ import main.java.repository.ProTeamRepo;
 @Service
 public class ProTeamService {
 
-	private static ProTeamRepo proTeamRepo;
-
 	@Autowired
-	public ProTeamService(ProTeamRepo proTeamRepo) {
-		ProTeamService.proTeamRepo = proTeamRepo;
-	}
+	private ProTeamRepo proTeamRepo;
 
-	public static List<ProTeamEntity> getTeams() {
+	public List<ProTeamEntity> getTeams() {
 		return proTeamRepo.findAll();
 	}
 
-	public static ProTeamEntity getSingleTeamAndRoster(long teamId) {
+	public ProTeamEntity getSingleTeamAndRoster(long teamId) {
 		return proTeamRepo.getOneByTeamId(teamId);
 
 	}
 
-	public static List<ProTeamEntity> getTeamsByFieldLookup(String name, String city, String mascot) {
+	public List<ProTeamEntity> getTeamsByFieldLookup(String name, String city, String mascot) {
 		if (name != null) {
 			return proTeamRepo.getTeamsByName(name);
 		} else if (city != null) {
@@ -38,11 +34,11 @@ public class ProTeamService {
 			return null;
 	}
 
-	public static ProTeamEntity createTeam(ProTeamEntity createTeamReq) {
+	public ProTeamEntity createTeam(ProTeamEntity createTeamReq) {
 		return proTeamRepo.save(createTeamReq);
 	}
 
-	public static ProTeamEntity updateTeam(long teamId, ProTeamEntity updateTeamReq) {
+	public ProTeamEntity updateTeam(long teamId, ProTeamEntity updateTeamReq) {
 
 		return proTeamRepo.findById(teamId).map(team -> {
 			team.city = updateTeamReq.city;
@@ -54,14 +50,13 @@ public class ProTeamService {
 		});
 	}
 
-	public static String deleteTeam(long teamId) {
+	public String deleteTeam(long teamId) {
 		try {
 			proTeamRepo.deleteTeamById(teamId);
 		} catch (Exception e) {
-			return "Delete was unsuccessful with error: " + e.toString();
+
 		}
 		return "Delete was successful for team:" + teamId;
-
 	}
 
 }

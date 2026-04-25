@@ -11,29 +11,25 @@ import main.java.repository.ProMascotRepo;
 @Service
 public class ProMascotService {
 
-	private static ProMascotRepo proMascotRepo;
-
 	@Autowired
-	public ProMascotService(ProMascotRepo proMascotRepo) {
-		ProMascotService.proMascotRepo = proMascotRepo;
-	}
+	private ProMascotRepo proMascotRepo;
 
-	public static ProMascotEntity getProMascot(long mascotId) {
+	public ProMascotEntity getProMascot(long mascotId) {
 		return proMascotRepo.getOneByMascotId(mascotId);
 	}
 
-	public static List<ProMascotEntity> getMascotsByTeam(String teamName) {
+	public List<ProMascotEntity> getMascotsByTeam(String teamName) {
 		return proMascotRepo.getMascotsByTeamName(teamName);
 	}
 
-	public static ProMascotEntity createProMascot(ProMascotEntity createMascotReq) {
+	public ProMascotEntity createProMascot(ProMascotEntity createMascotReq) {
 		return proMascotRepo.save(createMascotReq);
 	}
 
-	public static ProMascotEntity updateProMascot(long mascotId, ProMascotEntity updateMascotReq) {
+	public ProMascotEntity updateProMascot(long mascotId, ProMascotEntity updateMascotReq) {
 		return proMascotRepo.findById(mascotId).map(mascot -> {
 			mascot.name = updateMascotReq.name;
-			mascot.team = updateMascotReq.team;
+			mascot.teamName = updateMascotReq.teamName;
 			mascot.description = updateMascotReq.description;
 			mascot.costume = updateMascotReq.costume;
 			return proMascotRepo.save(mascot);
@@ -42,7 +38,7 @@ public class ProMascotService {
 		});
 	}
 
-	public static String deleteProMascot(long mascotId) {
+	public String deleteProMascot(long mascotId) {
 		try {
 			proMascotRepo.deleteMascotById(mascotId);
 		} catch (Exception e) {
@@ -52,4 +48,3 @@ public class ProMascotService {
 	}
 
 }
-

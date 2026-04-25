@@ -2,6 +2,7 @@ package main.java.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,30 +18,33 @@ import main.java.service.ProTeamService;
 @RestController
 public class ProTeamController {
 
+	@Autowired
+	private ProTeamService proTeamService;
+
 	// gets
 
 	@GetMapping("/teams")
 	public List<ProTeamEntity> getTeams() {
-		return ProTeamService.getTeams();
+		return proTeamService.getTeams();
 	}
 
 	@GetMapping("/teams/{teamId}/roster")
 	public ProTeamEntity getSingleTeamAndRoster(@PathVariable(value = "teamId") long teamId) {
-		return ProTeamService.getSingleTeamAndRoster(teamId);
+		return proTeamService.getSingleTeamAndRoster(teamId);
 	}
 
 	@GetMapping("/teams/fields")
 	public List<ProTeamEntity> getTeamsByFieldLookup(@RequestParam(value = "team-name", required = false) String name,
 			@RequestParam(value = "team-city", required = false) String city,
 			@RequestParam(value = "team-mascot", required = false) String mascot) {
-		return ProTeamService.getTeamsByFieldLookup(name, city, mascot);
+		return proTeamService.getTeamsByFieldLookup(name, city, mascot);
 	}
 
 	// posts
 
 	@PostMapping("/teams")
 	public ProTeamEntity createTeam(@RequestBody ProTeamEntity createTeamReq) {
-		return ProTeamService.createTeam(createTeamReq);
+		return proTeamService.createTeam(createTeamReq);
 	}
 
 	// puts
@@ -48,13 +52,15 @@ public class ProTeamController {
 	@PutMapping("/teams/{teamId}")
 	public ProTeamEntity updateTeam(@PathVariable(value = "teamId") long teamId,
 			@RequestBody ProTeamEntity updateTeamReq) {
-		return ProTeamService.updateTeam(teamId, updateTeamReq);
+
+		return proTeamService.updateTeam(teamId, updateTeamReq);
 	}
 
 	// deletes
 
 	@DeleteMapping("/teams/{teamId}")
 	public String deleteTeam(@PathVariable(value = "teamId") long teamId) {
-		return ProTeamService.deleteTeam(teamId);
+		return proTeamService.deleteTeam(teamId);
 	}
+
 }
