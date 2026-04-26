@@ -28,15 +28,23 @@ def get_controllers():
                     controllers[name] = []
                     # Find @GetMapping, @PostMapping, etc.
                     # Handle @RequestMapping at class level
-                    class_mapping = re.search(r'@RequestMapping\("([^"]+)"\)', content)
+                    class_mapping = re.search(r'@RequestMapping\((?:value\s*=\s*)?"([^"]+)"\)', content)
                     base_path = class_mapping.group(1) if class_mapping else ""
                     
-                    matches = re.findall(r'@(Get|Post|Put|Delete)Mapping(\("([^"]+)"\))?', content)
+                    # Improved regex to handle (value = "/path") or ("/path") and multiple attributes
+                    matches = re.findall(r'@(Get|Post|Put|Delete)Mapping\((?:[^)]*value\s*=\s*)?"([^"]+)"[^)]*\)', content)
+                    # Also catch bare mappings like @GetMapping
+                    bare_matches = re.findall(r'@(Get|Post|Put|Delete)Mapping(?!\()', content)
+                    
                     for m in matches:
                         verb = m[0]
-                        sub_path = m[2] if m[2] else ""
+                        sub_path = m[1]
                         full_path = (base_path + sub_path).replace("//", "/")
                         if not full_path: full_path = "/"
+                        controllers[name].append(f"{verb.upper()} {full_path}")
+                    
+                    for verb in bare_matches:
+                        full_path = base_path if base_path else "/"
                         controllers[name].append(f"{verb.upper()} {full_path}")
     return controllers
 
@@ -163,8 +171,12 @@ if __name__ == "__main__":
         # ONLY add endpoints that actually exist in the code
         for e in found_endpoints:
             if e in added: continue
-            if f"`{e}`" in existing:
-                line = re.search(rf"- `{e}`.*", existing)
+            # Check if this endpoint already exists in 'existing' (possibly with query params or custom desc)
+            # e is "VERB PATH"
+            verb, path = e.split(' ', 1)
+            pattern = rf"- `({verb} )?{re.escape(path)}(\?[^`]+)?`"
+            if re.search(pattern, existing):
+                line = re.search(rf"- `({verb} )?{re.escape(path)}(\?[^`]+)?`.*", existing)
                 if line:
                     new_block += line.group(0) + "\n"
             else:
@@ -179,7 +191,7 @@ if __name__ == "__main__":
             if not line_content: continue
             
             # Check if this line is an endpoint list item
-            endpoint_match = re.search(r"- `([A-Z]+ )?([^` ]+)`", line_content)
+            endpoint_match = re.search(r"- `([A-Z]+ )?([^` ?]+)(\?[^`]+)?`", line_content)
             if endpoint_match:
                 # It's an endpoint line. Check if it's in our currently found endpoints.
                 current_ep_path = endpoint_match.group(2)
@@ -187,9 +199,11 @@ if __name__ == "__main__":
                 if any(ep.endswith(current_ep_path) for ep in found_endpoints):
                     # It's a valid current endpoint.
                     # If it has a custom description (not "API Endpoint"), keep the WHOLE line
-                    if "API Endpoint" not in line and (current_ep_path == "/health" or "/images" in current_ep_path):
-                         # If we already added an auto-generated one for this same path, remove it
-                         # This is getting complex. Let's just avoid adding it in the first loop if we find it here.
+                    # OR if it has query parameters, keep it (as we don't auto-detect them yet)
+                    if "API Endpoint" not in line or "?" in line_content:
+                         # We already added an auto-generated one for this same path in the first loop.
+                         # To avoid duplicates, we should have a better strategy.
+                         # For now, let's just make sure we don't add it in the first loop if we are going to keep it here.
                          pass
                     continue
                 else:

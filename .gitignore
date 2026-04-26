@@ -1,0 +1,82 @@
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+.flattened-pom.xml
+
+# IDE - JetBrains IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# IDE - Visual Studio Code
+.vscode/
+*.code-workspace
+
+# IDE - Eclipse
+.classpath
+.project
+.settings/
+.metadata/
+bin/
+*.log
+
+# Java
+*.class
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Compilation
+*.o
+*.so
+*.dylib
+
+# OS
+.DS_Store
+Thumbs.db
+.gitkeep
+
+# Python
+src/main/python/__pycache__/
+src/main/python/.venv/
+src/main/python/venv/
+src/main/python/env/
+src/main/python/.env
+src/main/python/*.pyc
+src/main/python/*.pyo
+src/main/python/*.egg-info/
+src/main/python/.streamlit/
+src/main/python/*.egg
+
+# Node.js
+src/main/nodejs/manager-portal/node_modules/
+src/main/nodejs/manager-portal/npm-debug.log
+src/main/nodejs/manager-portal/yarn-error.log
+src/main/nodejs/manager-portal/.env.local
+
+# H2 Database
+*.mv.db
+*.trace.db
+
+# Local environment
+.env
+.env.local
+
+# Build outputs
+build_output.txt
+test_output.txt
+
+# JaCoCo coverage
+jacoco.exec
+

@@ -10,9 +10,9 @@ Spring Boot REST API managing professional sports teams and player rosters. In-m
 3. **Repositories** (`src/main/java/repository/`) – JPA interfaces extending `JpaRepository`.
 ### Data Models & Relationships
 - **ProArenaEntity**: Top-level entity for venues.
-- **ProMascotEntity**: Mascots linked to a Team (`@OneToOne`).
+- **ProMascotEntity**: Mascots linked to a Team (`@OneToOne`). Includes `species` and dynamic `imageUrl`.
 - **ProPlayerEntity**: Players linked to a Team (`@ManyToOne`).
-- **ProScheduleEntity**: Schedules linking a Team and an Arena (`@ManyToOne` for both).
+- **ProScheduleEntity**: Schedules linking a `homeTeam` and an `awayTeam` to an `Arena` (`@ManyToOne` for all).
 - **ProTeamEntity**: Teams associated with an Arena (`@ManyToOne`). Has a list of Players (`@OneToMany`) and a Mascot (`@OneToOne`).
 - **Serialization:** Use `@JsonManagedReference` (in Team) and `@JsonBackReference` (in Player) to prevent infinite recursion in JSON responses.
 ---
@@ -35,6 +35,7 @@ mvn test                            # Run all tests
 - **Timezone:** America/New_York (set in main method)
 ### Testing Strategy
 - **JaCoCo Coverage:** Run JaCoCo coverage every time a new full build is made to ensure code quality and coverage.
+    - **Thresholds:** Minimum **80% line coverage** and **70% branch coverage** for services and controllers. Build fails if coverage drops below these values.
     - **Command:** `mvn clean install` (automatically runs tests and generates coverage) or `mvn test`.
     - **Report Location:** `target/site/jacoco/index.html`
 - **Integration Tests:** Use `@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)`.
@@ -66,18 +67,18 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
 - `GET /arenas`: API Endpoint
 - `GET /arenas/{arenaId}`: API Endpoint
 - `GET /health`: Returns service status and component health
-- `GET /images`: API Endpoint
+- `GET /images/random-mascot`: Proxies a random mascot image from an external service
 - `GET /mascots`: API Endpoint
-- `GET /mascots/random`: API Endpoint
-- `GET /mascots/team`: API Endpoint
+- `GET /mascots/random`: Returns a random mascot entity with a fresh image URL
+- `GET /mascots/team?team-id={id}`: Filtered mascots by team
 - `GET /mascots/{mascotId}`: API Endpoint
 - `GET /players/{playerId}`: API Endpoint
-- `GET /schedules` – returns schedules with nested Team and Arena data.
+- `GET /schedules` – returns schedules with nested home/away Team and Arena data.
 - `GET /schedules/arena/{arenaId}`: API Endpoint
-- `GET /schedules/team/{teamId}` – filtered schedules.
+- `GET /schedules/team/{teamId}` – filtered schedules for both home and away appearances.
 - `GET /schedules/{scheduleId}`: API Endpoint
 - `GET /teams` – list all  
-- `GET /teams/fields`: API Endpoint
+- `GET /teams/fields?team-name={name}&team-city={city}&team-mascot={mascot}`: Search teams by multiple criteria
 - `GET /teams/{teamId}/roster` – team + players
 - `POST /arenas`: API Endpoint
 - `POST /mascots`: API Endpoint
@@ -87,6 +88,7 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
 - `PUT /arenas/{arenaId}`: API Endpoint
 - `PUT /mascots/{mascotId}`: API Endpoint
 - `PUT /players/{playerId}`: API Endpoint
+- `PUT /players/{playerId}/trade/{teamId}`: API Endpoint
 - `PUT /schedules/{scheduleId}`: API Endpoint
 - `PUT /teams/{teamId}`: API Endpoint
 
@@ -101,8 +103,11 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
 | Spring Boot | 2.4.4 | compile | Core framework + autoconfiguration |
 | Springdoc OpenAPI | 1.5.7 | compile | OpenAPI 3 / Swagger Documentation |
 | Lombok | 1.18.30 | provided | Boilerplate reduction (@Data) |
+| JaCoCo | 0.8.13 | test | Code coverage reporting and enforcement |
 | H2 Database | (inherited) | runtime | In-memory database |
 | JUnit 5 | (inherited) | test | Testing framework |
+| Node.js | 16+ | runtime | Manager Portal runtime |
+| npm | 7+ | build | Node.js package manager |
 ---
 ## Common Tasks
 ### Add New REST Endpoint
@@ -124,7 +129,7 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
 ## Python Analytics (Experimental)
 ### Prerequisites
 - **Python 3.7+** must be installed (download from [python.org](https://www.python.org/downloads/)).
-- Ensure Python and pip are in your system PATH.
+- Ensure Python and pip are in your system PATH (or run `.\scripts\setup_env.ps1`).
 
 ### Setup & Run
 1. **Install dependencies:**
@@ -140,6 +145,44 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
 ### Purpose
 Provides "visually cool" analytics and interactive dashboards for the Team Roster data, demonstrating how to integrate Python with a Java-based backend.
 ---
+## Node.js Manager Portal
+### Prerequisites
+- **Node.js 16+** and **npm** must be installed.
+- Ensure they are in your system PATH (or run `.\scripts\setup_env.ps1`).
+- Ensure the Java backend is running (port 8080).
+
+### Setup & Run
+1. **Install dependencies:**
+   ```powershell
+   cd src/main/nodejs/manager-portal
+   npm install
+   ```
+2. **Run the portal:**
+   ```powershell
+   npm start
+   ```
+3. **Access the portal:**
+   - **URL:** http://localhost:3000
+   - **Credentials:** `manager` / `password`
+
+### Purpose
+Allows managers to login and perform administrative tasks, such as trading players between teams via the backend REST API.
+
+---
+
+## Troubleshooting Environment Issues
+### npm/Node.js not recognized
+If you encounter the error: `npm : The term 'npm' is not recognized...`, it usually means Node.js is installed but not in your system `PATH`.
+- **Default Windows Path:** `C:\Program Files\nodejs`
+- **Temporary Fix (PowerShell):**
+  ```powershell
+  $env:Path += ";C:\Program Files\nodejs"
+  ```
+- **Permanent Fix:** Add `C:\Program Files\nodejs` to your system environment variables.
+- **Helper Script:** Run `.\scripts\setup_env.ps1` to automatically detect and add Node.js/Python to your session path.
+
+---
+
 ## AI Tool Usage & Logging
 ### Mandatory Changelog Updates
 Every time an AI tool (Junie or GitHub Copilot) is used to generate or modify code, the developer MUST update `.github/CHANGELOG.md`.

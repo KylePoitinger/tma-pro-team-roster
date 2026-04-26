@@ -51,4 +51,11 @@ public class ProPlayerController {
 		return proPlayerService.deleteProPlayer(playerId);
 	}
 
+	@PutMapping("/players/{playerId}/trade/{teamId}")
+	@Operation(summary = "Trade player to another team", description = "Moves a player from their current team to a new team")
+	public ProPlayerEntity tradePlayer(@PathVariable(value = "playerId") long playerId,
+									   @PathVariable(value = "teamId") long teamId) {
+		return proPlayerService.tradePlayer(playerId, teamId);
+	}
+
 }
