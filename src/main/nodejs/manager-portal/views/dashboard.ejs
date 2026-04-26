@@ -22,6 +22,17 @@
         .logout-btn { background-color: #dc3545; text-decoration: none; color: white; padding: 8px 16px; border-radius: 4px; font-weight: 600; }
         .logout-btn:hover { background-color: #c82333; }
         .error-msg { color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        
+        /* Modal Styles */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
+        .modal-content { background-color: #fefefe; margin: 10% auto; padding: 30px; border-radius: 12px; width: 500px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); position: relative; }
+        .close { color: #aaa; position: absolute; right: 20px; top: 15px; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: #333; }
+        .modal-team-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .team-btn { padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9; cursor: pointer; text-align: left; transition: all 0.2s; font-weight: 500; }
+        .team-btn:hover { background: #e7f3ff; border-color: #007bff; color: #007bff; }
+        .trade-btn { background-color: #007bff; }
+        .trade-btn:hover { background-color: #0056b3; }
     </style>
 </head>
 <body>
@@ -56,16 +67,11 @@
                                     <td><strong><%= player.name %></strong></td>
                                     <td><%= player.position %></td>
                                     <td>
-                                        <form action="/trade" method="POST" class="trade-form">
-                                            <input type="hidden" name="playerId" value="<%= player.playerId %>">
-                                            <select name="targetTeamId" required>
-                                                <option value="" disabled selected>Target Team</option>
-                                                <% teams.filter(t => t.teamId !== team.teamId).forEach(t => { %>
-                                                    <option value="<%= t.teamId %>"><%= t.name %></option>
-                                                <% }) %>
-                                            </select>
-                                            <button type="submit">Trade</button>
-                                        </form>
+                                        <button type="button" class="trade-btn" 
+                                                data-player-id="<%= player.playerId %>" 
+                                                data-player-name="<%= player.name %>" 
+                                                data-current-team-id="<%= team.teamId %>"
+                                                onclick="handleTradeButtonClick(this)">Trade</button>
                                     </td>
                                 </tr>
                             <% }) %>
@@ -79,5 +85,26 @@
             </div>
         <% }) %>
     </div>
+
+    <!-- Hidden data for JS -->
+    <div id="teamsData" style="display: none;" data-teams="<%= JSON.stringify(teams.map(t => ({ teamId: t.teamId, name: t.name, city: t.city }))) %>"></div>
+
+    <!-- Trade Modal -->
+    <div id="tradeModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 style="margin-top: 0;">Trade Player</h2>
+            <p>Select a destination team for <strong id="modalPlayerName"></strong>:</p>
+            <div id="teamsList" class="modal-team-list">
+                <!-- Teams will be populated here -->
+            </div>
+            <form id="tradeForm" action="/trade" method="POST" style="display: none;">
+                <input type="hidden" name="playerId" id="modalPlayerId">
+                <input type="hidden" name="targetTeamId" id="modalTargetTeamId">
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/trade-modal.js"></script>
 </body>
 </html>
