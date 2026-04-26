@@ -29,7 +29,7 @@ h1 {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
-    padding: 20px !important;
+    padding: 15px 20px !important;
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
@@ -55,17 +55,23 @@ h1 {
 /* Metric Values */
 [data-testid="stMetricValue"] {
     font-family: 'Big Shoulders Display', cursive !important;
-    font-size: 3.5rem !important;
-    line-height: 1 !important;
+    font-size: 2.5rem !important;
+    line-height: 1.1 !important;
     color: #00d4ff !important;
     font-weight: 900 !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 [data-testid="stMetricLabel"] {
     text-transform: uppercase;
     font-weight: 700 !important;
-    letter-spacing: 1px;
+    font-size: 0.85rem !important;
+    letter-spacing: 0.5px;
     color: #e0e0e0 !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Light Mode Contrast Adjustments */

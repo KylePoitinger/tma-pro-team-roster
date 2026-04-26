@@ -47,7 +47,7 @@ def render_mascot_image(mascot, caption=None):
     if image_url:
         if image_url.startswith('/'):
             image_url = f"{BASE_URL}{image_url}"
-        st.image(image_url, caption=caption, use_container_width=True, alt=caption)
+        st.image(image_url, caption=caption, width="stretch")
     else:
         st.info(f"Image for {mascot.get('name', 'this mascot')} is currently unavailable.")
 
@@ -82,11 +82,14 @@ if page == "Team Analytics":
 
         st.header(f"Team: {selected_team}")
         
-        col1, col2, col3, col4 = st.columns(4)
-        col1.metric("City", team_data['city'])
-        col2.metric("Founded", team_data['foundedYear'])
-        col3.metric("Championships", team_data['championships'])
-        col4.metric("Owner", team_data['owner'])
+        # Team Metrics in a 2x2 grid to prevent field name cutoff
+        mcol1, mcol2 = st.columns(2)
+        mcol1.metric("City", team_data['city'])
+        mcol2.metric("Founded", team_data['foundedYear'])
+        
+        mcol3, mcol4 = st.columns(2)
+        mcol3.metric("Championships", team_data['championships'])
+        mcol4.metric("Owner", team_data['owner'])
 
         # Mascot Section
         st.subheader("🐾 Team Mascot")
@@ -128,7 +131,20 @@ if page == "Team Analytics":
             players_df = pd.DataFrame(players)
             
             if not players_df.empty:
-                st.dataframe(players_df[['name', 'position', 'age', 'height', 'weight', 'salary', 'jerseyNumber', 'injuryStatus']])
+                st.dataframe(
+                    players_df[['name', 'position', 'age', 'height', 'weight', 'salary', 'jerseyNumber', 'injuryStatus']],
+                    use_container_width=True,
+                    column_config={
+                        "name": st.column_config.TextColumn("Player Name", width="medium"),
+                        "position": st.column_config.TextColumn("Position", width="small"),
+                        "age": st.column_config.NumberColumn("Age"),
+                        "height": st.column_config.TextColumn("Height", width="small"),
+                        "weight": st.column_config.TextColumn("Weight", width="small"),
+                        "salary": st.column_config.NumberColumn("Salary", format="$%d"),
+                        "jerseyNumber": st.column_config.NumberColumn("Jersey #"),
+                        "injuryStatus": st.column_config.TextColumn("Injury Status", width="medium"),
+                    }
+                )
 
                 st.subheader("📊 Visual Analytics")
                 vcol1, vcol2 = st.columns(2)
@@ -200,7 +216,18 @@ elif page == "Arena Overview":
     arenas_data = fetch_data("arenas")
     if arenas_data:
         arenas_df = pd.DataFrame(arenas_data)
-        st.dataframe(arenas_df[['name', 'location', 'capacity', 'openedYear', 'surface', 'cost']])
+        st.dataframe(
+            arenas_df[['name', 'location', 'capacity', 'openedYear', 'surface', 'cost']],
+            use_container_width=True,
+            column_config={
+                "name": st.column_config.TextColumn("Arena Name", width="medium"),
+                "location": st.column_config.TextColumn("Location", width="medium"),
+                "capacity": st.column_config.NumberColumn("Capacity", format="%d"),
+                "openedYear": st.column_config.NumberColumn("Opened", format="%d"),
+                "surface": st.column_config.TextColumn("Surface", width="small"),
+                "cost": st.column_config.NumberColumn("Build Cost", format="$%d"),
+            }
+        )
         
         st.subheader("Capacity Comparison")
         fig_cap = px.bar(
@@ -254,7 +281,18 @@ elif page == "Schedule Explorer":
                 "Location": s['arena']['location'] if s['arena'] else "N/A"
             })
         sched_df = pd.DataFrame(flat_schedules)
-        st.dataframe(sched_df.sort_values("Date"))
+        st.dataframe(
+            sched_df.sort_values("Date"),
+            use_container_width=True,
+            column_config={
+                "Date": st.column_config.TextColumn("Scheduled Date", width="medium"),
+                "Home Team": st.column_config.TextColumn("Home Team", width="medium"),
+                "Away Team": st.column_config.TextColumn("Away Team", width="medium"),
+                "Arena": st.column_config.TextColumn("Arena", width="medium"),
+                "Ticket Price": st.column_config.NumberColumn("Ticket Price", format="$%d"),
+                "Location": st.column_config.TextColumn("Location", width="medium"),
+            }
+        )
         
         st.subheader("Ticket Pricing Trends")
         sorted_sched = sched_df.sort_values("Date")
