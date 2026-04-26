@@ -47,7 +47,7 @@ def render_mascot_image(mascot, caption=None):
     if image_url:
         if image_url.startswith('/'):
             image_url = f"{BASE_URL}{image_url}"
-        st.image(image_url, caption=caption, use_container_width=True)
+        st.image(image_url, caption=caption, use_container_width=True, alt=caption)
     else:
         st.info(f"Image for {mascot.get('name', 'this mascot')} is currently unavailable.")
 
