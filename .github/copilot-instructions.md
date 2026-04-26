@@ -39,9 +39,14 @@ mvn test                            # Run all tests
     - **Command:** `mvn clean install` (automatically runs tests and generates coverage) or `mvn test`.
     - **Report Location:** `target/site/jacoco/index.html`
 - **Integration Tests:** Use `@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)`.
+- **Frontend Logic Tests (Node.js):** 
+    - Uses `jest` and `jest-environment-jsdom`.
+    - Tests are located in `src/main/nodejs/manager-portal/test/`.
+    - Command: `npm test` inside the `manager-portal` directory.
 - **Key Tests:** 
     - `EndpointIntegrationTest`: Verifies health and core entity endpoints.
     - `ScaleDataIntegrationTest`: Verifies the requested scale of data (8 teams, 5 arenas, 11 players/team).
+    - `trade-modal.test.js`: Verifies trade popup logic, team filtering, and form submission.
 - **Verification:** Always run `mvn test -Dtest="main.java.integration.*Test"` after architectural changes.
 ---
 ## Package Structure & Naming
@@ -96,6 +101,13 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
 - Use Lombok `@Data` (generates getters, setters, toString, etc.).
 - `@Entity` for JPA mapping.
 - All relationships are now proper JPA mappings (no more string-based "teamName" references).
+
+### Accessibility & UI Standards
+- **ADA Compliance:** All new UI elements must meet WCAG AA standards.
+- **Color Contrast:** Maintain high contrast ratios (use CSS variables for theme consistency).
+- **Keyboard Navigation:** Ensure all interactive elements have visible focus states and are reachable via Tab.
+- **ARIA Roles:** Use semantic HTML and ARIA attributes for dynamic components like modals and alerts.
+- **Alt Text:** Provide descriptive `alt` text for all images and icons.
 ---
 ## External Dependencies & Versions
 | Dependency | Version | Scope | Purpose |
@@ -108,6 +120,9 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
 | JUnit 5 | (inherited) | test | Testing framework |
 | Node.js | 16+ | runtime | Manager Portal runtime |
 | npm | 7+ | build | Node.js package manager |
+| Jest | 29+ | test | Frontend unit testing |
+| JSDOM | 22+ | test | Browser environment for Jest |
+| Streamlit | 1.56.0 | runtime | Python data visualization |
 ---
 ## Common Tasks
 ### Add New REST Endpoint
@@ -119,6 +134,9 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
 1. Update field in entity class.
 2. Update `ProTeamRosterApplication.run()` to seed the new field if necessary.
 3. Update Service/Repository if logic depends on the field.
+### Update Instructions
+1. Run `python scripts/update_docs.py` to auto-detect new entities and REST endpoints.
+2. Manually verify changes in `.github/copilot-instructions.md`.
 ---
 ## Known Issues & Constraints
 1. **H2 transient** – All data lost on restart; no persistence.
@@ -129,7 +147,7 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
 ## Python Analytics (Experimental)
 ### Prerequisites
 - **Python 3.7+** must be installed (download from [python.org](https://www.python.org/downloads/)).
-- Ensure Python and pip are in your system PATH (or run `.\scripts\setup_env.ps1`).
+- Ensure Python and pip are in your system PATH.
 
 ### Setup & Run
 1. **Install dependencies:**
@@ -143,12 +161,17 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
    ```
    *Note: Using `python -m` ensures you use the version of streamlit linked to your current Python installation.*
 ### Purpose
-Provides "visually cool" analytics and interactive dashboards for the Team Roster data, demonstrating how to integrate Python with a Java-based backend.
+Provides "visually cool" analytics and interactive dashboards for the Team Roster data.
+### Best Practices
+- **Layout:** Use `st.columns` for grid layouts (e.g., 2x2 for metrics) to prevent text cutoff.
+- **Dataframes:** Use `st.column_config` for all `st.dataframe` calls to provide proper formatting and sizing.
+- **Images:** Use `st.image(url, width="stretch")` (Note: `alt` parameter is not supported in v1.56.0).
+- **Styling:** Custom styles are in `src/main/python/style.css`.
 ---
 ## Node.js Manager Portal
 ### Prerequisites
 - **Node.js 16+** and **npm** must be installed.
-- Ensure they are in your system PATH (or run `.\scripts\setup_env.ps1`).
+- Ensure they are in your system PATH.
 - Ensure the Java backend is running (port 8080).
 
 ### Setup & Run
@@ -161,9 +184,19 @@ Provides "visually cool" analytics and interactive dashboards for the Team Roste
    ```powershell
    npm start
    ```
-3. **Access the portal:**
+3. **Run tests:**
+   ```powershell
+   npm test
+   ```
+4. **Access the portal:**
    - **URL:** http://localhost:3000
    - **Credentials:** `manager` / `password`
+
+### Features & Architecture
+- **Theme Toggle:** Supports persistent Dark Mode via `public/js/theme-toggle.js` and `localStorage`.
+- **Trade Modal:** Interactive player trading using `public/js/trade-modal.js`.
+- **Static Assets:** All JS/CSS are served from the `public/` directory.
+- **Testing:** Unit tests for frontend logic using Jest in the `test/` directory.
 
 ### Purpose
 Allows managers to login and perform administrative tasks, such as trading players between teams via the backend REST API.
@@ -179,7 +212,6 @@ If you encounter the error: `npm : The term 'npm' is not recognized...`, it usua
   $env:Path += ";C:\Program Files\nodejs"
   ```
 - **Permanent Fix:** Add `C:\Program Files\nodejs` to your system environment variables.
-- **Helper Script:** Run `.\scripts\setup_env.ps1` to automatically detect and add Node.js/Python to your session path.
 
 ---
 
