@@ -1,5 +1,7 @@
 package main.java;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
@@ -10,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,9 +30,16 @@ import main.java.repository.ProTeamRepo;
 
 @SpringBootApplication
 public class ProTeamRosterApplication implements CommandLineRunner {
+	// Static reference to the actual port for access by other components
+	private static int actualPort = 8080;
+
 	public static void main(String[] args) {
 		TimeZone.setDefault(TimeZone.getTimeZone("America/New_York"));
 		SpringApplication.run(ProTeamRosterApplication.class, args);
+	}
+
+	public static int getActualPort() {
+		return actualPort;
 	}
 
 	private Logger LOG = LoggerFactory.getLogger("Application");
@@ -56,6 +67,27 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 	@Bean
 	public RestTemplate restTemplate() {
 		return new RestTemplate();
+	}
+
+	@Bean
+	public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> webServerFactoryCustomizer() {
+		return factory -> {
+			int port = 8080;
+			if (!isPortAvailable(port)) {
+				LOG.info("[Application] Port 8080 is already in use. Switching to a dynamic port.");
+				port = 0;
+			}
+			actualPort = port; // Store port before server starts
+			factory.setPort(port);
+		};
+	}
+
+	private boolean isPortAvailable(int port) {
+		try (ServerSocket socket = new ServerSocket(port)) {
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
 	}
 
 	@Override
@@ -165,6 +197,6 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 			proScheduleRepo.save(schedule);
 		}
 		
-		LOG.info("Startup data population complete.");
+		LOG.info("[Application] Database seeding completed successfully.");
 	}
 }

@@ -4,6 +4,10 @@ import requests
 import plotly.express as px
 from datetime import datetime
 import os
+import time
+
+print("STATUS: RUNNING")
+print("URL: http://localhost:8501")
 
 st.set_page_config(page_title="Pro Team Roster Dashboard", layout="wide")
 
@@ -16,13 +20,38 @@ def load_css():
 
 load_css()
 
-# Constants
-BASE_URL = "http://localhost:8080"
+# Constants - Dynamically discover backend URL
+BASE_URL = os.getenv("BACKEND_URL", "http://localhost:8080")
+
+def discover_backend_port():
+    """Attempt to discover the actual backend port from the /health/port endpoint."""
+    max_retries = 10
+    retry_delay = 1  # 1 second
+
+    for attempt in range(1, max_retries + 1):
+        try:
+            response = requests.get(f"{BASE_URL}/health/port", timeout=5)
+            if response.status_code == 200:
+                data = response.json()
+                if 'url' in data:
+                    discovered_url = data['url']
+                    print(f"[Dashboard] Backend discovered at: {discovered_url}")
+                    return discovered_url
+        except Exception as e:
+            if attempt < max_retries:
+                print(f"[Dashboard] Attempt {attempt}/{max_retries} - Backend not ready. Retrying in {retry_delay}s...")
+                time.sleep(retry_delay)
+
+    print(f"[Dashboard] Could not discover backend port. Using default: {BASE_URL}")
+    return BASE_URL
+
+# Discover backend on app load
+BASE_URL = discover_backend_port()
 
 @st.cache_data(ttl=60)
 def fetch_data(endpoint, params=None):
     try:
-        response = requests.get(f"{BASE_URL}/{endpoint}", params=params)
+        response = requests.get(f"{BASE_URL}/{endpoint}", params=params, timeout=5)
         if response.status_code == 200:
             return response.json()
     except Exception as e:
@@ -68,7 +97,7 @@ page = st.sidebar.radio("Go to", ["Team Analytics", "Arena Overview", "Schedule 
 st.title("🏀 Pro Team Roster Analytics")
 
 if health_status == "OFFLINE":
-    st.warning("Please ensure the Spring Boot backend is running at http://localhost:8080")
+    st.warning(f"Please ensure the Spring Boot backend is running (currently trying {BASE_URL})")
     st.info("Tip: Run `mvn spring-boot:run` to start the backend.")
 
 teams_data = fetch_data("teams")

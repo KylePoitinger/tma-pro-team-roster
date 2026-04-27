@@ -11,7 +11,10 @@ By integrating into the Spring Boot startup sequence, it ensures that the **Pyth
 - **Non-blocking Execution**: Launches services in dedicated background threads and consumes their output streams asynchronously to prevent blocking the main application or test runners.
 - **Log Aggregation**: Integrates output from the child processes into the main application logs for easier debugging.
 - **Lifecycle Monitoring**: Monitors the exit status of auxiliary services and logs any unexpected shutdowns.
+- **Path Resolution & Injection**: Automatically resolves full paths for `python` and `npm` and injects their parent directories into the child process `PATH` to ensure sub-commands (like `node` called by `npm`) are correctly recognized.
+- **Headless Execution**: Launches auxiliary services in headless mode (e.g., `--server.headless true` for Streamlit) to prevent browser-based interruptions.
 - **Test-Awareness**: Automatically skips execution when the `test` Spring profile is active or when the `skip.service.launcher` system property is set to `true`.
+- **Server Admin Summary**: Displays a centralized, structured summary of all service URLs (Backend, Swagger, H2, Dashboard, Manager Portal) and their startup status once initialization is complete.
 
 ## Configuration & Usage
 The agent is implemented as a Spring `@Component` and implements `CommandLineRunner`. It is automatically picked up by Spring Boot's component scanning.

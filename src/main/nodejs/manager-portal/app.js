@@ -6,7 +6,33 @@ const path = require('path');
 
 const app = express();
 const PORT = 3000;
-const BACKEND_URL = 'http://localhost:8080';
+
+// Dynamically discover backend URL
+let BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8080';
+
+// Function to discover backend port from /health/port endpoint
+async function discoverBackendPort() {
+    const maxRetries = 10;
+    const retryDelay = 1000; // 1 second
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+            const response = await axios.get('http://localhost:8080/health/port', { timeout: 5000 });
+            if (response.data && response.data.url) {
+                BACKEND_URL = response.data.url;
+                console.log(`[Manager Portal] Backend discovered at: ${BACKEND_URL}`);
+                return true;
+            }
+        } catch (error) {
+            if (attempt < maxRetries) {
+                console.log(`[Manager Portal] Attempt ${attempt}/${maxRetries} - Backend not ready. Retrying in ${retryDelay}ms...`);
+                await new Promise(resolve => setTimeout(resolve, retryDelay));
+            }
+        }
+    }
+    console.log(`[Manager Portal] Could not discover backend port. Using default: ${BACKEND_URL}`);
+    return false;
+}
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -80,6 +106,9 @@ app.post('/trade', isAuthenticated, async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Manager Portal running at http://localhost:${PORT}`);
+app.listen(PORT, async () => {
+    console.log(`STATUS: RUNNING`);
+    console.log(`URL: http://localhost:${PORT}`);
+    // Discover backend port on startup
+    await discoverBackendPort();
 });
