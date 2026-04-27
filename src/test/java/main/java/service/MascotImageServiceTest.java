@@ -1,21 +1,21 @@
 package main.java.service;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestTemplate;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class MascotImageServiceTest {
 
     @Mock
@@ -39,11 +39,13 @@ public class MascotImageServiceTest {
         assertEquals("http://example.com/image.jpg", result);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testFetchRandomMascotImageFailure() {
         LOG.info("Testing fetchRandomMascotImage failure scenario");
         when(restTemplate.getForObject(anyString(), eq(Map.class))).thenReturn(null);
 
-        mascotImageService.fetchRandomMascotImage();
+        assertThrows(IllegalStateException.class, () -> {
+            mascotImageService.fetchRandomMascotImage();
+        });
     }
 }
