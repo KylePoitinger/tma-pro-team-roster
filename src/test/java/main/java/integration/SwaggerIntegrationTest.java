@@ -11,15 +11,7 @@ import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
-public class SwaggerIntegrationTest {
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    @LocalServerPort
-    private int port;
+public class SwaggerIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void testSwaggerUi() {

@@ -24,22 +24,9 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@ActiveProfiles("test")
-public class ScaleDataIntegrationTest {
+public class ScaleDataIntegrationTest extends BaseIntegrationTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(ScaleDataIntegrationTest.class);
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    @LocalServerPort
-    private int port;
-
-    private String getBaseUrl() {
-        return "http://localhost:" + port;
-    }
 
     private HttpHeaders getHeaders() {
         HttpHeaders headers = new HttpHeaders();

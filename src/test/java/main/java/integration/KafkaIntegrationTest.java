@@ -19,7 +19,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest
-@DirtiesContext
 @EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9092", "port=9092" })
 @Disabled("EmbeddedKafka connectivity issues in current build environment. Kafka producer/consumer tested indirectly through ProPlayerService. Re-enable with standalone broker or Docker.")
 public class KafkaIntegrationTest {

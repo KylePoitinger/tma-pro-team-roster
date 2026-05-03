@@ -15,19 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
-public class EndpointIntegrationTest {
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    @LocalServerPort
-    private int port;
-
-    private String getBaseUrl() {
-        return "http://localhost:" + port;
-    }
+public class EndpointIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void testHealthCheck() {
@@ -156,8 +144,8 @@ public class EndpointIntegrationTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         
-        // We can't easily check the nested team object because it's a Map in the response
-        // But the call should not have failed.
+        // Trade player 1 back to team 1 to maintain state for other tests
+        restTemplate.put(getBaseUrl() + "/players/1/trade/1", null);
     }
 
     // MASCOTS TESTS
