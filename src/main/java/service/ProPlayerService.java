@@ -2,6 +2,8 @@ package main.java.service;
 
 import java.util.Optional;
 
+import main.java.config.KafkaConfig;
+import main.java.dto.ProEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +22,18 @@ public class ProPlayerService {
 	@Autowired
 	private ProTeamRepo proTeamRepo;
 
+	@Autowired
+	private ProKafkaProducer proKafkaProducer;
+
 	public ProPlayerEntity getProPlayer(long playerId) {
 		return Optional.ofNullable(proPlayerRepo.getOneByPlayerId(playerId))
 				.orElseThrow(() -> new ResourceNotFoundException("Player not found for this id :: " + playerId));
 	}
 
 	public ProPlayerEntity createProPlayer(ProPlayerEntity createPlayerReq) {
-		return proPlayerRepo.save(createPlayerReq);
+		ProPlayerEntity savedPlayer = proPlayerRepo.save(createPlayerReq);
+		proKafkaProducer.sendEvent(KafkaConfig.PLAYER_TOPIC, ProEvent.create("PLAYER_CREATED", "PLAYER", savedPlayer));
+		return savedPlayer;
 	}
 
 	public ProPlayerEntity updateProPlayer(long playerId, ProPlayerEntity updatePlayerReq) {
@@ -39,7 +46,9 @@ public class ProPlayerService {
 			player.weight = updatePlayerReq.weight;
 			player.college = updatePlayerReq.college;
 			player.salary = updatePlayerReq.salary;
-			return proPlayerRepo.save(player);
+			ProPlayerEntity updatedPlayer = proPlayerRepo.save(player);
+			proKafkaProducer.sendEvent(KafkaConfig.PLAYER_TOPIC, ProEvent.create("PLAYER_UPDATED", "PLAYER", updatedPlayer));
+			return updatedPlayer;
 		}).orElseThrow(() -> new ResourceNotFoundException("Player not found for this id :: " + playerId));
 	}
 
@@ -48,6 +57,7 @@ public class ProPlayerService {
 				.orElseThrow(() -> new ResourceNotFoundException("Player not found for this id :: " + playerId));
 
 		proPlayerRepo.delete(player);
+		proKafkaProducer.sendEvent(KafkaConfig.PLAYER_TOPIC, ProEvent.create("PLAYER_DELETED", "PLAYER", player));
 		return "Delete was successful for player:" + playerId;
 	}
 

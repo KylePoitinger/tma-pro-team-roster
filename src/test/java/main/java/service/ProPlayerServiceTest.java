@@ -23,6 +23,9 @@ public class ProPlayerServiceTest {
     @Mock
     private ProPlayerRepo proPlayerRepo;
 
+    @Mock
+    private ProKafkaProducer proKafkaProducer;
+
     @InjectMocks
     private ProPlayerService proPlayerService;
 

@@ -61,6 +61,21 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.awaitility</groupId>
+			<artifactId>awaitility</artifactId>
+			<version>4.0.3</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -118,6 +133,8 @@
 									<exclude>main.java.controller.MascotImageController</exclude>
 									<exclude>main.java.service.MascotImageService</exclude>
 									<exclude>main.java.controller.HealthCheckController</exclude>
+									<exclude>main.java.service.ProKafkaConsumer</exclude>
+									<exclude>main.java.service.ProKafkaProducer</exclude>
 								</excludes>
 								<limits>
 									<limit>

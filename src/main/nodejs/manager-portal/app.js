@@ -106,9 +106,21 @@ app.post('/trade', isAuthenticated, async (req, res) => {
     }
 });
 
-app.listen(PORT, async () => {
-    console.log(`STATUS: RUNNING`);
-    console.log(`URL: http://localhost:${PORT}`);
-    // Discover backend port on startup
-    await discoverBackendPort();
-});
+const startServer = (port) => {
+    const server = app.listen(port, async () => {
+        const actualPort = server.address().port;
+        console.log(`STATUS: RUNNING`);
+        console.log(`URL: http://localhost:${actualPort}`);
+        // Discover backend port on startup
+        await discoverBackendPort();
+    }).on('error', (err) => {
+        if (err.code === 'EADDRINUSE') {
+            console.log(`[Manager Portal] Port ${port} is already in use. Switching to a dynamic port.`);
+            startServer(0);
+        } else {
+            console.error(`[Manager Portal] Error: ${err.message}`);
+        }
+    });
+};
+
+startServer(process.env.PORT || PORT);

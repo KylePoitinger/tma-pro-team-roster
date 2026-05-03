@@ -76,6 +76,7 @@ src/main/nodejs/manager-portal/.env.local
 # Build outputs
 build_output.txt
 test_output.txt
+output.txt
 
 # JaCoCo coverage
 jacoco.exec
