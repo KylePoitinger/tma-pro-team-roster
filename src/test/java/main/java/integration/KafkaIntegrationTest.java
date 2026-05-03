@@ -17,11 +17,12 @@ import java.util.concurrent.TimeUnit;
 import static org.awaitility.Awaitility.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.atLeastOnce;
 
-@SpringBootTest
-@EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9092", "port=9092" })
-@Disabled("EmbeddedKafka connectivity issues in current build environment. Kafka producer/consumer tested indirectly through ProPlayerService. Re-enable with standalone broker or Docker.")
-public class KafkaIntegrationTest {
+@EmbeddedKafka(partitions = 1, topics = { "pro-player-events" })
+@SpringBootTest(properties = "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}", webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext
+public class KafkaIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private ProPlayerService proPlayerService;
@@ -42,8 +43,8 @@ public class KafkaIntegrationTest {
 
         // Assert - Use Awaitility for proper async verification
         await()
-            .timeout(60, TimeUnit.SECONDS)
-            .pollInterval(500, TimeUnit.MILLISECONDS)
-            .untilAsserted(() -> verify(proKafkaConsumer).consumePlayerEvent(any(ProEvent.class)));
+            .timeout(90, TimeUnit.SECONDS)
+            .pollInterval(1, TimeUnit.SECONDS)
+            .untilAsserted(() -> verify(proKafkaConsumer, atLeastOnce()).consumePlayerEvent(any(ProEvent.class)));
     }
 }

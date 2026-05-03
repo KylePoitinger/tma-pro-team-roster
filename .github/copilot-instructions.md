@@ -245,3 +245,5 @@ Add a new row to the appropriate table using the following structure:
 - **For data scale:** Check `ProTeamRosterApplication.java` for the current seeding logic.
 - **For testing:** Leverage `TestRestTemplate` in integration tests.
 - **For JSON:** Always check for circular references when adding new relationships.
+- **For Shell:** Prefer PowerShell commands over Bash.
+- **For Git:** Automatically add newly created files to git.

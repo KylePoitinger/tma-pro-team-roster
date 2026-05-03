@@ -5,6 +5,13 @@
 - Accuracy
 - Available Documentation (.md files)
 
+## Shell & Environment
+- Prefer PowerShell commands over Bash where applicable (Windows environment).
+- Add newly created files to git (`git add <file>`).
+
+## Guidance & Context
+- If no specific task context is provided, search for and refer to ".github/copilot-instructions.md" for project guidance.
+
 ## Maven Testing Guidelines
 - Run high level tests first.
 - Ignore Jacoco coverage reports, unless otherwise specified.
