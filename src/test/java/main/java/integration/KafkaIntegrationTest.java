@@ -34,9 +34,9 @@ public class KafkaIntegrationTest extends BaseIntegrationTest {
     public void testPlayerEventFlow() throws Exception {
         // Arrange
         ProPlayerEntity player = new ProPlayerEntity();
-        player.playerId = 999L;
-        player.name = "Kafka Test Player";
-        player.position = "Forward";
+        player.setPlayerId(999L);
+        player.setName("Kafka Test Player");
+        player.setPosition("Forward");
 
         // Act
         proPlayerService.createProPlayer(player);

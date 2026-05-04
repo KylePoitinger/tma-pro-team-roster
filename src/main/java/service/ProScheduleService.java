@@ -41,11 +41,11 @@ public class ProScheduleService {
 
     public ProScheduleEntity updateSchedule(long scheduleId, ProScheduleEntity updateReq) {
         return proScheduleRepo.findById(scheduleId).map(schedule -> {
-            schedule.homeTeam = updateReq.homeTeam;
-            schedule.awayTeam = updateReq.awayTeam;
-            schedule.arena = updateReq.arena;
-            schedule.scheduledDate = updateReq.scheduledDate;
-            schedule.ticketPrice = updateReq.ticketPrice;
+            schedule.setHomeTeam(updateReq.getHomeTeam());
+            schedule.setAwayTeam(updateReq.getAwayTeam());
+            schedule.setArena(updateReq.getArena());
+            schedule.setScheduledDate(updateReq.getScheduledDate());
+            schedule.setTicketPrice(updateReq.getTicketPrice());
             return proScheduleRepo.save(schedule);
         }).orElseThrow(() -> new ResourceNotFoundException("Schedule not found for this id :: " + scheduleId));
     }

@@ -27,8 +27,8 @@ public class ProTeamControllerTest {
     @Test
     public void testGetTeams() {
         ProTeamEntity team = new ProTeamEntity();
-        team.teamId = 1L;
-        team.name = "Test Team";
+        team.setTeamId(1L);
+        team.setName("Test Team");
         List<ProTeamEntity> mockTeams = Arrays.asList(team);
         when(proTeamService.getTeams()).thenReturn(mockTeams);
 
@@ -42,22 +42,22 @@ public class ProTeamControllerTest {
     @Test
     public void testGetSingleTeamAndRoster() {
         ProTeamEntity team = new ProTeamEntity();
-        team.teamId = 1L;
-        team.name = "Test Team";
+        team.setTeamId(1L);
+        team.setName("Test Team");
         when(proTeamService.getSingleTeamAndRoster(1L)).thenReturn(team);
 
         ProTeamEntity result = proTeamController.getSingleTeamAndRoster(1L);
 
         assertNotNull(result);
-        assertEquals("Test Team", result.name);
+        assertEquals("Test Team", result.getName());
         verify(proTeamService, times(1)).getSingleTeamAndRoster(1L);
     }
 
     @Test
     public void testGetTeamsByFieldLookup() {
         ProTeamEntity team = new ProTeamEntity();
-        team.teamId = 1L;
-        team.name = "Lakers";
+        team.setTeamId(1L);
+        team.setName("Lakers");
         List<ProTeamEntity> mockTeams = Arrays.asList(team);
         when(proTeamService.getTeamsByFieldLookup("Lakers", null, null)).thenReturn(mockTeams);
 
@@ -71,28 +71,28 @@ public class ProTeamControllerTest {
     @Test
     public void testCreateTeam() {
         ProTeamEntity team = new ProTeamEntity();
-        team.teamId = 1L;
-        team.name = "New Team";
+        team.setTeamId(1L);
+        team.setName("New Team");
         when(proTeamService.createTeam(team)).thenReturn(team);
 
         ProTeamEntity result = proTeamController.createTeam(team);
 
         assertNotNull(result);
-        assertEquals("New Team", result.name);
+        assertEquals("New Team", result.getName());
         verify(proTeamService, times(1)).createTeam(team);
     }
 
     @Test
     public void testUpdateTeam() {
         ProTeamEntity team = new ProTeamEntity();
-        team.teamId = 1L;
-        team.name = "Updated Team";
+        team.setTeamId(1L);
+        team.setName("Updated Team");
         when(proTeamService.updateTeam(1L, team)).thenReturn(team);
 
         ProTeamEntity result = proTeamController.updateTeam(1L, team);
 
         assertNotNull(result);
-        assertEquals("Updated Team", result.name);
+        assertEquals("Updated Team", result.getName());
         verify(proTeamService, times(1)).updateTeam(1L, team);
     }
 

@@ -44,10 +44,10 @@ public class ProTeamService {
 
 	public ProTeamEntity updateTeam(long teamId, ProTeamEntity updateTeamReq) {
 		return proTeamRepo.findById(teamId).map(team -> {
-			team.city = updateTeamReq.city;
-			team.mascot = updateTeamReq.mascot;
-			team.name = updateTeamReq.name;
-			team.arena = updateTeamReq.arena;
+			team.setCity(updateTeamReq.getCity());
+			team.setMascot(updateTeamReq.getMascot());
+			team.setName(updateTeamReq.getName());
+			team.setArena(updateTeamReq.getArena());
 			return proTeamRepo.save(team);
 		}).orElseThrow(() -> new ResourceNotFoundException("Team not found for this id :: " + teamId));
 	}

@@ -28,8 +28,8 @@ public class ProArenaControllerTest {
     @Test
     public void testGetArenas() {
         ProArenaEntity arena = new ProArenaEntity();
-        arena.arenaId = 1L;
-        arena.name = "Test Arena";
+        arena.setArenaId(1L);
+        arena.setName("Test Arena");
         List<ProArenaEntity> mockArenas = Arrays.asList(arena);
         when(proArenaService.getArenas()).thenReturn(mockArenas);
 
@@ -43,42 +43,42 @@ public class ProArenaControllerTest {
     @Test
     public void testGetArena() {
         ProArenaEntity arena = new ProArenaEntity();
-        arena.arenaId = 1L;
-        arena.name = "Test Arena";
+        arena.setArenaId(1L);
+        arena.setName("Test Arena");
         when(proArenaService.getArena(1L)).thenReturn(arena);
 
         ProArenaEntity result = proArenaController.getArena(1L);
 
         assertNotNull(result);
-        assertEquals("Test Arena", result.name);
+        assertEquals("Test Arena", result.getName());
         verify(proArenaService, times(1)).getArena(1L);
     }
 
     @Test
     public void testCreateArena() {
         ProArenaEntity arena = new ProArenaEntity();
-        arena.arenaId = 1L;
-        arena.name = "New Arena";
+        arena.setArenaId(1L);
+        arena.setName("New Arena");
         when(proArenaService.createArena(arena)).thenReturn(arena);
 
         ProArenaEntity result = proArenaController.createArena(arena);
 
         assertNotNull(result);
-        assertEquals("New Arena", result.name);
+        assertEquals("New Arena", result.getName());
         verify(proArenaService, times(1)).createArena(arena);
     }
 
     @Test
     public void testUpdateArena() {
         ProArenaEntity arena = new ProArenaEntity();
-        arena.arenaId = 1L;
-        arena.name = "Updated Arena";
+        arena.setArenaId(1L);
+        arena.setName("Updated Arena");
         when(proArenaService.updateArena(1L, arena)).thenReturn(arena);
 
         ProArenaEntity result = proArenaController.updateArena(1L, arena);
 
         assertNotNull(result);
-        assertEquals("Updated Arena", result.name);
+        assertEquals("Updated Arena", result.getName());
         verify(proArenaService, times(1)).updateArena(1L, arena);
     }
 

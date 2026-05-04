@@ -1,32 +1,101 @@
 package main.java.entity;
 
-import lombok.Data;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-@Data
 @Entity
 public class ProArenaEntity {
 
     @Id
-    public long arenaId;
+    private long arenaId;
 
-    public String name;
+    private String name;
 
-    public String location;
+    private String location;
 
-    public int capacity;
+    private int capacity;
 
-    public String address;
+    private String address;
 
-    public int openedYear;
+    private int openedYear;
 
-    public String surface;
+    private String surface;
 
-    public String amenities;
+    private String amenities;
 
-    public double cost;
+    private double cost;
+
+    public long getArenaId() {
+        return arenaId;
+    }
+
+    public void setArenaId(long arenaId) {
+        this.arenaId = arenaId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public int getOpenedYear() {
+        return openedYear;
+    }
+
+    public void setOpenedYear(int openedYear) {
+        this.openedYear = openedYear;
+    }
+
+    public String getSurface() {
+        return surface;
+    }
+
+    public void setSurface(String surface) {
+        this.surface = surface;
+    }
+
+    public String getAmenities() {
+        return amenities;
+    }
+
+    public void setAmenities(String amenities) {
+        this.amenities = amenities;
+    }
+
+    public double getCost() {
+        return cost;
+    }
+
+    public void setCost(double cost) {
+        this.cost = cost;
+    }
 
     @Override
     public String toString() {

@@ -77,11 +77,11 @@ public class ProMascotService {
 
 	public ProMascotEntity updateProMascot(long mascotId, ProMascotEntity updateMascotReq) {
 		return proMascotRepo.findById(mascotId).map(mascot -> {
-			if (updateMascotReq.name != null) mascot.name = updateMascotReq.name;
-			if (updateMascotReq.species != null) mascot.species = updateMascotReq.species;
-			if (updateMascotReq.team != null) mascot.team = updateMascotReq.team;
-			if (updateMascotReq.description != null) mascot.description = updateMascotReq.description;
-			if (updateMascotReq.costume != null) mascot.costume = updateMascotReq.costume;
+			if (updateMascotReq.getName() != null) mascot.setName(updateMascotReq.getName());
+			if (updateMascotReq.getSpecies() != null) mascot.setSpecies(updateMascotReq.getSpecies());
+			if (updateMascotReq.getTeam() != null) mascot.setTeam(updateMascotReq.getTeam());
+			if (updateMascotReq.getDescription() != null) mascot.setDescription(updateMascotReq.getDescription());
+			if (updateMascotReq.getCostume() != null) mascot.setCostume(updateMascotReq.getCostume());
 			if (updateMascotReq.getImageUrl() != null && !updateMascotReq.getImageUrl().equals("/images/random-mascot")) {
 				mascot.setImageUrl(updateMascotReq.getImageUrl());
 			}

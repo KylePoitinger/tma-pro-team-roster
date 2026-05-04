@@ -27,22 +27,22 @@ public class ProMascotControllerTest {
     @Test
     public void testGetProMascot() {
         ProMascotEntity mascot = new ProMascotEntity();
-        mascot.mascotId = 1L;
-        mascot.name = "Test Mascot";
+        mascot.setMascotId(1L);
+        mascot.setName("Test Mascot");
         when(proMascotService.getProMascot(1L)).thenReturn(mascot);
 
         ProMascotEntity result = proMascotController.getProMascot(1L);
 
         assertNotNull(result);
-        assertEquals("Test Mascot", result.name);
+        assertEquals("Test Mascot", result.getName());
         verify(proMascotService, times(1)).getProMascot(1L);
     }
 
     @Test
     public void testGetMascotsByTeam() {
         ProMascotEntity mascot = new ProMascotEntity();
-        mascot.mascotId = 1L;
-        mascot.name = "Test Mascot";
+        mascot.setMascotId(1L);
+        mascot.setName("Test Mascot");
         List<ProMascotEntity> mockMascots = Arrays.asList(mascot);
         when(proMascotService.getMascotsByTeam(1L)).thenReturn(mockMascots);
 
@@ -56,28 +56,28 @@ public class ProMascotControllerTest {
     @Test
     public void testCreateProMascot() {
         ProMascotEntity mascot = new ProMascotEntity();
-        mascot.mascotId = 1L;
-        mascot.name = "New Mascot";
+        mascot.setMascotId(1L);
+        mascot.setName("New Mascot");
         when(proMascotService.createProMascot(mascot)).thenReturn(mascot);
 
         ProMascotEntity result = proMascotController.createProMascot(mascot);
 
         assertNotNull(result);
-        assertEquals("New Mascot", result.name);
+        assertEquals("New Mascot", result.getName());
         verify(proMascotService, times(1)).createProMascot(mascot);
     }
 
     @Test
     public void testUpdateProMascot() {
         ProMascotEntity mascot = new ProMascotEntity();
-        mascot.mascotId = 1L;
-        mascot.name = "Updated Mascot";
+        mascot.setMascotId(1L);
+        mascot.setName("Updated Mascot");
         when(proMascotService.updateProMascot(1L, mascot)).thenReturn(mascot);
 
         ProMascotEntity result = proMascotController.updateProMascot(1L, mascot);
 
         assertNotNull(result);
-        assertEquals("Updated Mascot", result.name);
+        assertEquals("Updated Mascot", result.getName());
         verify(proMascotService, times(1)).updateProMascot(1L, mascot);
     }
 

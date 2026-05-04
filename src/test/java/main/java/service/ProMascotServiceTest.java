@@ -37,28 +37,28 @@ public class ProMascotServiceTest {
     public void testCreateProMascot() {
         LOG.info("Testing createProMascot method");
         ProMascotEntity mascot = new ProMascotEntity();
-        mascot.mascotId = 1L;
-        mascot.name = "Test Mascot";
-        mascot.species = "Test Species";
-        mascot.description = "Test Description";
-        mascot.costume = "Test Costume";
+        mascot.setMascotId(1L);
+        mascot.setName("Test Mascot");
+        mascot.setSpecies("Test Species");
+        mascot.setDescription("Test Description");
+        mascot.setCostume("Test Costume");
         when(proMascotRepo.save(mascot)).thenReturn(mascot);
         ProMascotEntity created = proMascotService.createProMascot(mascot);
-        LOG.info("Created mascot: {}", created.name);
+        LOG.info("Created mascot: {}", created.getName());
         assertNotNull(created);
-        assertEquals("Test Mascot", created.name);
+        assertEquals("Test Mascot", created.getName());
     }
 
     @Test
     public void testGetProMascotSuccess() {
         LOG.info("Testing getProMascot method - success");
         ProMascotEntity mascot = new ProMascotEntity();
-        mascot.mascotId = 1L;
-        mascot.name = "Test Mascot";
+        mascot.setMascotId(1L);
+        mascot.setName("Test Mascot");
         when(proMascotRepo.getOneByMascotId(1L)).thenReturn(mascot);
         ProMascotEntity result = proMascotService.getProMascot(1L);
         assertNotNull(result);
-        assertEquals("Test Mascot", result.name);
+        assertEquals("Test Mascot", result.getName());
     }
 
     @Test
@@ -72,8 +72,8 @@ public class ProMascotServiceTest {
     public void testGetMascotsByTeam() {
         LOG.info("Testing getMascotsByTeam method");
         ProMascotEntity mascot = new ProMascotEntity();
-        mascot.mascotId = 1L;
-        mascot.name = "Test Mascot";
+        mascot.setMascotId(1L);
+        mascot.setName("Test Mascot");
         List<ProMascotEntity> mockMascots = Arrays.asList(mascot);
         when(proMascotRepo.findByTeam_TeamId(1L)).thenReturn(mockMascots);
         List<ProMascotEntity> result = proMascotService.getMascotsByTeam(1L);
@@ -85,16 +85,16 @@ public class ProMascotServiceTest {
     public void testUpdateProMascotSuccess() {
         LOG.info("Testing updateProMascot method - success");
         ProMascotEntity existingMascot = new ProMascotEntity();
-        existingMascot.mascotId = 1L;
-        existingMascot.name = "Old Mascot";
-        existingMascot.description = "Old Description";
-        existingMascot.costume = "Old Costume";
+        existingMascot.setMascotId(1L);
+        existingMascot.setName("Old Mascot");
+        existingMascot.setDescription("Old Description");
+        existingMascot.setCostume("Old Costume");
 
         ProMascotEntity updateReq = new ProMascotEntity();
-        updateReq.name = "New Mascot";
-        updateReq.species = "New Species";
-        updateReq.description = "New Description";
-        updateReq.costume = "New Costume";
+        updateReq.setName("New Mascot");
+        updateReq.setSpecies("New Species");
+        updateReq.setDescription("New Description");
+        updateReq.setCostume("New Costume");
         updateReq.setImageUrl("http://newimage.jpg");
 
         when(proMascotRepo.findById(1L)).thenReturn(Optional.of(existingMascot));
@@ -102,9 +102,9 @@ public class ProMascotServiceTest {
 
         ProMascotEntity result = proMascotService.updateProMascot(1L, updateReq);
         assertNotNull(result);
-        assertEquals("New Mascot", result.name);
-        assertEquals("New Description", result.description);
-        assertEquals("New Costume", result.costume);
+        assertEquals("New Mascot", result.getName());
+        assertEquals("New Description", result.getDescription());
+        assertEquals("New Costume", result.getCostume());
         assertEquals("http://newimage.jpg", result.getImageUrl());
     }
 
@@ -112,27 +112,27 @@ public class ProMascotServiceTest {
     public void testUpdateProMascotPartial() {
         LOG.info("Testing updateProMascot method - partial update");
         ProMascotEntity existingMascot = new ProMascotEntity();
-        existingMascot.mascotId = 1L;
-        existingMascot.name = "Old Mascot";
+        existingMascot.setMascotId(1L);
+        existingMascot.setName("Old Mascot");
 
         ProMascotEntity updateReq = new ProMascotEntity();
-        updateReq.name = null; // Should not update name
-        updateReq.species = "New Species";
+        updateReq.setName(null); // Should not update name
+        updateReq.setSpecies("New Species");
 
         when(proMascotRepo.findById(1L)).thenReturn(Optional.of(existingMascot));
         when(proMascotRepo.save(any(ProMascotEntity.class))).thenReturn(existingMascot);
 
         ProMascotEntity result = proMascotService.updateProMascot(1L, updateReq);
         assertNotNull(result);
-        assertEquals("Old Mascot", result.name);
-        assertEquals("New Species", result.species);
+        assertEquals("Old Mascot", result.getName());
+        assertEquals("New Species", result.getSpecies());
     }
 
     @Test
     public void testUpdateProMascotWithDefaultImage() {
         LOG.info("Testing updateProMascot method - with default image");
         ProMascotEntity existingMascot = new ProMascotEntity();
-        existingMascot.mascotId = 1L;
+        existingMascot.setMascotId(1L);
         existingMascot.setImageUrl("old_url");
 
         ProMascotEntity updateReq = new ProMascotEntity();
@@ -158,8 +158,8 @@ public class ProMascotServiceTest {
     public void testDeleteProMascotSuccess() {
         LOG.info("Testing deleteProMascot method - success");
         ProMascotEntity mascot = new ProMascotEntity();
-        mascot.mascotId = 1L;
-        mascot.name = "Test Mascot";
+        mascot.setMascotId(1L);
+        mascot.setName("Test Mascot");
         when(proMascotRepo.getOneByMascotId(1L)).thenReturn(mascot);
         String result = proMascotService.deleteProMascot(1L);
         assertNotNull(result);
@@ -178,15 +178,15 @@ public class ProMascotServiceTest {
     public void testGetMascotsUniqueImages() {
         LOG.info("Testing getMascots method with image fetching");
         ProMascotEntity m1 = new ProMascotEntity();
-        m1.mascotId = 1L;
+        m1.setMascotId(1L);
         m1.setImageUrl(null);
 
         ProMascotEntity m2 = new ProMascotEntity();
-        m2.mascotId = 2L;
+        m2.setMascotId(2L);
         m2.setImageUrl("/images/random-mascot");
 
         ProMascotEntity m3 = new ProMascotEntity();
-        m3.mascotId = 3L;
+        m3.setMascotId(3L);
         m3.setImageUrl("http://existing.com/image.jpg");
 
         List<ProMascotEntity> mockMascots = Arrays.asList(m1, m2, m3);
@@ -208,11 +208,11 @@ public class ProMascotServiceTest {
     public void testGetMascotsDuplicateHandling() {
         LOG.info("Testing getMascots method duplicate image handling");
         ProMascotEntity m1 = new ProMascotEntity();
-        m1.mascotId = 1L;
+        m1.setMascotId(1L);
         m1.setImageUrl(null);
 
         ProMascotEntity m2 = new ProMascotEntity();
-        m2.mascotId = 2L;
+        m2.setMascotId(2L);
         m2.setImageUrl(null);
 
         List<ProMascotEntity> mockMascots = Arrays.asList(m1, m2);
@@ -232,7 +232,7 @@ public class ProMascotServiceTest {
     public void testGetMascotsImageServiceException() {
         LOG.info("Testing getMascots method when image service fails");
         ProMascotEntity m1 = new ProMascotEntity();
-        m1.mascotId = 1L;
+        m1.setMascotId(1L);
         m1.setImageUrl(null);
 
         when(proMascotRepo.findAll()).thenReturn(Arrays.asList(m1));
@@ -248,8 +248,8 @@ public class ProMascotServiceTest {
     public void testGetRandomMascot() {
         LOG.info("Testing getRandomMascot method");
         ProMascotEntity mascot = new ProMascotEntity();
-        mascot.mascotId = 1L;
-        mascot.name = "Random Mascot";
+        mascot.setMascotId(1L);
+        mascot.setName("Random Mascot");
 
         when(proMascotRepo.findRandomMascot()).thenReturn(mascot);
         when(mascotImageService.fetchRandomMascotImage()).thenReturn("http://example.com/image.jpg");
@@ -257,7 +257,7 @@ public class ProMascotServiceTest {
 
         ProMascotEntity result = proMascotService.getRandomMascot();
         assertNotNull(result);
-        assertEquals("Random Mascot", result.name);
+        assertEquals("Random Mascot", result.getName());
         assertEquals("http://example.com/image.jpg", result.getImageUrl());
     }
 
@@ -273,8 +273,8 @@ public class ProMascotServiceTest {
     public void testGetRandomMascotImageServiceException() {
         LOG.info("Testing getRandomMascot method - image service exception");
         ProMascotEntity mascot = new ProMascotEntity();
-        mascot.mascotId = 1L;
-        mascot.name = "Random Mascot";
+        mascot.setMascotId(1L);
+        mascot.setName("Random Mascot");
         mascot.setImageUrl("/images/random-mascot");
 
         when(proMascotRepo.findRandomMascot()).thenReturn(mascot);

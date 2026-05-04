@@ -1,7 +1,7 @@
 # GitHub Copilot Instructions – AI Coding Guide for tma-pro-team-roster
 ## Project Overview
 Spring Boot REST API managing professional sports teams and player rosters. In-memory H2 database with a three-layer architecture (Controller → Service → Repository). Primary goal: readability and maintainability for legacy code scenarios.
-**Build/Test:** Maven (pom.xml) | **Language:** Java 1.8 | **Framework:** Spring Boot 2.4.4
+**Build/Test:** Maven (pom.xml) | **Language:** Java 21 | **Framework:** Spring Boot 3.3.0
 ---
 ## Architecture & Data Flow
 ### Three-Layer Pattern
@@ -113,9 +113,9 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
 ## External Dependencies & Versions
 | Dependency | Version | Scope | Purpose |
 |-----------|---------|-------|---------|
-| Spring Boot | 2.4.4 | compile | Core framework + autoconfiguration |
-| Springdoc OpenAPI | 1.5.7 | compile | OpenAPI 3 / Swagger Documentation |
-| Lombok | 1.18.30 | provided | Boilerplate reduction (@Data) |
+| Spring Boot | 3.3.0 | compile | Core framework + autoconfiguration |
+| Springdoc OpenAPI | 2.5.0 | compile | OpenAPI 3 / Swagger Documentation |
+| Lombok | (Removed) | N/A | Migrated to manual getters/setters |
 | JaCoCo | 0.8.13 | test | Code coverage reporting and enforcement |
 | H2 Database | (inherited) | runtime | In-memory database |
 | JUnit 5 | (inherited) | test | Testing framework |
@@ -144,7 +144,7 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
 ---
 ## Known Issues & Constraints
 1. **H2 transient** – All data lost on restart; no persistence.
-2. **Java 1.8** – Legacy version; avoid Java 9+ features.
+2. **Java 21+** – Modern version; uses Jakarta EE 10.
 3. **Testing** – Ensure tests are run with Maven to avoid environment-specific issues.
 4. **Python Integration** – A separate Python dashboard is located in `src/main/python`. It uses Streamlit for data visualization.
 ---

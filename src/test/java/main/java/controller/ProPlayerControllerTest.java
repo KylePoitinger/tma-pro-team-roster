@@ -24,42 +24,42 @@ public class ProPlayerControllerTest {
     @Test
     public void testGetProPlayer() {
         ProPlayerEntity player = new ProPlayerEntity();
-        player.playerId = 1L;
-        player.name = "Test Player";
+        player.setPlayerId(1L);
+        player.setName("Test Player");
         when(proPlayerService.getProPlayer(1L)).thenReturn(player);
 
         ProPlayerEntity result = proPlayerController.getProPlayer(1L);
 
         assertNotNull(result);
-        assertEquals("Test Player", result.name);
+        assertEquals("Test Player", result.getName());
         verify(proPlayerService, times(1)).getProPlayer(1L);
     }
 
     @Test
     public void testCreateProPlayer() {
         ProPlayerEntity player = new ProPlayerEntity();
-        player.playerId = 1L;
-        player.name = "New Player";
+        player.setPlayerId(1L);
+        player.setName("New Player");
         when(proPlayerService.createProPlayer(player)).thenReturn(player);
 
         ProPlayerEntity result = proPlayerController.createProPlayer(player);
 
         assertNotNull(result);
-        assertEquals("New Player", result.name);
+        assertEquals("New Player", result.getName());
         verify(proPlayerService, times(1)).createProPlayer(player);
     }
 
     @Test
     public void testUpdateProPlayer() {
         ProPlayerEntity player = new ProPlayerEntity();
-        player.playerId = 1L;
-        player.name = "Updated Player";
+        player.setPlayerId(1L);
+        player.setName("Updated Player");
         when(proPlayerService.updateProPlayer(1L, player)).thenReturn(player);
 
         ProPlayerEntity result = proPlayerController.updateProPlayer(1L, player);
 
         assertNotNull(result);
-        assertEquals("Updated Player", result.name);
+        assertEquals("Updated Player", result.getName());
         verify(proPlayerService, times(1)).updateProPlayer(1L, player);
     }
 

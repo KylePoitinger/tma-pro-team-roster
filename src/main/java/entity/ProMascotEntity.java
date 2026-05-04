@@ -1,57 +1,124 @@
 package main.java.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
-import lombok.Data;
-
-@Data
 @Entity
 public class ProMascotEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public long mascotId;
+	private long mascotId;
 
-	public String name;
+	private String name;
 
-	public String species;
+	private String species;
 
 	@OneToOne
 	@JoinColumn(name = "team_id")
-	public ProTeamEntity team;
+	private ProTeamEntity team;
 
-	public String description;
+	private String description;
 
-	public String costume;
+	private String costume;
 
-	public double height;
+	private double height;
 
-	public double weight;
+	private double weight;
 
-	public String personality;
+	private String personality;
 
-	public String firstAppearance;
+	private String firstAppearance;
 
-	public String performerName;
+	private String performerName;
 
 	private String imageUrl;
 
-	@Override
-	public String toString() {
-		return "ProMascotEntity{" +
-				"mascotId=" + mascotId +
-				", name='" + name + '\'' +
-				", species='" + species + '\'' +
-				", team=" + (team != null ? team.name : "null") +
-				", description='" + description + '\'' +
-				", costume='" + costume + '\'' +
-				", height=" + height +
-				", weight=" + weight +
-				", personality='" + personality + '\'' +
-				", firstAppearance='" + firstAppearance + '\'' +
-				", performerName='" + performerName + '\'' +
-				", imageUrl='" + imageUrl + '\'' +
-				'}';
+	public long getMascotId() {
+		return mascotId;
+	}
+
+	public void setMascotId(long mascotId) {
+		this.mascotId = mascotId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getSpecies() {
+		return species;
+	}
+
+	public void setSpecies(String species) {
+		this.species = species;
+	}
+
+	public ProTeamEntity getTeam() {
+		return team;
+	}
+
+	public void setTeam(ProTeamEntity team) {
+		this.team = team;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getCostume() {
+		return costume;
+	}
+
+	public void setCostume(String costume) {
+		this.costume = costume;
+	}
+
+	public double getHeight() {
+		return height;
+	}
+
+	public void setHeight(double height) {
+		this.height = height;
+	}
+
+	public double getWeight() {
+		return weight;
+	}
+
+	public void setWeight(double weight) {
+		this.weight = weight;
+	}
+
+	public String getPersonality() {
+		return personality;
+	}
+
+	public void setPersonality(String personality) {
+		this.personality = personality;
+	}
+
+	public String getFirstAppearance() {
+		return firstAppearance;
+	}
+
+	public void setFirstAppearance(String firstAppearance) {
+		this.firstAppearance = firstAppearance;
+	}
+
+	public String getPerformerName() {
+		return performerName;
+	}
+
+	public void setPerformerName(String performerName) {
+		this.performerName = performerName;
 	}
 
 	public String getImageUrl() {
@@ -63,5 +130,22 @@ public class ProMascotEntity {
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	@Override
+	public String toString() {
+		return "ProMascotEntity{" +
+				"mascotId=" + mascotId +
+				", name='" + name + '\'' +
+				", species='" + species + '\'' +
+				", description='" + description + '\'' +
+				", costume='" + costume + '\'' +
+				", height=" + height +
+				", weight=" + weight +
+				", personality='" + personality + '\'' +
+				", firstAppearance='" + firstAppearance + '\'' +
+				", performerName='" + performerName + '\'' +
+				", imageUrl='" + imageUrl + '\'' +
+				'}';
 	}
 }

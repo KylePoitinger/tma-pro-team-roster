@@ -1,40 +1,82 @@
 package main.java.entity;
 
-import lombok.Data;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
-
-@Data
 @Entity
 public class ProScheduleEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public long scheduleId;
+    private long scheduleId;
 
     @ManyToOne
     @JoinColumn(name = "teamId")
-    public ProTeamEntity homeTeam;
+    private ProTeamEntity homeTeam;
 
     @ManyToOne
     @JoinColumn(name = "awayTeamId")
-    public ProTeamEntity awayTeam;
+    private ProTeamEntity awayTeam;
 
     @ManyToOne
     @JoinColumn(name = "arenaId")
-    public ProArenaEntity arena;
+    private ProArenaEntity arena;
 
-    public String scheduledDate;
+    private String scheduledDate;
 
-    public double ticketPrice;
+    private double ticketPrice;
+
+    public long getScheduleId() {
+        return scheduleId;
+    }
+
+    public void setScheduleId(long scheduleId) {
+        this.scheduleId = scheduleId;
+    }
+
+    public ProTeamEntity getHomeTeam() {
+        return homeTeam;
+    }
+
+    public void setHomeTeam(ProTeamEntity homeTeam) {
+        this.homeTeam = homeTeam;
+    }
+
+    public ProTeamEntity getAwayTeam() {
+        return awayTeam;
+    }
+
+    public void setAwayTeam(ProTeamEntity awayTeam) {
+        this.awayTeam = awayTeam;
+    }
+
+    public ProArenaEntity getArena() {
+        return arena;
+    }
+
+    public void setArena(ProArenaEntity arena) {
+        this.arena = arena;
+    }
+
+    public String getScheduledDate() {
+        return scheduledDate;
+    }
+
+    public void setScheduledDate(String scheduledDate) {
+        this.scheduledDate = scheduledDate;
+    }
+
+    public double getTicketPrice() {
+        return ticketPrice;
+    }
+
+    public void setTicketPrice(double ticketPrice) {
+        this.ticketPrice = ticketPrice;
+    }
 
     @Override
     public String toString() {
         return "ProScheduleEntity{" +
                 "scheduleId=" + scheduleId +
-                ", homeTeam=" + (homeTeam != null ? homeTeam.teamId : "null") +
-                ", awayTeam=" + (awayTeam != null ? awayTeam.teamId : "null") +
-                ", arena=" + (arena != null ? arena.arenaId : "null") +
                 ", scheduledDate='" + scheduledDate + '\'' +
                 ", ticketPrice=" + ticketPrice +
                 '}';

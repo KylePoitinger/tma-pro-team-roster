@@ -45,27 +45,27 @@ public class ProTeamServiceTest {
     public void testCreateTeam() {
         LOG.info("Testing createTeam method");
         ProTeamEntity team = new ProTeamEntity();
-        team.teamId = 1L;
-        team.name = "Test Team";
-        team.city = "Test City";
-        team.mascot = "Test Mascot";
+        team.setTeamId(1L);
+        team.setName("Test Team");
+        team.setCity("Test City");
+        team.setMascot("Test Mascot");
         when(proTeamRepo.save(team)).thenReturn(team);
         ProTeamEntity created = proTeamService.createTeam(team);
-        LOG.info("Created homeTeam: {}", created.name);
+        LOG.info("Created homeTeam: {}", created.getName());
         assertNotNull(created);
-        assertEquals("Test Team", created.name);
+        assertEquals("Test Team", created.getName());
     }
 
     @Test
     public void testGetSingleTeamAndRosterSuccess() {
         LOG.info("Testing getSingleTeamAndRoster method - success");
         ProTeamEntity team = new ProTeamEntity();
-        team.teamId = 1L;
-        team.name = "Test Team";
+        team.setTeamId(1L);
+        team.setName("Test Team");
         when(proTeamRepo.getOneByTeamId(1L)).thenReturn(team);
         ProTeamEntity result = proTeamService.getSingleTeamAndRoster(1L);
         assertNotNull(result);
-        assertEquals("Test Team", result.name);
+        assertEquals("Test Team", result.getName());
     }
 
     @Test
@@ -79,20 +79,20 @@ public class ProTeamServiceTest {
     public void testGetTeamsByFieldLookupByName() {
         LOG.info("Testing getTeamsByFieldLookup - by name");
         ProTeamEntity team = new ProTeamEntity();
-        team.name = "Lakers";
+        team.setName("Lakers");
         List<ProTeamEntity> mockTeams = Arrays.asList(team);
         when(proTeamRepo.getTeamsByName("Lakers")).thenReturn(mockTeams);
         List<ProTeamEntity> result = proTeamService.getTeamsByFieldLookup("Lakers", null, null);
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals("Lakers", result.get(0).name);
+        assertEquals("Lakers", result.get(0).getName());
     }
 
     @Test
     public void testGetTeamsByFieldLookupByCity() {
         LOG.info("Testing getTeamsByFieldLookup - by city");
         ProTeamEntity team = new ProTeamEntity();
-        team.city = "Los Angeles";
+        team.setCity("Los Angeles");
         List<ProTeamEntity> mockTeams = Arrays.asList(team);
         when(proTeamRepo.getTeamsByCity("Los Angeles")).thenReturn(mockTeams);
         List<ProTeamEntity> result = proTeamService.getTeamsByFieldLookup(null, "Los Angeles", null);
@@ -104,7 +104,7 @@ public class ProTeamServiceTest {
     public void testGetTeamsByFieldLookupByMascot() {
         LOG.info("Testing getTeamsByFieldLookup - by mascot");
         ProTeamEntity team = new ProTeamEntity();
-        team.mascot = "Laker Girl";
+        team.setMascot("Laker Girl");
         List<ProTeamEntity> mockTeams = Arrays.asList(team);
         when(proTeamRepo.getTeamsByMascot("Laker Girl")).thenReturn(mockTeams);
         List<ProTeamEntity> result = proTeamService.getTeamsByFieldLookup(null, null, "Laker Girl");
@@ -122,23 +122,23 @@ public class ProTeamServiceTest {
     public void testUpdateTeamSuccess() {
         LOG.info("Testing updateTeam method - success");
         ProTeamEntity existingTeam = new ProTeamEntity();
-        existingTeam.teamId = 1L;
-        existingTeam.name = "Old Team";
-        existingTeam.city = "Old City";
-        existingTeam.mascot = "Old Mascot";
+        existingTeam.setTeamId(1L);
+        existingTeam.setName("Old Team");
+        existingTeam.setCity("Old City");
+        existingTeam.setMascot("Old Mascot");
 
         ProTeamEntity updateReq = new ProTeamEntity();
-        updateReq.name = "New Team";
-        updateReq.city = "New City";
-        updateReq.mascot = "New Mascot";
+        updateReq.setName("New Team");
+        updateReq.setCity("New City");
+        updateReq.setMascot("New Mascot");
 
         when(proTeamRepo.findById(1L)).thenReturn(Optional.of(existingTeam));
         when(proTeamRepo.save(any(ProTeamEntity.class))).thenReturn(existingTeam);
 
         ProTeamEntity result = proTeamService.updateTeam(1L, updateReq);
         assertNotNull(result);
-        assertEquals("New Team", result.name);
-        assertEquals("New City", result.city);
+        assertEquals("New Team", result.getName());
+        assertEquals("New City", result.getCity());
     }
 
     @Test
@@ -153,8 +153,8 @@ public class ProTeamServiceTest {
     public void testDeleteTeamSuccess() {
         LOG.info("Testing deleteTeam method - success");
         ProTeamEntity team = new ProTeamEntity();
-        team.teamId = 1L;
-        team.name = "Test Team";
+        team.setTeamId(1L);
+        team.setName("Test Team");
         when(proTeamRepo.getOneByTeamId(1L)).thenReturn(team);
         String result = proTeamService.deleteTeam(1L);
         assertNotNull(result);

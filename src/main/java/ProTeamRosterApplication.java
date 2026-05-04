@@ -100,15 +100,15 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 		List<ProArenaEntity> arenas = new ArrayList<>();
 		for (int i = 1; i <= 5; i++) {
 			ProArenaEntity arena = new ProArenaEntity();
-			arena.arenaId = i;
-			arena.name = arenaNames[i - 1];
-			arena.location = cities[i - 1];
-			arena.capacity = 18000 + (i * 500);
-			arena.address = addresses[i - 1];
-			arena.openedYear = 1990 + (i * 2);
-			arena.surface = "Hardwood";
-			arena.amenities = "Concessions, VIP Suites, Pro Shop";
-			arena.cost = 150000000.00 + (i * 20000000);
+			arena.setArenaId(i);
+			arena.setName(arenaNames[i - 1]);
+			arena.setLocation(cities[i - 1]);
+			arena.setCapacity(18000 + (i * 500));
+			arena.setAddress(addresses[i - 1]);
+			arena.setOpenedYear(1990 + (i * 2));
+			arena.setSurface("Hardwood");
+			arena.setAmenities("Concessions, VIP Suites, Pro Shop");
+			arena.setCost(150000000.00 + (i * 20000000));
 			arenas.add(proArenaRepo.save(arena));
 		}
 
@@ -120,16 +120,16 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 
 		for (int i = 1; i <= 8; i++) {
 			ProTeamEntity team = new ProTeamEntity();
-			team.teamId = i;
-			team.name = teamNames[i - 1];
-			team.city = teamCities[i - 1];
-			team.mascot = team.name + " Mascot";
-			team.foundedYear = 1946 + (i * 5);
-			team.arena = arenas.get((i - 1) % 5);
-			team.championships = i % 4;
-			team.owner = owners[i - 1];
-			team.colors = "Primary Color, Secondary Color";
-			team.website = "https://www.nba.com/" + team.name.toLowerCase();
+			team.setTeamId(i);
+			team.setName(teamNames[i - 1]);
+			team.setCity(teamCities[i - 1]);
+			team.setMascot(team.getName() + " Mascot");
+			team.setFoundedYear(1946 + (i * 5));
+			team.setArena(arenas.get((i - 1) % 5));
+			team.setChampionships(i % 4);
+			team.setOwner(owners[i - 1]);
+			team.setColors("Primary Color, Secondary Color");
+			team.setWebsite("https://www.nba.com/" + team.getName().toLowerCase());
 			teams.add(proTeamRepo.save(team));
 		}
 
@@ -141,16 +141,16 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 		for (int i = 0; i < teams.size(); i++) {
 			ProTeamEntity team = teams.get(i);
 			ProMascotEntity mascot = new ProMascotEntity();
-			mascot.name = mascotNames[i];
-			mascot.species = mascotSpecies[i];
-			mascot.team = team;
-			mascot.description = "The energetic and fan-favorite mascot of the " + team.name;
-			mascot.costume = team.name + " themed outfit";
-			mascot.height = 185.0 + i;
-			mascot.weight = 80.0 + i;
-			mascot.personality = "Highly Energetic";
-			mascot.firstAppearance = "199" + i + "-10-01";
-			mascot.performerName = performers[i];
+			mascot.setName(mascotNames[i]);
+			mascot.setSpecies(mascotSpecies[i]);
+			mascot.setTeam(team);
+			mascot.setDescription("The energetic and fan-favorite mascot of the " + team.getName());
+			mascot.setCostume(team.getName() + " themed outfit");
+			mascot.setHeight(185.0 + i);
+			mascot.setWeight(80.0 + i);
+			mascot.setPersonality("Highly Energetic");
+			mascot.setFirstAppearance("199" + i + "-10-01");
+			mascot.setPerformerName(performers[i]);
 			proMascotRepo.save(mascot);
 		}
 
@@ -165,21 +165,21 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 			ProTeamEntity team = teams.get(t);
 			for (int p = 1; p <= 11; p++) {
 				ProPlayerEntity player = new ProPlayerEntity();
-				player.playerId = (long) t * 11 + p;
-				player.name = firstNames[(p - 1) % 11] + " " + lastNames[(t + p - 1) % 11];
-				player.position = positions[(p - 1) % 5];
-				player.team = team;
-				player.age = 19 + (p % 15);
-				player.height = 180.0 + (p * 2);
-				player.weight = 180.0 + (p * 5);
-				player.college = colleges[(t + p) % 11];
-				player.salary = 1000000.00 + (p * 500000);
-				player.jerseyNumber = p + 10;
-				player.nationality = "International";
-				player.contractYears = 1 + (p % 5);
-				player.injuryStatus = "Active";
-				player.stats = "PPG: " + (10 + p) + ", RPG: " + (p / 2) + ", APG: " + (p / 3);
-				player.debutDate = "201" + (p % 10) + "-10-15";
+				player.setPlayerId((long) t * 11 + p);
+				player.setName(firstNames[(p - 1) % 11] + " " + lastNames[(t + p - 1) % 11]);
+				player.setPosition(positions[(p - 1) % 5]);
+				player.setTeam(team);
+				player.setAge(19 + (p % 15));
+				player.setHeight(180.0 + (p * 2));
+				player.setWeight(180.0 + (p * 5));
+				player.setCollege(colleges[(t + p) % 11]);
+				player.setSalary(1000000.00 + (p * 500000));
+				player.setJerseyNumber(p + 10);
+				player.setNationality("International");
+				player.setContractYears(1 + (p % 5));
+				player.setInjuryStatus("Active");
+				player.setStats("PPG: " + (10 + p) + ", RPG: " + (p / 2) + ", APG: " + (p / 3));
+				player.setDebutDate("201" + (p % 10) + "-10-15");
 				allPlayers.add(proPlayerRepo.save(player));
 			}
 		}
@@ -189,11 +189,11 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 			ProTeamEntity homeTeam = teams.get(i);
 			ProTeamEntity awayTeam = teams.get((i + 1) % teams.size());
 			ProScheduleEntity schedule = new ProScheduleEntity();
-			schedule.homeTeam = homeTeam;
-			schedule.awayTeam = awayTeam;
-			schedule.arena = homeTeam.arena;
-			schedule.scheduledDate = "2026-05-" + (10 + i);
-			schedule.ticketPrice = 50.00 + (i * 5);
+			schedule.setHomeTeam(homeTeam);
+			schedule.setAwayTeam(awayTeam);
+			schedule.setArena(homeTeam.getArena());
+			schedule.setScheduledDate("2026-05-" + (10 + i));
+			schedule.setTicketPrice(50.00 + (i * 5));
 			proScheduleRepo.save(schedule);
 		}
 		

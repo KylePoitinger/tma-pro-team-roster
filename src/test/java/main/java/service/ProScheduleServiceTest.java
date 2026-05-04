@@ -37,28 +37,28 @@ public class ProScheduleServiceTest {
         LOG.info("[DEBUG_LOG] Testing getAllSchedules method with multiple entries");
         
         // Mocking multiple teams and arenas
-        ProTeamEntity t1 = new ProTeamEntity(); t1.teamId = 1L;
-        ProTeamEntity t2 = new ProTeamEntity(); t2.teamId = 2L;
-        ProArenaEntity a1 = new ProArenaEntity(); a1.arenaId = 101L;
-        ProArenaEntity a2 = new ProArenaEntity(); a2.arenaId = 102L;
+        ProTeamEntity t1 = new ProTeamEntity(); t1.setTeamId(1L);
+        ProTeamEntity t2 = new ProTeamEntity(); t2.setTeamId(2L);
+        ProArenaEntity a1 = new ProArenaEntity(); a1.setArenaId(101L);
+        ProArenaEntity a2 = new ProArenaEntity(); a2.setArenaId(102L);
 
         ProScheduleEntity s1 = new ProScheduleEntity();
-        s1.homeTeam = t1; // Team 1
-        s1.arena = a1; // Arena 1
-        s1.scheduledDate = "2026-05-01";
-        s1.ticketPrice = 50.0;
+        s1.setHomeTeam(t1); // Team 1
+        s1.setArena(a1); // Arena 1
+        s1.setScheduledDate("2026-05-01");
+        s1.setTicketPrice(50.0);
         
         ProScheduleEntity s2 = new ProScheduleEntity();
-        s2.homeTeam = t2; // Team 2
-        s2.arena = a2; // Arena 2
-        s2.scheduledDate = "2026-05-15";
-        s2.ticketPrice = 60.0;
+        s2.setHomeTeam(t2); // Team 2
+        s2.setArena(a2); // Arena 2
+        s2.setScheduledDate("2026-05-15");
+        s2.setTicketPrice(60.0);
 
         ProScheduleEntity s3 = new ProScheduleEntity();
-        s3.homeTeam = t1; // Team 1 again
-        s3.arena = a2; // Arena 2
-        s3.scheduledDate = "2026-06-01";
-        s3.ticketPrice = 55.0;
+        s3.setHomeTeam(t1); // Team 1 again
+        s3.setArena(a2); // Arena 2
+        s3.setScheduledDate("2026-06-01");
+        s3.setTicketPrice(55.0);
 
         when(proScheduleRepo.findAll()).thenReturn(Arrays.asList(s1, s2, s3));
         
@@ -72,12 +72,12 @@ public class ProScheduleServiceTest {
     public void testGetScheduleSuccess() {
         LOG.info("Testing getSchedule method - success");
         ProScheduleEntity schedule = new ProScheduleEntity();
-        schedule.scheduleId = 1L;
-        schedule.scheduledDate = "2026-05-01";
+        schedule.setScheduleId(1L);
+        schedule.setScheduledDate("2026-05-01");
         when(proScheduleRepo.findById(1L)).thenReturn(Optional.of(schedule));
         ProScheduleEntity result = proScheduleService.getSchedule(1L);
         assertNotNull(result);
-        assertEquals("2026-05-01", result.scheduledDate);
+        assertEquals("2026-05-01", result.getScheduledDate());
     }
 
     @Test
@@ -90,19 +90,19 @@ public class ProScheduleServiceTest {
     @Test
     public void testGetSchedulesByTeam() {
         LOG.info("[DEBUG_LOG] Testing getSchedulesByTeam method");
-        ProTeamEntity t1 = new ProTeamEntity(); t1.teamId = 1L;
-        ProTeamEntity t2 = new ProTeamEntity(); t2.teamId = 2L;
-        ProArenaEntity a1 = new ProArenaEntity(); a1.arenaId = 101L;
+        ProTeamEntity t1 = new ProTeamEntity(); t1.setTeamId(1L);
+        ProTeamEntity t2 = new ProTeamEntity(); t2.setTeamId(2L);
+        ProArenaEntity a1 = new ProArenaEntity(); a1.setArenaId(101L);
 
         ProScheduleEntity s1 = new ProScheduleEntity();
-        s1.homeTeam = t1;
-        s1.awayTeam = t2;
-        s1.arena = a1;
+        s1.setHomeTeam(t1);
+        s1.setAwayTeam(t2);
+        s1.setArena(a1);
         
         ProScheduleEntity s2 = new ProScheduleEntity();
-        s2.homeTeam = t2;
-        s2.awayTeam = t1;
-        s2.arena = a1;
+        s2.setHomeTeam(t2);
+        s2.setAwayTeam(t1);
+        s2.setArena(a1);
 
         when(proScheduleRepo.findByHomeTeam_TeamId(1L)).thenReturn(new java.util.ArrayList<>(java.util.Arrays.asList(s1)));
         when(proScheduleRepo.findByAwayTeam_TeamId(1L)).thenReturn(new java.util.ArrayList<>(java.util.Arrays.asList(s2)));
@@ -115,17 +115,17 @@ public class ProScheduleServiceTest {
     @Test
     public void testGetSchedulesByArena() {
         LOG.info("[DEBUG_LOG] Testing getSchedulesByArena method with multiple arenas");
-        ProTeamEntity t1 = new ProTeamEntity(); t1.teamId = 1L;
-        ProTeamEntity t2 = new ProTeamEntity(); t2.teamId = 2L;
-        ProArenaEntity a1 = new ProArenaEntity(); a1.arenaId = 101L;
+        ProTeamEntity t1 = new ProTeamEntity(); t1.setTeamId(1L);
+        ProTeamEntity t2 = new ProTeamEntity(); t2.setTeamId(2L);
+        ProArenaEntity a1 = new ProArenaEntity(); a1.setArenaId(101L);
 
         ProScheduleEntity s1 = new ProScheduleEntity();
-        s1.homeTeam = t1;
-        s1.arena = a1;
+        s1.setHomeTeam(t1);
+        s1.setArena(a1);
         
         ProScheduleEntity s2 = new ProScheduleEntity();
-        s2.homeTeam = t2;
-        s2.arena = a1;
+        s2.setHomeTeam(t2);
+        s2.setArena(a1);
 
         when(proScheduleRepo.findByArena_ArenaId(101L)).thenReturn(Arrays.asList(s1, s2));
         when(proScheduleRepo.findByArena_ArenaId(102L)).thenReturn(Arrays.asList(new ProScheduleEntity())); // Arena 102 has 1 schedule
@@ -140,56 +140,56 @@ public class ProScheduleServiceTest {
     @Test
     public void testCreateSchedule() {
         LOG.info("[DEBUG_LOG] Testing createSchedule method");
-        ProTeamEntity t1 = new ProTeamEntity(); t1.teamId = 1L;
-        ProArenaEntity a1 = new ProArenaEntity(); a1.arenaId = 1L;
+        ProTeamEntity t1 = new ProTeamEntity(); t1.setTeamId(1L);
+        ProArenaEntity a1 = new ProArenaEntity(); a1.setArenaId(1L);
 
         ProScheduleEntity schedule = new ProScheduleEntity();
-        schedule.homeTeam = t1;
-        schedule.arena = a1;
-        schedule.scheduledDate = "2026-05-01";
-        schedule.ticketPrice = 50.0;
+        schedule.setHomeTeam(t1);
+        schedule.setArena(a1);
+        schedule.setScheduledDate("2026-05-01");
+        schedule.setTicketPrice(50.0);
         
         when(proScheduleRepo.save(schedule)).thenReturn(schedule);
         
         ProScheduleEntity result = proScheduleService.createSchedule(schedule);
         
         assertNotNull(result);
-        assertEquals(1L, result.homeTeam.teamId);
-        assertEquals(50.0, result.ticketPrice);
+        assertEquals(1L, result.getHomeTeam().getTeamId());
+        assertEquals(50.0, result.getTicketPrice());
     }
 
     @Test
     public void testUpdateScheduleSuccess() {
         LOG.info("Testing updateSchedule method - success");
-        ProTeamEntity t1 = new ProTeamEntity(); t1.teamId = 1L;
-        ProTeamEntity t2 = new ProTeamEntity(); t2.teamId = 2L;
-        ProArenaEntity a1 = new ProArenaEntity(); a1.arenaId = 1L;
-        ProArenaEntity a2 = new ProArenaEntity(); a2.arenaId = 2L;
+        ProTeamEntity t1 = new ProTeamEntity(); t1.setTeamId(1L);
+        ProTeamEntity t2 = new ProTeamEntity(); t2.setTeamId(2L);
+        ProArenaEntity a1 = new ProArenaEntity(); a1.setArenaId(1L);
+        ProArenaEntity a2 = new ProArenaEntity(); a2.setArenaId(2L);
 
         ProScheduleEntity existingSchedule = new ProScheduleEntity();
-        existingSchedule.scheduleId = 1L;
-        existingSchedule.homeTeam = t1;
-        existingSchedule.awayTeam = t2;
-        existingSchedule.arena = a1;
-        existingSchedule.scheduledDate = "2026-05-01";
-        existingSchedule.ticketPrice = 50.0;
+        existingSchedule.setScheduleId(1L);
+        existingSchedule.setHomeTeam(t1);
+        existingSchedule.setAwayTeam(t2);
+        existingSchedule.setArena(a1);
+        existingSchedule.setScheduledDate("2026-05-01");
+        existingSchedule.setTicketPrice(50.0);
 
         ProScheduleEntity updateReq = new ProScheduleEntity();
-        updateReq.homeTeam = t2;
-        updateReq.awayTeam = t1;
-        updateReq.arena = a2;
-        updateReq.scheduledDate = "2026-06-01";
-        updateReq.ticketPrice = 75.0;
+        updateReq.setHomeTeam(t2);
+        updateReq.setAwayTeam(t1);
+        updateReq.setArena(a2);
+        updateReq.setScheduledDate("2026-06-01");
+        updateReq.setTicketPrice(75.0);
 
         when(proScheduleRepo.findById(1L)).thenReturn(Optional.of(existingSchedule));
         when(proScheduleRepo.save(any(ProScheduleEntity.class))).thenReturn(existingSchedule);
 
         ProScheduleEntity result = proScheduleService.updateSchedule(1L, updateReq);
         assertNotNull(result);
-        assertEquals(2L, result.homeTeam.teamId);
-        assertEquals(1L, result.awayTeam.teamId);
-        assertEquals("2026-06-01", result.scheduledDate);
-        assertEquals(75.0, result.ticketPrice);
+        assertEquals(2L, result.getHomeTeam().getTeamId());
+        assertEquals(1L, result.getAwayTeam().getTeamId());
+        assertEquals("2026-06-01", result.getScheduledDate());
+        assertEquals(75.0, result.getTicketPrice());
     }
 
     @Test
@@ -204,8 +204,8 @@ public class ProScheduleServiceTest {
     public void testDeleteScheduleSuccess() {
         LOG.info("Testing deleteSchedule method - success");
         ProScheduleEntity schedule = new ProScheduleEntity();
-        schedule.scheduleId = 1L;
-        schedule.scheduledDate = "2026-05-01";
+        schedule.setScheduleId(1L);
+        schedule.setScheduledDate("2026-05-01");
         when(proScheduleRepo.findById(1L)).thenReturn(Optional.of(schedule));
         String result = proScheduleService.deleteSchedule(1L);
         assertNotNull(result);

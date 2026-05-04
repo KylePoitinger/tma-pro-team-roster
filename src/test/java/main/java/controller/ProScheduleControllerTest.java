@@ -27,7 +27,7 @@ public class ProScheduleControllerTest {
     @Test
     public void testGetAllSchedules() {
         ProScheduleEntity schedule = new ProScheduleEntity();
-        schedule.scheduleId = 1L;
+        schedule.setScheduleId(1L);
         List<ProScheduleEntity> mockSchedules = Arrays.asList(schedule);
         when(proScheduleService.getAllSchedules()).thenReturn(mockSchedules);
 
@@ -41,21 +41,21 @@ public class ProScheduleControllerTest {
     @Test
     public void testGetSchedule() {
         ProScheduleEntity schedule = new ProScheduleEntity();
-        schedule.scheduleId = 1L;
-        schedule.scheduledDate = "2026-05-01";
+        schedule.setScheduleId(1L);
+        schedule.setScheduledDate("2026-05-01");
         when(proScheduleService.getSchedule(1L)).thenReturn(schedule);
 
         ProScheduleEntity result = proScheduleController.getSchedule(1L);
 
         assertNotNull(result);
-        assertEquals("2026-05-01", result.scheduledDate);
+        assertEquals("2026-05-01", result.getScheduledDate());
         verify(proScheduleService, times(1)).getSchedule(1L);
     }
 
     @Test
     public void testGetSchedulesByTeam() {
         ProScheduleEntity schedule = new ProScheduleEntity();
-        schedule.scheduleId = 1L;
+        schedule.setScheduleId(1L);
         List<ProScheduleEntity> mockSchedules = Arrays.asList(schedule);
         when(proScheduleService.getSchedulesByTeam(1L)).thenReturn(mockSchedules);
 
@@ -69,7 +69,7 @@ public class ProScheduleControllerTest {
     @Test
     public void testGetSchedulesByArena() {
         ProScheduleEntity schedule = new ProScheduleEntity();
-        schedule.scheduleId = 1L;
+        schedule.setScheduleId(1L);
         List<ProScheduleEntity> mockSchedules = Arrays.asList(schedule);
         when(proScheduleService.getSchedulesByArena(1L)).thenReturn(mockSchedules);
 
@@ -83,28 +83,28 @@ public class ProScheduleControllerTest {
     @Test
     public void testCreateSchedule() {
         ProScheduleEntity schedule = new ProScheduleEntity();
-        schedule.scheduleId = 1L;
-        schedule.ticketPrice = 50.0;
+        schedule.setScheduleId(1L);
+        schedule.setTicketPrice(50.0);
         when(proScheduleService.createSchedule(schedule)).thenReturn(schedule);
 
         ProScheduleEntity result = proScheduleController.createSchedule(schedule);
 
         assertNotNull(result);
-        assertEquals(50.0, result.ticketPrice);
+        assertEquals(50.0, result.getTicketPrice());
         verify(proScheduleService, times(1)).createSchedule(schedule);
     }
 
     @Test
     public void testUpdateSchedule() {
         ProScheduleEntity schedule = new ProScheduleEntity();
-        schedule.scheduleId = 1L;
-        schedule.ticketPrice = 75.0;
+        schedule.setScheduleId(1L);
+        schedule.setTicketPrice(75.0);
         when(proScheduleService.updateSchedule(1L, schedule)).thenReturn(schedule);
 
         ProScheduleEntity result = proScheduleController.updateSchedule(1L, schedule);
 
         assertNotNull(result);
-        assertEquals(75.0, result.ticketPrice);
+        assertEquals(75.0, result.getTicketPrice());
         verify(proScheduleService, times(1)).updateSchedule(1L, schedule);
     }
 

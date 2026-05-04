@@ -45,27 +45,27 @@ public class ProArenaServiceTest {
 	public void testCreateArena() {
 		LOG.info("Testing createArena method");
 		ProArenaEntity arena = new ProArenaEntity();
-		arena.arenaId = 1L;
-		arena.name = "Test Arena";
-		arena.location = "Test City";
-		arena.capacity = 20000;
+		arena.setArenaId(1L);
+		arena.setName("Test Arena");
+		arena.setLocation("Test City");
+		arena.setCapacity(20000);
 		when(proArenaRepo.save(arena)).thenReturn(arena);
 		ProArenaEntity created = proArenaService.createArena(arena);
-		LOG.info("Created arena: {}", created.name);
+		LOG.info("Created arena: {}", created.getName());
 		assertNotNull(created);
-		assertEquals("Test Arena", created.name);
+		assertEquals("Test Arena", created.getName());
 	}
 
 	@Test
 	public void testGetArenaSuccess() {
 		LOG.info("Testing getArena method - success");
 		ProArenaEntity arena = new ProArenaEntity();
-		arena.arenaId = 1L;
-		arena.name = "Test Arena";
+		arena.setArenaId(1L);
+		arena.setName("Test Arena");
 		when(proArenaRepo.getOneByArenaId(1L)).thenReturn(arena);
 		ProArenaEntity result = proArenaService.getArena(1L);
 		assertNotNull(result);
-		assertEquals("Test Arena", result.name);
+		assertEquals("Test Arena", result.getName());
 	}
 
 	@Test
@@ -79,24 +79,24 @@ public class ProArenaServiceTest {
 	public void testUpdateArenaSuccess() {
 		LOG.info("Testing updateArena method - success");
 		ProArenaEntity existingArena = new ProArenaEntity();
-		existingArena.arenaId = 1L;
-		existingArena.name = "Old Arena";
-		existingArena.location = "Old City";
-		existingArena.capacity = 10000;
+		existingArena.setArenaId(1L);
+		existingArena.setName("Old Arena");
+		existingArena.setLocation("Old City");
+		existingArena.setCapacity(10000);
 
 		ProArenaEntity updateReq = new ProArenaEntity();
-		updateReq.name = "New Arena";
-		updateReq.location = "New City";
-		updateReq.capacity = 25000;
+		updateReq.setName("New Arena");
+		updateReq.setLocation("New City");
+		updateReq.setCapacity(25000);
 
 		when(proArenaRepo.findById(1L)).thenReturn(Optional.of(existingArena));
 		when(proArenaRepo.save(any(ProArenaEntity.class))).thenReturn(existingArena);
 
 		ProArenaEntity result = proArenaService.updateArena(1L, updateReq);
 		assertNotNull(result);
-		assertEquals("New Arena", result.name);
-		assertEquals("New City", result.location);
-		assertEquals(25000, result.capacity);
+		assertEquals("New Arena", result.getName());
+		assertEquals("New City", result.getLocation());
+		assertEquals(25000, result.getCapacity());
 	}
 
 	@Test
@@ -111,8 +111,8 @@ public class ProArenaServiceTest {
 	public void testDeleteArenaSuccess() {
 		LOG.info("Testing deleteArena method - success");
 		ProArenaEntity arena = new ProArenaEntity();
-		arena.arenaId = 1L;
-		arena.name = "Test Arena";
+		arena.setArenaId(1L);
+		arena.setName("Test Arena");
 		when(proArenaRepo.getOneByArenaId(1L)).thenReturn(arena);
 		String result = proArenaService.deleteArena(1L);
 		assertNotNull(result);

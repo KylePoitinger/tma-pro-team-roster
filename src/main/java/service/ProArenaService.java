@@ -32,9 +32,9 @@ public class ProArenaService {
 
    	public ProArenaEntity updateArena(long arenaId, ProArenaEntity updateArenaReq) {
         return proArenaRepo.findById(arenaId).map(arena -> {
-            arena.name = updateArenaReq.name;
-            arena.location = updateArenaReq.location;
-            arena.capacity = updateArenaReq.capacity;
+            arena.setName(updateArenaReq.getName());
+            arena.setLocation(updateArenaReq.getLocation());
+            arena.setCapacity(updateArenaReq.getCapacity());
             return proArenaRepo.save(arena);
         }).orElseThrow(() -> new ResourceNotFoundException("Arena not found for this id :: " + arenaId));
     }

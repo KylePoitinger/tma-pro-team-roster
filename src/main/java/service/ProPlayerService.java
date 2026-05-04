@@ -38,14 +38,14 @@ public class ProPlayerService {
 
 	public ProPlayerEntity updateProPlayer(long playerId, ProPlayerEntity updatePlayerReq) {
 		return proPlayerRepo.findById(playerId).map(player -> {
-			player.name = updatePlayerReq.name;
-			player.position = updatePlayerReq.position;
-			player.team = updatePlayerReq.team;
-			player.age = updatePlayerReq.age;
-			player.height = updatePlayerReq.height;
-			player.weight = updatePlayerReq.weight;
-			player.college = updatePlayerReq.college;
-			player.salary = updatePlayerReq.salary;
+			player.setName(updatePlayerReq.getName());
+			player.setPosition(updatePlayerReq.getPosition());
+			player.setTeam(updatePlayerReq.getTeam());
+			player.setAge(updatePlayerReq.getAge());
+			player.setHeight(updatePlayerReq.getHeight());
+			player.setWeight(updatePlayerReq.getWeight());
+			player.setCollege(updatePlayerReq.getCollege());
+			player.setSalary(updatePlayerReq.getSalary());
 			ProPlayerEntity updatedPlayer = proPlayerRepo.save(player);
 			proKafkaProducer.sendEvent(KafkaConfig.PLAYER_TOPIC, ProEvent.create("PLAYER_UPDATED", "PLAYER", updatedPlayer));
 			return updatedPlayer;
@@ -68,7 +68,7 @@ public class ProPlayerService {
 		ProTeamEntity team = Optional.ofNullable(proTeamRepo.getOneByTeamId(teamId))
 				.orElseThrow(() -> new ResourceNotFoundException("Team not found for this id :: " + teamId));
 
-		player.team = team;
+		player.setTeam(team);
 		return proPlayerRepo.save(player);
 	}
 
