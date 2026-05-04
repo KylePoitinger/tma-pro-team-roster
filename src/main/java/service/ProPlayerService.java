@@ -1,5 +1,6 @@
 package main.java.service;
 
+import java.util.Map;
 import java.util.Optional;
 
 import main.java.config.KafkaConfig;
@@ -22,7 +23,7 @@ public class ProPlayerService {
 	@Autowired
 	private ProTeamRepo proTeamRepo;
 
-	@Autowired
+	@Autowired(required = false)
 	private ProKafkaProducer proKafkaProducer;
 
 	public ProPlayerEntity getProPlayer(long playerId) {
@@ -32,7 +33,9 @@ public class ProPlayerService {
 
 	public ProPlayerEntity createProPlayer(ProPlayerEntity createPlayerReq) {
 		ProPlayerEntity savedPlayer = proPlayerRepo.save(createPlayerReq);
-		proKafkaProducer.sendEvent(KafkaConfig.PLAYER_TOPIC, ProEvent.create("PLAYER_CREATED", "PLAYER", savedPlayer));
+		if (proKafkaProducer != null) {
+			proKafkaProducer.sendEvent(KafkaConfig.PLAYER_TOPIC, ProEvent.create("PLAYER_CREATED", "PLAYER", savedPlayer));
+		}
 		return savedPlayer;
 	}
 
@@ -47,7 +50,9 @@ public class ProPlayerService {
 			player.setCollege(updatePlayerReq.getCollege());
 			player.setSalary(updatePlayerReq.getSalary());
 			ProPlayerEntity updatedPlayer = proPlayerRepo.save(player);
-			proKafkaProducer.sendEvent(KafkaConfig.PLAYER_TOPIC, ProEvent.create("PLAYER_UPDATED", "PLAYER", updatedPlayer));
+			if (proKafkaProducer != null) {
+				proKafkaProducer.sendEvent(KafkaConfig.PLAYER_TOPIC, ProEvent.create("PLAYER_UPDATED", "PLAYER", updatedPlayer));
+			}
 			return updatedPlayer;
 		}).orElseThrow(() -> new ResourceNotFoundException("Player not found for this id :: " + playerId));
 	}
@@ -57,7 +62,9 @@ public class ProPlayerService {
 				.orElseThrow(() -> new ResourceNotFoundException("Player not found for this id :: " + playerId));
 
 		proPlayerRepo.delete(player);
-		proKafkaProducer.sendEvent(KafkaConfig.PLAYER_TOPIC, ProEvent.create("PLAYER_DELETED", "PLAYER", player));
+		if (proKafkaProducer != null) {
+			proKafkaProducer.sendEvent(KafkaConfig.PLAYER_TOPIC, ProEvent.create("PLAYER_DELETED", "PLAYER", player));
+		}
 		return "Delete was successful for player:" + playerId;
 	}
 
@@ -69,7 +76,20 @@ public class ProPlayerService {
 				.orElseThrow(() -> new ResourceNotFoundException("Team not found for this id :: " + teamId));
 
 		player.setTeam(team);
-		return proPlayerRepo.save(player);
+		ProPlayerEntity updatedPlayer = proPlayerRepo.save(player);
+		if (proKafkaProducer != null) {
+			proKafkaProducer.sendEvent(KafkaConfig.PLAYER_TOPIC, ProEvent.create("PLAYER_TRADED", "PLAYER", updatedPlayer));
+		}
+		return updatedPlayer;
+	}
+
+	public void initiateTrade(long playerId, long teamId) {
+		if (proKafkaProducer != null) {
+			proKafkaProducer.sendEvent(KafkaConfig.PLAYER_TOPIC,
+					ProEvent.create("PLAYER_TRADE_REQUESTED", "PLAYER", Map.of("playerId", playerId, "teamId", teamId)));
+		} else {
+			tradePlayer(playerId, teamId);
+		}
 	}
 
 }

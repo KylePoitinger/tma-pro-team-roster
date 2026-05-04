@@ -15,6 +15,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import java.util.concurrent.TimeUnit;
 
 import static org.awaitility.Awaitility.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.atLeastOnce;
@@ -50,5 +51,33 @@ public class KafkaIntegrationTest extends BaseIntegrationTest {
             .timeout(90, TimeUnit.SECONDS)
             .pollInterval(1, TimeUnit.SECONDS)
             .untilAsserted(() -> verify(proKafkaConsumer, atLeastOnce()).consumePlayerEvent(any(ProEvent.class)));
+    }
+
+    @Test
+    public void testPlayerTradeEventFlow() throws Exception {
+        // Player 1 is initially in team 1
+        long playerId = 1L;
+        long targetTeamId = 2L;
+
+        // Act
+        proPlayerService.initiateTrade(playerId, targetTeamId);
+
+        // Assert - The consumer should pick it up and update the DB
+        await()
+            .timeout(60, TimeUnit.SECONDS)
+            .pollInterval(1, TimeUnit.SECONDS)
+            .untilAsserted(() -> {
+                ProPlayerEntity updatedPlayer = proPlayerService.getProPlayer(playerId);
+                assertEquals(targetTeamId, updatedPlayer.getTeam().getTeamId());
+            });
+            
+        // Clean up - trade back
+        proPlayerService.initiateTrade(playerId, 1L);
+        await()
+            .timeout(60, TimeUnit.SECONDS)
+            .untilAsserted(() -> {
+                ProPlayerEntity p = proPlayerService.getProPlayer(playerId);
+                assertEquals(1L, p.getTeam().getTeamId());
+            });
     }
 }
