@@ -61,13 +61,16 @@ app.post('/login', (req, res) => {
     // Hardcoded credentials
     if (username === 'manager' && password === 'password') {
         req.session.isManager = true;
+        console.log(`[TRANSACTION] Manager logged in successfully: ${username}`);
         res.redirect('/');
     } else {
+        console.warn(`[TRANSACTION] Failed login attempt for username: ${username}`);
         res.render('login', { error: 'Invalid credentials' });
     }
 });
 
 app.get('/logout', (req, res) => {
+    console.log(`[TRANSACTION] Manager logged out`);
     req.session.destroy();
     res.redirect('/login');
 });
@@ -97,11 +100,13 @@ app.get('/', isAuthenticated, async (req, res) => {
 
 app.post('/trade', isAuthenticated, async (req, res) => {
     const { playerId, targetTeamId } = req.body;
+    console.log(`[TRANSACTION] Initiating trade: Player ${playerId} to Team ${targetTeamId}`);
     try {
         await axios.put(`${BACKEND_URL}/players/${playerId}/trade/${targetTeamId}`);
+        console.log(`[TRANSACTION] Trade completed successfully: Player ${playerId} to Team ${targetTeamId}`);
         res.redirect('/');
     } catch (error) {
-        console.error('Error trading player:', error.message);
+        console.error(`[TRANSACTION] Trade failed: Player ${playerId} to Team ${targetTeamId}. Error: ${error.message}`);
         res.status(500).send('Trade failed. Make sure the backend is running and IDs are correct.');
     }
 });

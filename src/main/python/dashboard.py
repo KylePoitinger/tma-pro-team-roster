@@ -5,6 +5,15 @@ import plotly.express as px
 from datetime import datetime
 import os
 import time
+import logging
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - [TRANSACTION] - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+logger = logging.getLogger(__name__)
 
 print("STATUS: RUNNING")
 print("URL: http://localhost:8501")
@@ -93,6 +102,7 @@ else:
 st.sidebar.markdown("---")
 st.sidebar.header("Navigation")
 page = st.sidebar.radio("Go to", ["Team Analytics", "Arena Overview", "Schedule Explorer"])
+logger.info(f"User navigated to: {page}")
 
 st.title("🏀 Pro Team Roster Analytics")
 
@@ -106,6 +116,7 @@ teams_df = pd.DataFrame(teams_data) if teams_data else pd.DataFrame()
 if page == "Team Analytics":
     if not teams_df.empty:
         selected_team = st.sidebar.selectbox("Select a Team", teams_df['name'].unique())
+        logger.info(f"Team selected: {selected_team}")
         team_data = teams_df[teams_df['name'] == selected_team].iloc[0]
         team_id = team_data['teamId']
 
@@ -142,6 +153,7 @@ if page == "Team Analytics":
         st.sidebar.markdown("---")
         st.sidebar.subheader("🌟 Mascot Spotlight")
         if st.sidebar.button("Fetch Random Mascot"):
+            logger.info("Fetching random mascot spotlight")
             # Use timestamp to bypass cache for random mascot
             timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
             random_m = fetch_data("mascots/random", params={"t": timestamp})
@@ -162,7 +174,7 @@ if page == "Team Analytics":
             if not players_df.empty:
                 st.dataframe(
                     players_df[['name', 'position', 'age', 'height', 'weight', 'salary', 'jerseyNumber', 'injuryStatus']],
-                    use_container_width=True,
+                    width="stretch",
                     column_config={
                         "name": st.column_config.TextColumn("Player Name", width="medium"),
                         "position": st.column_config.TextColumn("Position", width="small"),
@@ -199,7 +211,7 @@ if page == "Team Analytics":
                         font_color='#e0e0e0',
                         margin=dict(l=20, r=20, t=40, b=20)
                     )
-                    st.plotly_chart(fig_age, use_container_width=True)
+                    st.plotly_chart(fig_age, width="stretch")
 
                 with vcol2:
                     fig_salary = px.bar(
@@ -219,7 +231,7 @@ if page == "Team Analytics":
                         font_color='#e0e0e0',
                         margin=dict(l=20, r=20, t=40, b=20)
                     )
-                    st.plotly_chart(fig_salary, use_container_width=True)
+                    st.plotly_chart(fig_salary, width="stretch")
                 
                 fig_hw = px.scatter(
                     players_df, 
@@ -236,7 +248,7 @@ if page == "Team Analytics":
                     paper_bgcolor='rgba(0,0,0,0)',
                     font_color='#e0e0e0'
                 )
-                st.plotly_chart(fig_hw, use_container_width=True)
+                st.plotly_chart(fig_hw, width="stretch")
     else:
         st.info("No teams found. Start the backend to see live data.")
 
@@ -247,7 +259,7 @@ elif page == "Arena Overview":
         arenas_df = pd.DataFrame(arenas_data)
         st.dataframe(
             arenas_df[['name', 'location', 'capacity', 'openedYear', 'surface', 'cost']],
-            use_container_width=True,
+            width="stretch",
             column_config={
                 "name": st.column_config.TextColumn("Arena Name", width="medium"),
                 "location": st.column_config.TextColumn("Location", width="medium"),
@@ -275,7 +287,7 @@ elif page == "Arena Overview":
             paper_bgcolor='rgba(0,0,0,0)',
             font_color='#e0e0e0'
         )
-        st.plotly_chart(fig_cap, use_container_width=True)
+        st.plotly_chart(fig_cap, width="stretch")
         
         st.subheader("Construction Cost Analysis")
         fig_cost = px.pie(
@@ -290,7 +302,7 @@ elif page == "Arena Overview":
             paper_bgcolor='rgba(0,0,0,0)',
             font_color='#e0e0e0'
         )
-        st.plotly_chart(fig_cost, use_container_width=True)
+        st.plotly_chart(fig_cost, width="stretch")
     else:
         st.info("No arena data available.")
 
@@ -312,7 +324,7 @@ elif page == "Schedule Explorer":
         sched_df = pd.DataFrame(flat_schedules)
         st.dataframe(
             sched_df.sort_values("Date"),
-            use_container_width=True,
+            width="stretch",
             column_config={
                 "Date": st.column_config.TextColumn("Scheduled Date", width="medium"),
                 "Home Team": st.column_config.TextColumn("Home Team", width="medium"),
@@ -341,7 +353,7 @@ elif page == "Schedule Explorer":
             paper_bgcolor='rgba(0,0,0,0)',
             font_color='#e0e0e0'
         )
-        st.plotly_chart(fig_price, use_container_width=True)
+        st.plotly_chart(fig_price, width="stretch")
     else:
         st.info("No schedule data available.")
 
