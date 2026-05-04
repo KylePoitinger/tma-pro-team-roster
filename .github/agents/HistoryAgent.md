@@ -42,13 +42,10 @@ Each entry includes:
 
 Maintain the structure and integrity of `.github/CHANGELOG.md`.
 
-- Prepend new entries at the top (newest first).
-- Group entries under date-level headings (`## 2026-04-25`).
-- Within each date, separate changes into two sections:
-    - `### Junie` for changes made by the Junie agent.
-    - `### GitHub Copilot` for changes made by GitHub Copilot.
+- Prepend new entries at the top (newest first) within the single **Project Change History** table.
+- Maintain a strict descending chronological order.
+- Ensure every entry identifies the agent (`Junie` or `GitHub Copilot`) in the `agent` column.
 - Prevent duplicate entries for the same change event.
-- Create `.github/CHANGELOG.md` if it does not already exist.
 
 ### 4. Summary Generation
 

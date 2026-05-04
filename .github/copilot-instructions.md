@@ -229,16 +229,11 @@ If you encounter the error: `npm : The term 'npm' is not recognized...`, it usua
 ### Mandatory Changelog Updates
 Every time an AI tool (Junie or GitHub Copilot) is used to generate or modify code, the developer MUST update `.github/CHANGELOG.md`.
 
-### Agent Distinction
-- **GitHub Copilot:** Use this agent name for code completions, chat-based suggestions, or small refactors initiated via the Copilot plugin. Entries should be placed under the `### GitHub Copilot` section.
-- **Junie:** Use this agent name for autonomous task execution, multi-file refactors, or complex feature implementations performed by Junie. Entries should be placed under the `### Junie` section.
-
 ### Entry Format
-Add a new row to the appropriate table using the following structure:
+Add a new row to the **Project Change History** table in `.github/CHANGELOG.md` using the following structure:
 | timestamp | agent | action | files | summary | details |
-| :--- | :--- | :--- | :--- | :--- | :--- |
 
-- **timestamp:** ISO 8601 format (e.g., `2026-04-25T17:23:00`).
+- **timestamp:** ISO 8601 format (e.g., `2026-04-25T17:23:00`). Entries MUST be kept in descending chronological order (newest at the top).
 - **agent:** Either `GitHub Copilot` or `Junie`.
 - **action:** `created`, `modified`, `deleted`, `renamed`, `expanded`, or `enhanced`.
 - **files:** Backtick-enclosed file paths (e.g., `src/main/java/service/ProTeamService.java`). Use commas for multiple files.
