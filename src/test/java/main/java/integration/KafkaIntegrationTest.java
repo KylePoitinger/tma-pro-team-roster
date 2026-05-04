@@ -20,7 +20,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.atLeastOnce;
 
 @EmbeddedKafka(partitions = 1, topics = { "pro-player-events" })
-@SpringBootTest(properties = "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}", webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(properties = {
+    "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}",
+    "spring.kafka.enabled=true",
+    "spring.kafka.admin.auto-create=true"
+}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext
 public class KafkaIntegrationTest extends BaseIntegrationTest {
 

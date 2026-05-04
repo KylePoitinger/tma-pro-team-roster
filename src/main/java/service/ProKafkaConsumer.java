@@ -12,7 +12,7 @@ public class ProKafkaConsumer {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProKafkaConsumer.class);
 
-    @KafkaListener(topics = KafkaConfig.PLAYER_TOPIC, groupId = "pro-team-group")
+    @KafkaListener(topics = KafkaConfig.PLAYER_TOPIC, groupId = "pro-team-group", autoStartup = "${spring.kafka.enabled:true}")
     public void consumePlayerEvent(ProEvent event) {
         LOG.info("Received player event: {}", event);
         // Process the event (e.g., update a read model, notify another system, etc.)

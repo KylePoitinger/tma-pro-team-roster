@@ -81,3 +81,4 @@ output.txt
 # JaCoCo coverage
 jacoco.exec
 
+/kafka_test_log.txt
