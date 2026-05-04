@@ -10,10 +10,16 @@
 ```
 tma-pro-team-roster (Maven Project)
 │
-├── pom.xml                                    # Maven configuration (Java 1.8, Spring Boot 2.4.4)
+├── pom.xml                                    # Maven configuration (Java 21, Spring Boot 3.3.0)
 │
 ├── src/main/java                              # Source Code
 │   ├── ProTeamRosterApplication.java          # Entry point + CommandLineRunner (seeds DB)
+│   │
+│   ├── agent/                             # Management Agents
+│   │   └── ServiceLauncherAgent.java          # Auto-starts auxiliary services
+│   │
+│   ├── config/                            # Configuration beans
+│   │   └── KafkaConfig.java                   # Kafka topic & property config
 │   │
 │   ├── controller/                            # Layer 1: REST Endpoints
 │   │   ├── ProTeamController.java             # Team endpoints
@@ -30,6 +36,8 @@ tma-pro-team-roster (Maven Project)
 │   │   ├── ProMascotService.java              # Mascot service
 │   │   ├── ProArenaService.java               # Arena service
 │   │   ├── ProScheduleService.java            # Schedule service
+│   │   ├── ProKafkaProducer.java              # Kafka producer
+│   │   ├── ProKafkaConsumer.java              # Kafka consumer
 │   │   └── MascotImageService.java            # Image service
 │   │
 │   ├── repository/                            # Layer 3: Data Access (JPA)
@@ -78,7 +86,7 @@ tma-pro-team-roster (Maven Project)
          │  @RestController                                       │
          │  @GetMapping("/teams/{teamId}")                        │
          │  public ProTeamEntity getTeam(long teamId) {           │
-         │    return ProTeamService.getSingleTeam(teamId);        │
+         │    return proTeamService.getSingleTeam(teamId);        │
          │  }                                                     ���
          │                                                        ��
          │  Methods:                                              │
@@ -152,7 +160,7 @@ tma-pro-team-roster (Maven Project)
          │  ─────────────────────────────────────────────────────│
          │  Example: ProTeamEntity.java                           │
          │                                                        │
-         │  @Data                          // Lombok annotation   │
+         │  // manual getters/setters (no Lombok)  │
          │  @Entity                        // JPA mapping         │
          │  public class ProTeamEntity {                          │
          │    @Id                                                 │
@@ -168,7 +176,7 @@ tma-pro-team-roster (Maven Project)
          │  }                                                     │
          │                                                        │
          │  Features:                                             │
-         │  • Lombok @Data: auto-generates getters/setters       │
+         │  • Manual methods: getters, setters, toString()       │
          │  • @Entity: JPA persistence mapping                   │
          │  • OneToMany: team has multiple players               │
          │  • LAZY loading: optimal query performance            │

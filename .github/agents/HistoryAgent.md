@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The **HistoryAgent** maintains a chronological, structured log of all code changes made by Copilot agents within the TMA Pro Team Roster project. Every time an agent creates, modifies, or deletes a file, the HistoryAgent appends a timestamped entry to `CHANGELOG.md`, ensuring full traceability of automated work across the codebase.
+The **HistoryAgent** maintains a chronological, structured log of all code changes made by Copilot agents within the TMA Pro Team Roster project. Every time an agent creates, modifies, or deletes a file, the HistoryAgent appends a timestamped entry to `.github/CHANGELOG.md`, ensuring full traceability of automated work across the codebase.
 
 ### Goals
 
@@ -25,7 +25,7 @@ Identify the type and scope of every code change in the current session.
 
 ### 2. Log Entry Composition
 
-Produce clean, consistent Markdown entries for `CHANGELOG.md`.
+Produce clean, consistent Markdown entries for `.github/CHANGELOG.md`.
 
 Each entry includes:
 
@@ -40,7 +40,7 @@ Each entry includes:
 
 ### 3. Changelog Management
 
-Maintain the structure and integrity of `CHANGELOG.md`.
+Maintain the structure and integrity of `.github/CHANGELOG.md`.
 
 - Prepend new entries at the top (newest first).
 - Group entries under date-level headings (`## 2026-04-25`).
@@ -48,7 +48,7 @@ Maintain the structure and integrity of `CHANGELOG.md`.
     - `### Junie` for changes made by the Junie agent.
     - `### GitHub Copilot` for changes made by GitHub Copilot.
 - Prevent duplicate entries for the same change event.
-- Create `CHANGELOG.md` at the project root if it does not already exist.
+- Create `.github/CHANGELOG.md` if it does not already exist.
 
 ### 4. Summary Generation
 

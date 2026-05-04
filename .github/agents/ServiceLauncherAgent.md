@@ -30,7 +30,7 @@ The agent is implemented as a Spring `@Component` and implements `CommandLineRun
 ## Implementation Details
 - **File**: `src/main/java/agent/ServiceLauncherAgent.java`
 - **Package**: `main.java.agent`
-- **Technology**: Java 1.8, Spring Boot, ProcessBuilder
+- **Technology**: Java 21, Spring Boot, ProcessBuilder
 
 ## Maintenance
 If new auxiliary services are added to the project, they should be registered within the `run()` method of the `ServiceLauncherAgent` class following the established pattern.

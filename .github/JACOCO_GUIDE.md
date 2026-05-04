@@ -78,7 +78,7 @@ Branch Coverage (Conditions): 70% minimum
 | `MascotImageService` | Third-party integration - external dependency |
 
 ### Fully Excluded Packages (Not in Any Check)
-- `main.java.entity.*` - Lombok boilerplate (getters/setters)
+- `main.java.entity.*` - JPA entities (manual getters/setters)
 - `main.java.exception.*` - Generic exception handlers
 - `main.java.repository.*` - JPA framework-generated code
 

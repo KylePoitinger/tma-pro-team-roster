@@ -72,8 +72,8 @@ Agent:
 ## Agent Development Guidelines
 
 ### Code Generation Rules
-- Follow Java 1.8 compatibility
-- Use Lombok @Data for entities
+- Follow Java 21 compatibility
+- Use manual getters, setters, and `toString()` for entities (Lombok removed)
 - Implement standard Spring `@Service` beans (instance methods)
 - Include proper error handling
 - Add comprehensive integration tests
@@ -116,5 +116,4 @@ Use the `run_subagent` tool with appropriate parameters:
 run_subagent(agentName="ServiceGenerator", task="Create arena service for team venues")
 ```
 
-This ensures consistent agent behavior and proper task delegation.</content>
-<parameter name="filePath">C:\Users\kylep\IdeaProjects\tma-pro-team-roster\.github\AGENTS.md
+This ensures consistent agent behavior and proper task delegation.

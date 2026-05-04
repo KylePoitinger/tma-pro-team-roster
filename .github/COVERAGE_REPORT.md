@@ -33,7 +33,7 @@ Updated the JaCoCo Maven plugin with:
 - **report goal**: Generates coverage reports in `target/site/jacoco/`
 - **check goal**: Enforces coverage thresholds (80% lines, 70% branches)
 - **Exclusions**: 
-  - `main.java.entity.*` - Lombok boilerplate
+  - `main.java.entity.*` - JPA entities (manual getters/setters)
   - `main.java.exception.*` - Exception handlers
   - `main.java.repository.*` - JPA repository interfaces
   - `main.java.ProTeamRosterApplication` - Application entry point

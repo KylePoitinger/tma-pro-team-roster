@@ -52,7 +52,7 @@ mvn test                            # Run all tests
 ## Package Structure & Naming
 - `main.java.controller` – REST endpoint handlers  
 - `main.java.service` – Business logic layer  
-- `main.java.entity` – JPA-annotated domain objects with Lombok `@Data`  
+- `main.java.entity` – JPA-annotated domain objects
 - `main.java.repository` – JPA Repository interfaces
 **Note:** The package structure prefix is `main.java.*`. Maintain this for consistency.
 ---
@@ -99,9 +99,15 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
 - `PUT /teams/{teamId}`: API Endpoint
 
 ### Entity Annotations
-- Use Lombok `@Data` (generates getters, setters, toString, etc.).
+- Use manual getters, setters, and `toString()` (Lombok removed for compatibility).
 - `@Entity` for JPA mapping.
-- All relationships are now proper JPA mappings (no more string-based "teamName" references).
+- All relationships are proper JPA mappings (@ManyToOne, @OneToMany, @OneToOne).
+
+### Kafka Integration
+- **Producer:** `ProKafkaProducer` sends events (`ProEvent`) on entity creation/update/deletion.
+- **Consumer:** `ProKafkaConsumer` listens for player events.
+- **Configuration:** Controlled by `spring.kafka.enabled` in `application.properties`.
+- **Testing:** Kafka is disabled by default in tests (`application-test.properties`) to speed up execution and avoid connection noise. Use `@EmbeddedKafka` for dedicated Kafka integration tests.
 
 ### Accessibility & UI Standards
 - **ADA Compliance:** All new UI elements must meet WCAG AA standards.
