@@ -1,6 +1,6 @@
 # GitHub Copilot Instructions – AI Coding Guide for tma-pro-team-roster
 ## Project Overview
-Spring Boot REST API managing professional sports teams and player rosters. In-memory H2 database with a three-layer architecture (Controller → Service → Repository). Primary goal: readability and maintainability for legacy code scenarios.
+Spring Boot REST API managing professional sports teams and player rosters. SQLite database with a three-layer architecture (Controller → Service → Repository). Primary goal: readability and maintainability for legacy code scenarios.
 **Build/Test:** Maven (pom.xml) | **Language:** Java 21 | **Framework:** Spring Boot 3.3.0
 ---
 ## Architecture & Data Flow
@@ -24,9 +24,9 @@ mvn spring-boot:run                 # Start server (runs CommandLineRunner, seed
 mvn test                            # Run all tests
 ```
 ### Database
-- **H2 in-memory** or **SQLite** database.
+- **SQLite** database (default).
 - **SQLite:** Enabled by default in `application.properties` (file: `pro_team_roster.db`) for external viewing via SQLite GUI tools.
-- **H2 Console:** http://localhost:8080/h2-console (enabled in `application.properties`; accessible when H2 is active).
+- **H2 Console:** http://localhost:8080/h2-console (can be enabled for in-memory testing).
 - **Swagger Documentation:**
     - **UI:** http://localhost:8080/swagger-ui.html
     - **API Docs (OpenAPI 3):** http://localhost:8080/v3/api-docs
