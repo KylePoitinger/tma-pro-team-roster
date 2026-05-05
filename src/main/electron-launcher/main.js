@@ -1,7 +1,8 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const fs = require('fs');
 const { spawn } = require('child_process');
-const { Kafka } = require('kafkajs');
+const { Kafka, logLevel: LogLevel } = require('kafkajs');
 const sqlite3 = require('sqlite3').verbose();
 const treeKill = require('tree-kill');
 
@@ -9,7 +10,8 @@ let mainWindow;
 const processes = {
   java: null,
   python: null,
-  node: null
+  node: null,
+  kafka: null
 };
 
 function createWindow() {
@@ -42,10 +44,11 @@ app.on('window-all-closed', function () {
     Object.values(processes).forEach(p => {
       if (p) {
         killCount++;
-        treeKill(p.pid, 'SIGTERM', (err) => {
+        const signal = process.platform === 'win32' ? 'SIGKILL' : 'SIGTERM';
+        treeKill(p.pid, signal, (err) => {
           if (err) {
             try {
-              p.kill('SIGTERM');
+              p.kill(signal);
             } catch (e) {
               console.error('Failed to kill process:', e);
             }
@@ -66,7 +69,7 @@ app.on('window-all-closed', function () {
 });
 
 // IPC Handlers for Process Management
-ipcMain.handle('start-service', (event, service) => {
+function startService(service) {
   if (processes[service]) return { status: 'already_running' };
 
   let command, args, cwd;
@@ -84,9 +87,47 @@ ipcMain.handle('start-service', (event, service) => {
       cwd = path.join(rootDir, 'src/main/python');
       break;
     case 'node':
-      command = 'npm';
-      args = ['start'];
+      // Auto-start Kafka if requested (as per user requirement)
+      if (!processes['kafka']) {
+        console.log('[Launcher] Auto-starting Kafka for Manager Portal...');
+        startService('kafka');
+      }
+      command = 'node';
+      args = ['app.js'];
       cwd = path.join(rootDir, 'src/main/nodejs/manager-portal');
+      break;
+    case 'kafka':
+      // Construct command based on KAFKA_HOME if available
+      if (process.env.KAFKA_HOME) {
+        const kafkaHome = process.env.KAFKA_HOME;
+        if (process.platform === 'win32') {
+          command = path.join(kafkaHome, 'bin', 'windows', 'kafka-server-start.bat');
+        } else {
+          command = path.join(kafkaHome, 'bin', 'kafka-server-start.sh');
+        }
+        args = [path.join(kafkaHome, 'config', 'server.properties')];
+        cwd = kafkaHome;
+
+        if (!fs.existsSync(command)) {
+          return { 
+            status: 'error', 
+            message: `Kafka binary not found at ${command}. Please check your KAFKA_HOME environment variable.` 
+          };
+        }
+      } else {
+        // Fallback to basic command and hope it's in PATH
+        command = process.platform === 'win32' ? 'kafka-server-start.bat' : 'kafka-server-start.sh';
+        args = ['config/server.properties'];
+        cwd = rootDir;
+        
+        // Log a warning if KAFKA_HOME is missing, as it's the likely cause of failure
+        setTimeout(() => {
+          mainWindow.webContents.send('service-log', { 
+            service: 'kafka', 
+            data: '[Launcher] WARNING: KAFKA_HOME environment variable is not set. Kafka might fail to start if it is not in your PATH.' 
+          });
+        }, 100);
+      }
       break;
     default:
       return { status: 'error', message: 'Unknown service' };
@@ -100,6 +141,8 @@ ipcMain.handle('start-service', (event, service) => {
     });
     
     processes[service] = p;
+    mainWindow.webContents.send('service-started', { service });
+    mainWindow.webContents.send('service-log', { service, data: `[Launcher] Started with PID: ${p.pid}` });
 
     p.stdout.on('data', (data) => {
       console.log(`[${service}] stdout: ${data}`);
@@ -121,6 +164,10 @@ ipcMain.handle('start-service', (event, service) => {
   } catch (error) {
     return { status: 'error', message: error.message };
   }
+}
+
+ipcMain.handle('start-service', (event, service) => {
+  return startService(service);
 });
 
 ipcMain.handle('stop-service', (event, service) => {
@@ -130,14 +177,19 @@ ipcMain.handle('stop-service', (event, service) => {
 
     return new Promise((resolve) => {
       // Use tree-kill to terminate the entire process tree
-      treeKill(proc.pid, 'SIGTERM', (err) => {
+      // Using SIGKILL on Windows ensures taskkill /F is used for forceful termination
+      const signal = process.platform === 'win32' ? 'SIGKILL' : 'SIGTERM';
+      
+      console.log(`[Launcher] Stopping ${service} (PID: ${proc.pid}) with ${signal}`);
+      mainWindow.webContents.send('service-log', { service, data: `[Launcher] Stopping service (PID: ${proc.pid})...` });
+
+      treeKill(proc.pid, signal, (err) => {
         if (err) {
-          // Fallback to direct kill if tree-kill fails
+          console.error(`Failed to kill process tree for ${service}:`, err);
+          // Fallback to direct kill
           try {
-            proc.kill('SIGTERM');
-          } catch (e) {
-            console.error(`Failed to kill process tree for ${service}:`, e);
-          }
+            proc.kill(signal);
+          } catch (e) {}
         }
         resolve({ status: 'stopped' });
       });
@@ -150,9 +202,10 @@ ipcMain.handle('stop-service', (event, service) => {
 ipcMain.handle('check-kafka', async () => {
   const kafka = new Kafka({
     clientId: 'launcher-health-check',
-    brokers: ['localhost:9092'],
+    brokers: ['127.0.0.1:9092'],
     connectionTimeout: 3000,
     requestTimeout: 3000,
+    logLevel: LogLevel.NOTHING,
     retry: { retries: 0 }
   });
 

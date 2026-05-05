@@ -21,7 +21,7 @@
 | **Run Backend** | `mvn spring-boot:run` |
 | **Run Tests** | `mvn test` |
 | **Manager Portal** | `cd src/main/nodejs/manager-portal; npm install; npm start` |
-| **Electron Launcher**| `cd src/main/electron-launcher; npm install; npm start` |
+| **Electron Launcher**| `cd src/main/electron-launcher; npm install; npm start` (Manages Kafka auto-start) |
 
 ## Architecture & Patterns
 - **Three-Layer Pattern**: `Controller` → `Service` → `Repository`.

@@ -121,6 +121,14 @@
                     <button id="btn-node-stop" class="btn btn-stop" style="display:none" onclick="stopService('node')">Stop</button>
                 </div>
             </div>
+
+            <div class="service-row">
+                <span class="service-name">Kafka Broker</span>
+                <div>
+                    <button id="btn-kafka-start" class="btn btn-start" onclick="startService('kafka')">Start</button>
+                    <button id="btn-kafka-stop" class="btn btn-stop" style="display:none" onclick="stopService('kafka')">Stop</button>
+                </div>
+            </div>
         </div>
 
         <div class="panel">
@@ -194,17 +202,24 @@
 
         async function stopService(service) {
             appendLog(`Stopping ${service}...`);
+            const btnStop = document.getElementById(`btn-${service}-stop`);
+            btnStop.disabled = true;
+            btnStop.textContent = 'Stopping...';
+            
             try {
                 const result = await window.electronAPI.stopService(service);
                 if (result.status === 'stopped' || result.status === 'not_running') {
                     document.getElementById(`btn-${service}-start`).style.display = 'inline-block';
-                    document.getElementById(`btn-${service}-stop`).style.display = 'none';
+                    btnStop.style.display = 'none';
                     appendLog(`${service} stopped successfully`);
                 } else {
                     appendLog(`Error stopping ${service}: ${result.message || 'Unknown error'}`);
                 }
             } catch (error) {
                 appendLog(`Error stopping ${service}: ${error.message}`);
+            } finally {
+                btnStop.disabled = false;
+                btnStop.textContent = 'Stop';
             }
         }
 
@@ -243,6 +258,11 @@
             }
             msgEl.textContent = msg;
         }
+
+        window.electronAPI.onServiceStarted(({ service }) => {
+            document.getElementById(`btn-${service}-start`).style.display = 'none';
+            document.getElementById(`btn-${service}-stop`).style.display = 'inline-block';
+        });
 
         window.electronAPI.onServiceLog(({ service, data }) => {
             appendLog(`${service}: ${data}`);

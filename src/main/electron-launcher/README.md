@@ -20,6 +20,13 @@ This is an Electron-based launcher for the TMA Pro Team Roster project. It allow
    npm install
    ```
 
+3. **Kafka Configuration (Optional but Recommended):**
+   To manage the Kafka broker via the launcher, set the `KAFKA_HOME` environment variable to your Kafka installation directory.
+   - **Windows**: `[System.Environment]::SetEnvironmentVariable('KAFKA_HOME', 'C:\path\to\kafka', 'User')`
+   - **Unix**: `export KAFKA_HOME=/path/to/kafka`
+   
+   If `KAFKA_HOME` is not set, the launcher will attempt to use `kafka-server-start` from your system PATH.
+
 ## Running the Launcher
 
 Start the Electron application:
@@ -32,6 +39,6 @@ npm start
 - **Service Control**: Start and stop Java, Python, and Node.js services with a single click.
 - **Log Monitoring**: View stdout/stderr from all services directly in the launcher.
 - **Health Checks**: 
-  - **Kafka**: Verifies connectivity to the local Kafka broker (default: `localhost:9092`).
+  - **Kafka**: Verifies connectivity to the local Kafka broker (default: `127.0.0.1:9092`).
   - **SQLite**: Verifies that the `pro_team_roster.db` file is accessible and readable.
 - **Theme**: Modern, high-energy sports aesthetic consistent with the project.
