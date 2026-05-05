@@ -88,7 +88,7 @@ Detailed documentation is maintained in the `.github/` directory:
   ```
 
 ### General Info
-- **Java:** JUnit 5, Mockito, Awaitility, JaCoCo (80% Line / 70% Branch coverage required).
+- **Java:** JUnit 5, Mockito, Awaitility, JaCoCo (80% Line / 70% Branch coverage enforced via `jacoco` profile).
 - **Node.js:** Jest & JSDOM.
 - **Kafka:** Embedded Kafka for integration testing.
 

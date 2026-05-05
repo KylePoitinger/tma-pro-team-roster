@@ -19,7 +19,8 @@ Spring Boot REST API managing professional sports teams and player rosters. SQLi
 ## Critical Developer Workflows
 ### Build & Run
 ```bash
-mvn clean install                    # Full build (runs Unit Tests only by default)
+mvn clean install                    # Full build (runs Unit Tests only, coverage check disabled)
+mvn clean install -Pjacoco           # Full build with JaCoCo coverage enforcement
 mvn spring-boot:run                 # Start server (runs CommandLineRunner, seeds data)
 mvn test                            # Run Unit Tests
 mvn test -Pintegration              # Run Unit + Integration Tests
@@ -37,8 +38,8 @@ mvn test -Pintegration              # Run Unit + Integration Tests
 - **Timezone:** America/New_York (set in main method)
 ### Testing Strategy
 - **JaCoCo Coverage:** Run JaCoCo coverage every time a new full build is made to ensure code quality and coverage.
-    - **Thresholds:** Minimum **80% line coverage** and **70% branch coverage** for services and controllers. Build fails if coverage drops below these values.
-    - **Command:** `mvn clean install` (automatically runs tests and generates coverage) or `mvn test`.
+    - **Thresholds:** Minimum **80% line coverage** and **70% branch coverage** for services and controllers. Enforced via the `jacoco` profile.
+    - **Command:** `mvn verify -Pjacoco` to run tests and enforce coverage thresholds.
     - **Report Location:** `target/site/jacoco/index.html`
 - **Integration Tests:** Use `@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)`. These tests are toggled via the `integration` profile.
 - **Frontend Logic Tests (Node.js):** 
