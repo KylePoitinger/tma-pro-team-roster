@@ -22,7 +22,7 @@ public class ProKafkaConsumer {
 
     @KafkaListener(topics = KafkaConfig.PLAYER_TOPIC, groupId = "pro-team-group", autoStartup = "${spring.kafka.enabled:true}")
     public void consumePlayerEvent(ProEvent event) {
-        LOG.info("Received player event: {}", event);
+        LOG.debug("Received player event: {}", event);
         
         if ("PLAYER_TRADE_REQUESTED".equals(event.eventType())) {
             handleTradeRequested(event);

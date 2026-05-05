@@ -19,7 +19,7 @@ public class ProKafkaProducer {
 
     public void sendEvent(String topic, ProEvent event) {
         if (kafkaTemplate != null) {
-            LOG.info("Sending event to topic {}: {}", topic, event);
+            LOG.debug("Sending event to topic {}: {}", topic, event);
             kafkaTemplate.send(topic, event);
         } else {
             LOG.debug("Kafka is disabled. Skipping event sending for topic {}: {}", topic, event);

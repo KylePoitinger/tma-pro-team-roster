@@ -32,18 +32,18 @@ public class ProTeamServiceTest {
 
     @Test
     public void testGetTeams() {
-        LOG.info("Testing getTeams method");
+        LOG.info("[TEST] Testing getTeams method");
         List<ProTeamEntity> mockTeams = Arrays.asList(new ProTeamEntity());
         when(proTeamRepo.findAll()).thenReturn(mockTeams);
         List<ProTeamEntity> teams = proTeamService.getTeams();
-        LOG.info("Retrieved {} teams", teams.size());
+        LOG.info("[TEST] Retrieved {} teams", teams.size());
         assertNotNull(teams);
         assertEquals(1, teams.size());
     }
 
     @Test
     public void testCreateTeam() {
-        LOG.info("Testing createTeam method");
+        LOG.info("[TEST] Testing createTeam method");
         ProTeamEntity team = new ProTeamEntity();
         team.setTeamId(1L);
         team.setName("Test Team");
@@ -51,14 +51,14 @@ public class ProTeamServiceTest {
         team.setMascot("Test Mascot");
         when(proTeamRepo.save(team)).thenReturn(team);
         ProTeamEntity created = proTeamService.createTeam(team);
-        LOG.info("Created homeTeam: {}", created.getName());
+        LOG.info("[TEST] Created homeTeam: {}", created.getName());
         assertNotNull(created);
         assertEquals("Test Team", created.getName());
     }
 
     @Test
     public void testGetSingleTeamAndRosterSuccess() {
-        LOG.info("Testing getSingleTeamAndRoster method - success");
+        LOG.info("[TEST] Testing getSingleTeamAndRoster method - success");
         ProTeamEntity team = new ProTeamEntity();
         team.setTeamId(1L);
         team.setName("Test Team");
@@ -70,14 +70,14 @@ public class ProTeamServiceTest {
 
     @Test
     public void testGetSingleTeamAndRosterNotFound() {
-        LOG.info("Testing getSingleTeamAndRoster method - not found");
+        LOG.info("[TEST] Testing getSingleTeamAndRoster method - not found");
         when(proTeamRepo.getOneByTeamId(999L)).thenReturn(null);
         assertThrows(ResourceNotFoundException.class, () -> proTeamService.getSingleTeamAndRoster(999L));
     }
 
     @Test
     public void testGetTeamsByFieldLookupByName() {
-        LOG.info("Testing getTeamsByFieldLookup - by name");
+        LOG.info("[TEST] Testing getTeamsByFieldLookup - by name");
         ProTeamEntity team = new ProTeamEntity();
         team.setName("Lakers");
         List<ProTeamEntity> mockTeams = Arrays.asList(team);
@@ -90,7 +90,7 @@ public class ProTeamServiceTest {
 
     @Test
     public void testGetTeamsByFieldLookupByCity() {
-        LOG.info("Testing getTeamsByFieldLookup - by city");
+        LOG.info("[TEST] Testing getTeamsByFieldLookup - by city");
         ProTeamEntity team = new ProTeamEntity();
         team.setCity("Los Angeles");
         List<ProTeamEntity> mockTeams = Arrays.asList(team);
@@ -102,7 +102,7 @@ public class ProTeamServiceTest {
 
     @Test
     public void testGetTeamsByFieldLookupByMascot() {
-        LOG.info("Testing getTeamsByFieldLookup - by mascot");
+        LOG.info("[TEST] Testing getTeamsByFieldLookup - by mascot");
         ProTeamEntity team = new ProTeamEntity();
         team.setMascot("Laker Girl");
         List<ProTeamEntity> mockTeams = Arrays.asList(team);
@@ -114,13 +114,13 @@ public class ProTeamServiceTest {
 
     @Test
     public void testGetTeamsByFieldLookupNoCriteria() {
-        LOG.info("Testing getTeamsByFieldLookup - no criteria");
+        LOG.info("[TEST] Testing getTeamsByFieldLookup - no criteria");
         assertThrows(ResourceNotFoundException.class, () -> proTeamService.getTeamsByFieldLookup(null, null, null));
     }
 
     @Test
     public void testUpdateTeamSuccess() {
-        LOG.info("Testing updateTeam method - success");
+        LOG.info("[TEST] Testing updateTeam method - success");
         ProTeamEntity existingTeam = new ProTeamEntity();
         existingTeam.setTeamId(1L);
         existingTeam.setName("Old Team");
@@ -143,7 +143,7 @@ public class ProTeamServiceTest {
 
     @Test
     public void testUpdateTeamNotFound() {
-        LOG.info("Testing updateTeam method - not found");
+        LOG.info("[TEST] Testing updateTeam method - not found");
         ProTeamEntity updateReq = new ProTeamEntity();
         when(proTeamRepo.findById(999L)).thenReturn(Optional.empty());
         assertThrows(ResourceNotFoundException.class, () -> proTeamService.updateTeam(999L, updateReq));
@@ -151,7 +151,7 @@ public class ProTeamServiceTest {
 
     @Test
     public void testDeleteTeamSuccess() {
-        LOG.info("Testing deleteTeam method - success");
+        LOG.info("[TEST] Testing deleteTeam method - success");
         ProTeamEntity team = new ProTeamEntity();
         team.setTeamId(1L);
         team.setName("Test Team");
@@ -164,7 +164,7 @@ public class ProTeamServiceTest {
 
     @Test
     public void testDeleteTeamNotFound() {
-        LOG.info("Testing deleteTeam method - not found");
+        LOG.info("[TEST] Testing deleteTeam method - not found");
         when(proTeamRepo.getOneByTeamId(999L)).thenReturn(null);
         assertThrows(ResourceNotFoundException.class, () -> proTeamService.deleteTeam(999L));
     }

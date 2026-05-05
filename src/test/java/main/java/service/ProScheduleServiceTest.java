@@ -34,7 +34,7 @@ public class ProScheduleServiceTest {
 
     @Test
     public void testGetAllSchedules() {
-        LOG.info("[DEBUG_LOG] Testing getAllSchedules method with multiple entries");
+        LOG.info("[TEST] Testing getAllSchedules method with multiple entries");
         
         // Mocking multiple teams and arenas
         ProTeamEntity t1 = new ProTeamEntity(); t1.setTeamId(1L);
@@ -70,7 +70,7 @@ public class ProScheduleServiceTest {
 
     @Test
     public void testGetScheduleSuccess() {
-        LOG.info("Testing getSchedule method - success");
+        LOG.info("[TEST] Testing getSchedule method - success");
         ProScheduleEntity schedule = new ProScheduleEntity();
         schedule.setScheduleId(1L);
         schedule.setScheduledDate("2026-05-01");
@@ -82,14 +82,14 @@ public class ProScheduleServiceTest {
 
     @Test
     public void testGetScheduleNotFound() {
-        LOG.info("Testing getSchedule method - not found");
+        LOG.info("[TEST] Testing getSchedule method - not found");
         when(proScheduleRepo.findById(999L)).thenReturn(Optional.empty());
         assertThrows(ResourceNotFoundException.class, () -> proScheduleService.getSchedule(999L));
     }
 
     @Test
     public void testGetSchedulesByTeam() {
-        LOG.info("[DEBUG_LOG] Testing getSchedulesByTeam method");
+        LOG.info("[TEST] Testing getSchedulesByTeam method");
         ProTeamEntity t1 = new ProTeamEntity(); t1.setTeamId(1L);
         ProTeamEntity t2 = new ProTeamEntity(); t2.setTeamId(2L);
         ProArenaEntity a1 = new ProArenaEntity(); a1.setArenaId(101L);
@@ -114,7 +114,7 @@ public class ProScheduleServiceTest {
 
     @Test
     public void testGetSchedulesByArena() {
-        LOG.info("[DEBUG_LOG] Testing getSchedulesByArena method with multiple arenas");
+        LOG.info("[TEST] Testing getSchedulesByArena method with multiple arenas");
         ProTeamEntity t1 = new ProTeamEntity(); t1.setTeamId(1L);
         ProTeamEntity t2 = new ProTeamEntity(); t2.setTeamId(2L);
         ProArenaEntity a1 = new ProArenaEntity(); a1.setArenaId(101L);
@@ -139,7 +139,7 @@ public class ProScheduleServiceTest {
 
     @Test
     public void testCreateSchedule() {
-        LOG.info("[DEBUG_LOG] Testing createSchedule method");
+        LOG.info("[TEST] Testing createSchedule method");
         ProTeamEntity t1 = new ProTeamEntity(); t1.setTeamId(1L);
         ProArenaEntity a1 = new ProArenaEntity(); a1.setArenaId(1L);
 
@@ -160,7 +160,7 @@ public class ProScheduleServiceTest {
 
     @Test
     public void testUpdateScheduleSuccess() {
-        LOG.info("Testing updateSchedule method - success");
+        LOG.info("[TEST] Testing updateSchedule method - success");
         ProTeamEntity t1 = new ProTeamEntity(); t1.setTeamId(1L);
         ProTeamEntity t2 = new ProTeamEntity(); t2.setTeamId(2L);
         ProArenaEntity a1 = new ProArenaEntity(); a1.setArenaId(1L);
@@ -194,7 +194,7 @@ public class ProScheduleServiceTest {
 
     @Test
     public void testUpdateScheduleNotFound() {
-        LOG.info("Testing updateSchedule method - not found");
+        LOG.info("[TEST] Testing updateSchedule method - not found");
         ProScheduleEntity updateReq = new ProScheduleEntity();
         when(proScheduleRepo.findById(999L)).thenReturn(Optional.empty());
         assertThrows(ResourceNotFoundException.class, () -> proScheduleService.updateSchedule(999L, updateReq));
@@ -202,7 +202,7 @@ public class ProScheduleServiceTest {
 
     @Test
     public void testDeleteScheduleSuccess() {
-        LOG.info("Testing deleteSchedule method - success");
+        LOG.info("[TEST] Testing deleteSchedule method - success");
         ProScheduleEntity schedule = new ProScheduleEntity();
         schedule.setScheduleId(1L);
         schedule.setScheduledDate("2026-05-01");
@@ -215,7 +215,7 @@ public class ProScheduleServiceTest {
 
     @Test
     public void testDeleteScheduleNotFound() {
-        LOG.info("Testing deleteSchedule method - not found");
+        LOG.info("[TEST] Testing deleteSchedule method - not found");
         when(proScheduleRepo.findById(999L)).thenReturn(Optional.empty());
         assertThrows(ResourceNotFoundException.class, () -> proScheduleService.deleteSchedule(999L));
     }

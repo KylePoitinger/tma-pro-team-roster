@@ -32,18 +32,18 @@ public class ProArenaServiceTest {
 
 	@Test
 	public void testGetArenas() {
-		LOG.info("Testing getArenas method");
+  LOG.info("[TEST] Testing getArenas method");
 		List<ProArenaEntity> mockArenas = Arrays.asList(new ProArenaEntity());
 		when(proArenaRepo.findAll()).thenReturn(mockArenas);
 		List<ProArenaEntity> arenas = proArenaService.getArenas();
-		LOG.info("Retrieved {} arenas", arenas.size());
+  LOG.info("[TEST] Retrieved {} arenas", arenas.size());
 		assertNotNull(arenas);
 		assertEquals(1, arenas.size());
 	}
 
 	@Test
 	public void testCreateArena() {
-		LOG.info("Testing createArena method");
+  LOG.info("[TEST] Testing createArena method");
 		ProArenaEntity arena = new ProArenaEntity();
 		arena.setArenaId(1L);
 		arena.setName("Test Arena");
@@ -51,14 +51,14 @@ public class ProArenaServiceTest {
 		arena.setCapacity(20000);
 		when(proArenaRepo.save(arena)).thenReturn(arena);
 		ProArenaEntity created = proArenaService.createArena(arena);
-		LOG.info("Created arena: {}", created.getName());
+  LOG.info("[TEST] Created arena: {}", created.getName());
 		assertNotNull(created);
 		assertEquals("Test Arena", created.getName());
 	}
 
 	@Test
 	public void testGetArenaSuccess() {
-		LOG.info("Testing getArena method - success");
+  LOG.info("[TEST] Testing getArena method - success");
 		ProArenaEntity arena = new ProArenaEntity();
 		arena.setArenaId(1L);
 		arena.setName("Test Arena");
@@ -70,14 +70,14 @@ public class ProArenaServiceTest {
 
 	@Test
 	public void testGetArenaNotFound() {
-		LOG.info("Testing getArena method - not found");
+  LOG.info("[TEST] Testing getArena method - not found");
 		when(proArenaRepo.getOneByArenaId(999L)).thenReturn(null);
 		assertThrows(ResourceNotFoundException.class, () -> proArenaService.getArena(999L));
 	}
 
 	@Test
 	public void testUpdateArenaSuccess() {
-		LOG.info("Testing updateArena method - success");
+  LOG.info("[TEST] Testing updateArena method - success");
 		ProArenaEntity existingArena = new ProArenaEntity();
 		existingArena.setArenaId(1L);
 		existingArena.setName("Old Arena");
@@ -101,7 +101,7 @@ public class ProArenaServiceTest {
 
 	@Test
 	public void testUpdateArenaNotFound() {
-		LOG.info("Testing updateArena method - not found");
+  LOG.info("[TEST] Testing updateArena method - not found");
 		ProArenaEntity updateReq = new ProArenaEntity();
 		when(proArenaRepo.findById(999L)).thenReturn(Optional.empty());
 		assertThrows(ResourceNotFoundException.class, () -> proArenaService.updateArena(999L, updateReq));
@@ -109,7 +109,7 @@ public class ProArenaServiceTest {
 
 	@Test
 	public void testDeleteArenaSuccess() {
-		LOG.info("Testing deleteArena method - success");
+  LOG.info("[TEST] Testing deleteArena method - success");
 		ProArenaEntity arena = new ProArenaEntity();
 		arena.setArenaId(1L);
 		arena.setName("Test Arena");
@@ -122,7 +122,7 @@ public class ProArenaServiceTest {
 
 	@Test
 	public void testDeleteArenaNotFound() {
-		LOG.info("Testing deleteArena method - not found");
+  LOG.info("[TEST] Testing deleteArena method - not found");
 		when(proArenaRepo.getOneByArenaId(999L)).thenReturn(null);
 		assertThrows(ResourceNotFoundException.class, () -> proArenaService.deleteArena(999L));
 	}

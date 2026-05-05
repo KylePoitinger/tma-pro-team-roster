@@ -35,7 +35,7 @@ public class ProMascotServiceTest {
 
     @Test
     public void testCreateProMascot() {
-        LOG.info("Testing createProMascot method");
+        LOG.info("[TEST] Testing createProMascot method");
         ProMascotEntity mascot = new ProMascotEntity();
         mascot.setMascotId(1L);
         mascot.setName("Test Mascot");
@@ -44,14 +44,14 @@ public class ProMascotServiceTest {
         mascot.setCostume("Test Costume");
         when(proMascotRepo.save(mascot)).thenReturn(mascot);
         ProMascotEntity created = proMascotService.createProMascot(mascot);
-        LOG.info("Created mascot: {}", created.getName());
+        LOG.info("[TEST] Created mascot: {}", created.getName());
         assertNotNull(created);
         assertEquals("Test Mascot", created.getName());
     }
 
     @Test
     public void testGetProMascotSuccess() {
-        LOG.info("Testing getProMascot method - success");
+        LOG.info("[TEST] Testing getProMascot method - success");
         ProMascotEntity mascot = new ProMascotEntity();
         mascot.setMascotId(1L);
         mascot.setName("Test Mascot");
@@ -63,14 +63,14 @@ public class ProMascotServiceTest {
 
     @Test
     public void testGetProMascotNotFound() {
-        LOG.info("Testing getProMascot method - not found");
+        LOG.info("[TEST] Testing getProMascot method - not found");
         when(proMascotRepo.getOneByMascotId(999L)).thenReturn(null);
         assertThrows(ResourceNotFoundException.class, () -> proMascotService.getProMascot(999L));
     }
 
     @Test
     public void testGetMascotsByTeam() {
-        LOG.info("Testing getMascotsByTeam method");
+        LOG.info("[TEST] Testing getMascotsByTeam method");
         ProMascotEntity mascot = new ProMascotEntity();
         mascot.setMascotId(1L);
         mascot.setName("Test Mascot");
@@ -83,7 +83,7 @@ public class ProMascotServiceTest {
 
     @Test
     public void testUpdateProMascotSuccess() {
-        LOG.info("Testing updateProMascot method - success");
+        LOG.info("[TEST] Testing updateProMascot method - success");
         ProMascotEntity existingMascot = new ProMascotEntity();
         existingMascot.setMascotId(1L);
         existingMascot.setName("Old Mascot");
@@ -110,7 +110,7 @@ public class ProMascotServiceTest {
 
     @Test
     public void testUpdateProMascotPartial() {
-        LOG.info("Testing updateProMascot method - partial update");
+        LOG.info("[TEST] Testing updateProMascot method - partial update");
         ProMascotEntity existingMascot = new ProMascotEntity();
         existingMascot.setMascotId(1L);
         existingMascot.setName("Old Mascot");
@@ -130,7 +130,7 @@ public class ProMascotServiceTest {
 
     @Test
     public void testUpdateProMascotWithDefaultImage() {
-        LOG.info("Testing updateProMascot method - with default image");
+        LOG.info("[TEST] Testing updateProMascot method - with default image");
         ProMascotEntity existingMascot = new ProMascotEntity();
         existingMascot.setMascotId(1L);
         existingMascot.setImageUrl("old_url");
@@ -148,7 +148,7 @@ public class ProMascotServiceTest {
 
     @Test
     public void testUpdateProMascotNotFound() {
-        LOG.info("Testing updateProMascot method - not found");
+        LOG.info("[TEST] Testing updateProMascot method - not found");
         ProMascotEntity updateReq = new ProMascotEntity();
         when(proMascotRepo.findById(999L)).thenReturn(Optional.empty());
         assertThrows(ResourceNotFoundException.class, () -> proMascotService.updateProMascot(999L, updateReq));
@@ -156,7 +156,7 @@ public class ProMascotServiceTest {
 
     @Test
     public void testDeleteProMascotSuccess() {
-        LOG.info("Testing deleteProMascot method - success");
+        LOG.info("[TEST] Testing deleteProMascot method - success");
         ProMascotEntity mascot = new ProMascotEntity();
         mascot.setMascotId(1L);
         mascot.setName("Test Mascot");
@@ -169,14 +169,14 @@ public class ProMascotServiceTest {
 
     @Test
     public void testDeleteProMascotNotFound() {
-        LOG.info("Testing deleteProMascot method - not found");
+        LOG.info("[TEST] Testing deleteProMascot method - not found");
         when(proMascotRepo.getOneByMascotId(999L)).thenReturn(null);
         assertThrows(ResourceNotFoundException.class, () -> proMascotService.deleteProMascot(999L));
     }
 
     @Test
     public void testGetMascotsUniqueImages() {
-        LOG.info("Testing getMascots method with image fetching");
+        LOG.info("[TEST] Testing getMascots method with image fetching");
         ProMascotEntity m1 = new ProMascotEntity();
         m1.setMascotId(1L);
         m1.setImageUrl(null);
@@ -206,7 +206,7 @@ public class ProMascotServiceTest {
 
     @Test
     public void testGetMascotsDuplicateHandling() {
-        LOG.info("Testing getMascots method duplicate image handling");
+        LOG.info("[TEST] Testing getMascots method duplicate image handling");
         ProMascotEntity m1 = new ProMascotEntity();
         m1.setMascotId(1L);
         m1.setImageUrl(null);
@@ -230,7 +230,7 @@ public class ProMascotServiceTest {
 
     @Test
     public void testGetMascotsImageServiceException() {
-        LOG.info("Testing getMascots method when image service fails");
+        LOG.info("[TEST] Testing getMascots method when image service fails");
         ProMascotEntity m1 = new ProMascotEntity();
         m1.setMascotId(1L);
         m1.setImageUrl(null);
@@ -246,7 +246,7 @@ public class ProMascotServiceTest {
 
     @Test
     public void testGetRandomMascot() {
-        LOG.info("Testing getRandomMascot method");
+        LOG.info("[TEST] Testing getRandomMascot method");
         ProMascotEntity mascot = new ProMascotEntity();
         mascot.setMascotId(1L);
         mascot.setName("Random Mascot");
@@ -263,7 +263,7 @@ public class ProMascotServiceTest {
 
     @Test
     public void testGetRandomMascotNotFound() {
-        LOG.info("Testing getRandomMascot method - not found");
+        LOG.info("[TEST] Testing getRandomMascot method - not found");
         when(proMascotRepo.findRandomMascot()).thenReturn(null);
         ProMascotEntity result = proMascotService.getRandomMascot();
         assertNull(result);
@@ -271,7 +271,7 @@ public class ProMascotServiceTest {
 
     @Test
     public void testGetRandomMascotImageServiceException() {
-        LOG.info("Testing getRandomMascot method - image service exception");
+        LOG.info("[TEST] Testing getRandomMascot method - image service exception");
         ProMascotEntity mascot = new ProMascotEntity();
         mascot.setMascotId(1L);
         mascot.setName("Random Mascot");

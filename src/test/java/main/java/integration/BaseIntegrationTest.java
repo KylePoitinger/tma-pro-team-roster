@@ -31,7 +31,7 @@ public abstract class BaseIntegrationTest {
     @BeforeEach
     public void waitForApp() {
         if (!isAppReady) {
-            LOG.info("[DEBUG_LOG] Waiting for application health check to be UP at http://localhost:{}/health", port);
+            LOG.info("[TEST] Waiting for application health check to be UP at http://localhost:{}/health", port);
             await()
                 .atMost(60, TimeUnit.SECONDS)
                 .pollInterval(1, TimeUnit.SECONDS)
@@ -40,16 +40,16 @@ public abstract class BaseIntegrationTest {
                     ResponseEntity<Map> response = restTemplate.getForEntity(getBaseUrl() + "/health", Map.class);
                     boolean isUp = response.getStatusCode() == HttpStatus.OK && "UP".equals(response.getBody().get("status"));
                     if (isUp) {
-                        LOG.info("[DEBUG_LOG] Health check returned UP!");
+                        LOG.info("[TEST] Health check returned UP!");
                     }
                     return isUp;
                 } catch (Exception e) {
-                    LOG.info("[DEBUG_LOG] Waiting for health check... (Error: {})", e.getMessage());
+                    LOG.info("[TEST] Waiting for health check... (Error: {})", e.getMessage());
                     return false;
                 }
             });
             isAppReady = true;
-            LOG.info("[DEBUG_LOG] Application is ready for integration tests.");
+            LOG.info("[TEST] Application is ready for integration tests.");
         }
     }
 

@@ -36,17 +36,17 @@ public class ScaleDataIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void testScaleExpansion() {
-        LOG.info("[DEBUG_LOG] Starting Scale Expansion Test: 8 Teams, 5 Arenas, 11 Players per Team");
+        LOG.info("[TEST] Starting Scale Expansion Test: 8 Teams, 5 Arenas, 11 Players per Team");
 
         // 1. Verify 5 Arenas
         ResponseEntity<List> arenasResponse = restTemplate.getForEntity(getBaseUrl() + "/arenas", List.class);
         assertEquals(5, arenasResponse.getBody().size());
-        LOG.info("[DEBUG_LOG] Verified 5 arenas exist.");
+        LOG.info("[TEST] Verified 5 arenas exist.");
 
         // 2. Verify 8 Teams
         ResponseEntity<List> teamsResponse = restTemplate.getForEntity(getBaseUrl() + "/teams", List.class);
         assertEquals(8, teamsResponse.getBody().size());
-        LOG.info("[DEBUG_LOG] Verified 8 teams exist.");
+        LOG.info("[TEST] Verified 8 teams exist.");
 
         // 3. Verify 11 Players for each homeTeam
         for (int i = 1; i <= 8; i++) {
@@ -54,7 +54,7 @@ public class ScaleDataIntegrationTest extends BaseIntegrationTest {
             List players = (List) rosterResponse.getBody().get("proPlayers");
             assertNotNull(players);
             assertEquals(11, players.size());
-            LOG.info("[DEBUG_LOG] Verified Team {} has 11 players.", i);
+            LOG.info("[TEST] Verified Team {} has 11 players.", i);
         }
     }
 }

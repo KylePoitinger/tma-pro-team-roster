@@ -28,20 +28,20 @@ public class MascotImageServiceTest {
 
     @Test
     public void testFetchRandomMascotImage() {
-        LOG.info("Testing fetchRandomMascotImage method");
+        LOG.info("[TEST] Testing fetchRandomMascotImage method");
         Map<String, Object> mockResponse = new HashMap<>();
         mockResponse.put("status", "success");
         mockResponse.put("message", "http://example.com/image.jpg");
         when(restTemplate.getForObject(anyString(), eq(Map.class))).thenReturn(mockResponse);
 
         String result = mascotImageService.fetchRandomMascotImage();
-        LOG.info("Fetched image URL: {}", result);
+        LOG.info("[TEST] Fetched image URL: {}", result);
         assertEquals("http://example.com/image.jpg", result);
     }
 
     @Test
     public void testFetchRandomMascotImageFailure() {
-        LOG.info("Testing fetchRandomMascotImage failure scenario");
+        LOG.info("[TEST] Testing fetchRandomMascotImage failure scenario");
         when(restTemplate.getForObject(anyString(), eq(Map.class))).thenReturn(null);
 
         assertThrows(IllegalStateException.class, () -> {

@@ -42,7 +42,7 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 		return actualPort;
 	}
 
-	private Logger LOG = LoggerFactory.getLogger("Application");
+	private static final Logger LOG = LoggerFactory.getLogger(ProTeamRosterApplication.class);
 
 	private final ProTeamRepo proTeamRepo;
 
@@ -92,7 +92,9 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		LOG.info("Inserting arena data in DB.");
+		LOG.info("[Application] Starting database seeding...");
+		
+		LOG.debug("Inserting arena data in DB.");
 		String[] arenaNames = {"Madison Square Garden", "Staples Center", "United Center", "TD Garden", "Oracle Arena"};
 		String[] cities = {"New York, NY", "Los Angeles, CA", "Chicago, IL", "Boston, MA", "Oakland, CA"};
 		String[] addresses = {"4 Pennsylvania Plaza", "1111 S Figueroa St", "1901 W Madison St", "100 Legends Way", "7000 Coliseum Way"};
@@ -112,7 +114,7 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 			arenas.add(proArenaRepo.save(arena));
 		}
 
-		LOG.info("Inserting homeTeam data in DB.");
+		LOG.debug("Inserting homeTeam data in DB.");
 		List<ProTeamEntity> teams = new ArrayList<>();
 		String[] teamNames = {"Knicks", "Lakers", "Bulls", "Celtics", "Warriors", "Nets", "Clippers", "Heat"};
 		String[] teamCities = {"New York", "Los Angeles", "Chicago", "Boston", "San Francisco", "Brooklyn", "Los Angeles", "Miami"};
@@ -133,7 +135,7 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 			teams.add(proTeamRepo.save(team));
 		}
 
-		LOG.info("Inserting mascot data in DB.");
+		LOG.debug("Inserting mascot data in DB.");
 		String[] mascotNames = {"Spike", "Jack", "Benny", "Lucky", "Thunder", "BrooklyKnight", "Chuck", "Burnie"};
 		String[] mascotSpecies = {"Reptile", "Dog", "Bull", "Leprechaun", "Superhero", "Knight", "Pelican", "Sun"};
 		String[] performers = {"John Smith", "Mike Jones", "Chris Rock", "Dave Chappelle", "Bill Burr", "Kevin Hart", "Jerry Seinfeld", "Adam Sandler"};
@@ -155,7 +157,7 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 			proMascotRepo.save(mascot);
 		}
 
-		LOG.info("Inserting player data in DB.");
+		LOG.debug("Inserting player data in DB.");
 		String[] firstNames = {"LeBron", "Kevin", "Stephen", "Giannis", "Luka", "Joel", "Nikola", "Jayson", "Ja", "Devin", "Zion"};
 		String[] lastNames = {"James", "Durant", "Curry", "Antetokounmpo", "Doncic", "Embiid", "Jokic", "Tatum", "Morant", "Booker", "Williamson"};
 		String[] positions = {"Point Guard", "Shooting Guard", "Small Forward", "Power Forward", "Center"};
@@ -185,7 +187,7 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 			}
 		}
 
-		LOG.info("Inserting schedule data in DB.");
+		LOG.debug("Inserting schedule data in DB.");
 		for (int i = 0; i < teams.size(); i++) {
 			ProTeamEntity homeTeam = teams.get(i);
 			ProTeamEntity awayTeam = teams.get((i + 1) % teams.size());
@@ -199,6 +201,6 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 			proScheduleRepo.save(schedule);
 		}
 		
-		LOG.info("[Application] Database seeding completed successfully.");
+		LOG.debug("[Application] Database seeding completed successfully.");
 	}
 }
