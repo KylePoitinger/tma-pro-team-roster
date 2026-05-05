@@ -127,8 +127,26 @@
             <div class="panel-title">Component Health Checks</div>
             
             <div class="health-indicator">
+                <div id="java-status" class="status-dot"></div>
+                <span>Backend API (8080):</span>
+                <span id="java-msg">Checking...</span>
+            </div>
+
+            <div class="health-indicator">
+                <div id="node-status" class="status-dot"></div>
+                <span>Manager Portal (3000):</span>
+                <span id="node-msg">Checking...</span>
+            </div>
+
+            <div class="health-indicator">
+                <div id="python-status" class="status-dot"></div>
+                <span>Analytics Dashboard (8501):</span>
+                <span id="python-msg">Checking...</span>
+            </div>
+
+            <div class="health-indicator">
                 <div id="kafka-status" class="status-dot"></div>
-                <span>Kafka Broker:</span>
+                <span>Kafka Broker (9092):</span>
                 <span id="kafka-msg">Checking...</span>
             </div>
 
@@ -158,38 +176,72 @@
 
         async function startService(service) {
             appendLog(`Starting ${service}...`);
-            const result = await window.electronAPI.startService(service);
-            if (result.status === 'started') {
-                document.getElementById(`btn-${service}-start`).style.display = 'none';
-                document.getElementById(`btn-${service}-stop`).style.display = 'inline-block';
-            } else {
-                appendLog(`Error: ${result.message || result.status}`);
+            try {
+                const result = await window.electronAPI.startService(service);
+                if (result.status === 'started') {
+                    document.getElementById(`btn-${service}-start`).style.display = 'none';
+                    document.getElementById(`btn-${service}-stop`).style.display = 'inline-block';
+                    appendLog(`${service} started successfully`);
+                } else if (result.status === 'already_running') {
+                    appendLog(`${service} is already running`);
+                } else {
+                    appendLog(`Error: ${result.message || result.status}`);
+                }
+            } catch (error) {
+                appendLog(`Error starting ${service}: ${error.message}`);
             }
         }
 
         async function stopService(service) {
             appendLog(`Stopping ${service}...`);
-            const result = await window.electronAPI.stopService(service);
-            if (result.status === 'stopped' || result.status === 'not_running') {
-                document.getElementById(`btn-${service}-start`).style.display = 'inline-block';
-                document.getElementById(`btn-${service}-stop`).style.display = 'none';
+            try {
+                const result = await window.electronAPI.stopService(service);
+                if (result.status === 'stopped' || result.status === 'not_running') {
+                    document.getElementById(`btn-${service}-start`).style.display = 'inline-block';
+                    document.getElementById(`btn-${service}-stop`).style.display = 'none';
+                    appendLog(`${service} stopped successfully`);
+                } else {
+                    appendLog(`Error stopping ${service}: ${result.message || 'Unknown error'}`);
+                }
+            } catch (error) {
+                appendLog(`Error stopping ${service}: ${error.message}`);
             }
         }
 
         async function runHealthChecks() {
+            // Java Backend
+            updateStatus('java', 'Checking...');
+            window.electronAPI.checkHttp('http://localhost:8080/health').then(res => updateStatus('java', res.message, res.status));
+
+            // Node.js Manager Portal
+            updateStatus('node', 'Checking...');
+            window.electronAPI.checkHttp('http://localhost:3000').then(res => updateStatus('node', res.message, res.status));
+
+            // Python Dashboard
+            updateStatus('python', 'Checking...');
+            window.electronAPI.checkHttp('http://localhost:8501').then(res => updateStatus('python', res.message, res.status));
+
             // Kafka
-            document.getElementById('kafka-status').className = 'status-dot';
-            document.getElementById('kafka-msg').textContent = 'Checking...';
-            const kafkaResult = await window.electronAPI.checkKafka();
-            document.getElementById('kafka-status').className = 'status-dot ' + (kafkaResult.status === 'UP' ? 'status-up' : 'status-down');
-            document.getElementById('kafka-msg').textContent = kafkaResult.message;
+            updateStatus('kafka', 'Checking...');
+            window.electronAPI.checkKafka().then(res => updateStatus('kafka', res.message, res.status));
 
             // SQLite
-            document.getElementById('sqlite-status').className = 'status-dot';
-            document.getElementById('sqlite-msg').textContent = 'Checking...';
-            const sqliteResult = await window.electronAPI.checkSqlite();
-            document.getElementById('sqlite-status').className = 'status-dot ' + (sqliteResult.status === 'UP' ? 'status-up' : 'status-down');
-            document.getElementById('sqlite-msg').textContent = sqliteResult.message;
+            updateStatus('sqlite', 'Checking...');
+            window.electronAPI.checkSqlite().then(res => updateStatus('sqlite', res.message, res.status));
+        }
+
+        function updateStatus(id, msg, status) {
+            const dot = document.getElementById(`${id}-status`);
+            const msgEl = document.getElementById(`${id}-msg`);
+            
+            if (status === 'UP') {
+                dot.className = 'status-dot status-up';
+            } else if (status === 'DOWN') {
+                dot.className = 'status-dot status-down';
+            } else {
+                dot.className = 'status-dot';
+            }
+            msgEl.textContent = msg;
         }
 
         window.electronAPI.onServiceLog(({ service, data }) => {

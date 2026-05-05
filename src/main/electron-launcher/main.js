@@ -3,6 +3,7 @@ const path = require('path');
 const { spawn } = require('child_process');
 const { Kafka } = require('kafkajs');
 const sqlite3 = require('sqlite3').verbose();
+const treeKill = require('tree-kill');
 
 let mainWindow;
 const processes = {
@@ -37,10 +38,30 @@ app.whenReady().then(() => {
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
     // Kill all child processes before quitting
+    let killCount = 0;
     Object.values(processes).forEach(p => {
-      if (p) p.kill();
+      if (p) {
+        killCount++;
+        treeKill(p.pid, 'SIGTERM', (err) => {
+          if (err) {
+            try {
+              p.kill('SIGTERM');
+            } catch (e) {
+              console.error('Failed to kill process:', e);
+            }
+          }
+        });
+      }
     });
-    app.quit();
+
+    // Wait briefly for processes to terminate gracefully
+    if (killCount > 0) {
+      setTimeout(() => {
+        app.quit();
+      }, 500);
+    } else {
+      app.quit();
+    }
   }
 });
 
@@ -104,9 +125,23 @@ ipcMain.handle('start-service', (event, service) => {
 
 ipcMain.handle('stop-service', (event, service) => {
   if (processes[service]) {
-    processes[service].kill();
+    const proc = processes[service];
     processes[service] = null;
-    return { status: 'stopped' };
+
+    return new Promise((resolve) => {
+      // Use tree-kill to terminate the entire process tree
+      treeKill(proc.pid, 'SIGTERM', (err) => {
+        if (err) {
+          // Fallback to direct kill if tree-kill fails
+          try {
+            proc.kill('SIGTERM');
+          } catch (e) {
+            console.error(`Failed to kill process tree for ${service}:`, e);
+          }
+        }
+        resolve({ status: 'stopped' });
+      });
+    });
   }
   return { status: 'not_running' };
 });
@@ -116,6 +151,8 @@ ipcMain.handle('check-kafka', async () => {
   const kafka = new Kafka({
     clientId: 'launcher-health-check',
     brokers: ['localhost:9092'],
+    connectionTimeout: 3000,
+    requestTimeout: 3000,
     retry: { retries: 0 }
   });
 
@@ -125,8 +162,31 @@ ipcMain.handle('check-kafka', async () => {
     await admin.disconnect();
     return { status: 'UP', message: 'Connected to Kafka broker' };
   } catch (error) {
-    return { status: 'DOWN', message: error.message };
+    return { status: 'DOWN', message: 'Kafka unavailable: ' + error.message };
   }
+});
+
+ipcMain.handle('check-http', async (event, url) => {
+  return new Promise((resolve) => {
+    const protocol = url.startsWith('https') ? require('https') : require('http');
+    const req = protocol.get(url, (res) => {
+      res.on('data', () => {}); // Consume data
+      if (res.statusCode >= 200 && res.statusCode < 400) {
+        resolve({ status: 'UP', message: `Reachable (${res.statusCode})` });
+      } else {
+        resolve({ status: 'DOWN', message: `Status: ${res.statusCode}` });
+      }
+    });
+
+    req.on('error', (err) => {
+      resolve({ status: 'DOWN', message: 'Unreachable: ' + err.message });
+    });
+
+    req.setTimeout(3000, () => {
+      req.destroy();
+      resolve({ status: 'DOWN', message: 'Timeout' });
+    });
+  });
 });
 
 ipcMain.handle('check-sqlite', async () => {

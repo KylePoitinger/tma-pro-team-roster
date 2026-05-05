@@ -5,6 +5,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   stopService: (service) => ipcRenderer.invoke('stop-service', service),
   checkKafka: () => ipcRenderer.invoke('check-kafka'),
   checkSqlite: () => ipcRenderer.invoke('check-sqlite'),
+  checkHttp: (url) => ipcRenderer.invoke('check-http', url),
   onServiceLog: (callback) => ipcRenderer.on('service-log', (event, value) => callback(value)),
   onServiceStopped: (callback) => ipcRenderer.on('service-stopped', (event, value) => callback(value))
 });
