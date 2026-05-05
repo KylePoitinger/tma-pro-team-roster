@@ -11,12 +11,15 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.5</version>
+		<version>3.3.0</version>
 		<relativePath />
 	</parent>
 
 	<properties>
 		<java.version>21</java.version>
+		<sqlite-jdbc.version>3.45.3.0</sqlite-jdbc.version>
+		<hibernate-dialects.version>6.5.2.Final</hibernate-dialects.version>
+		<springdoc.version>2.5.0</springdoc.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -29,25 +32,21 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.18.30</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.xerial</groupId>
 			<artifactId>sqlite-jdbc</artifactId>
-			<version>3.45.3.0</version>
+			<version>${sqlite-jdbc.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate.orm</groupId>
 			<artifactId>hibernate-community-dialects</artifactId>
-			<version>6.4.4.Final</version>
+			<version>${hibernate-dialects.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -56,7 +55,7 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.5.0</version>
+			<version>${springdoc.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>
@@ -101,6 +100,40 @@
 					<goals>
 						<goal>report</goal>
 					</goals>
+				</execution>
+				<execution>
+					<id>check</id>
+					<goals>
+						<goal>check</goal>
+					</goals>
+					<configuration>
+						<rules>
+							<rule>
+								<element>BUNDLE</element>
+								<limits>
+									<limit>
+										<counter>LINE</counter>
+										<value>COVEREDRATIO</value>
+										<minimum>0.80</minimum>
+									</limit>
+									<limit>
+										<counter>BRANCH</counter>
+										<value>COVEREDRATIO</value>
+										<minimum>0.70</minimum>
+									</limit>
+								</limits>
+							</rule>
+						</rules>
+						<excludes>
+							<exclude>main/java/entity/*</exclude>
+							<exclude>main/java/exception/*</exclude>
+							<exclude>main/java/repository/*</exclude>
+							<exclude>main/java/ProTeamRosterApplication.class</exclude>
+							<exclude>main/java/controller/MascotImageController.class</exclude>
+							<exclude>main/java/service/MascotImageService.class</exclude>
+							<exclude>main/java/controller/HealthCheckController.class</exclude>
+						</excludes>
+					</configuration>
 				</execution>
 			</executions>
 		</plugin>
