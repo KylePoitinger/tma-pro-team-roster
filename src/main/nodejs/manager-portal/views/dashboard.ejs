@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Portal - Pro Team Roster</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <!-- Theme Initialization Script (prevents flash of unstyled content) -->
+    <script>
+        (function() {
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            if (currentTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+
+    <div class="header">
+        <h1>Manager Portal</h1>
+        <div class="header-actions">
+            <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Dark Mode">☀️</button>
+            <a href="/logout" class="logout-btn btn">Logout</a>
+        </div>
+    </div>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div class="error-msg"><%= error %></div>
+    <% } %>
+
+    <div class="team-grid">
+        <% teams.forEach(team => { %>
+            <div class="team-section">
+                <div class="team-title">
+                    <h2><%= team.city %> <%= team.name %></h2>
+                    <span class="player-count"><%= team.proPlayers ? team.proPlayers.length : 0 %> Players</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Player</th>
+                            <th scope="col">Pos</th>
+                            <th scope="col">Trade To</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (team.proPlayers && team.proPlayers.length > 0) { %>
+                            <% team.proPlayers.forEach(player => { %>
+                                <tr>
+                                    <td><strong><%= player.name %></strong></td>
+                                    <td><%= player.position %></td>
+                                    <td>
+                                        <button type="button" class="trade-btn" 
+                                                data-player-id="<%= player.playerId %>" 
+                                                data-player-name="<%= player.name %>" 
+                                                data-current-team-id="<%= team.teamId %>"
+                                                aria-label="Trade <%= player.name %>"
+                                                onclick="handleTradeButtonClick(this)">Trade</button>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="3" class="empty-roster">Roster empty</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        <% }) %>
+    </div>
+
+    <!-- Hidden data for JS -->
+    <div id="teamsData" style="display: none;" data-teams="<%= JSON.stringify(teams.map(t => ({ teamId: t.teamId, name: t.name, city: t.city }))) %>"></div>
+
+    <!-- Trade Modal -->
+    <div id="tradeModal" class="modal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+        <div class="modal-content">
+            <button type="button" class="close" onclick="closeModal()" aria-label="Close modal">&times;</button>
+            <h2 id="modalTitle">Trade Player</h2>
+            <p>Select a destination team for <strong id="modalPlayerName"></strong>:</p>
+            <div id="teamsList" class="modal-team-list" role="list">
+                <!-- Teams will be populated here -->
+            </div>
+            <form id="tradeForm" action="/trade" method="POST" style="display: none;">
+                <input type="hidden" name="playerId" id="modalPlayerId">
+                <input type="hidden" name="targetTeamId" id="modalTargetTeamId">
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/trade-modal.js"></script>
+    <script src="/js/theme-toggle.js"></script>
+</body>
+</html>

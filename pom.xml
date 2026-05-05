@@ -5,16 +5,21 @@
 	<groupId>tma-pro-team-roster</groupId>
 	<artifactId>tma-pro-team-roster</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<name>Pro Team Roster</name>
+	<description>Pro Team Roster Backend</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.4.4</version>
+		<version>3.3.0</version>
 		<relativePath />
 	</parent>
 
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>21</java.version>
+		<sqlite-jdbc.version>3.45.3.0</sqlite-jdbc.version>
+		<hibernate-dialects.version>6.5.2.Final</hibernate-dialects.version>
+		<springdoc.version>2.5.0</springdoc.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -22,23 +27,25 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>javax.persistence</groupId>
-			<artifactId>javax.persistence-api</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.18.30</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>${sqlite-jdbc.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.orm</groupId>
+			<artifactId>hibernate-community-dialects</artifactId>
+			<version>${hibernate-dialects.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
@@ -46,21 +53,17 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.10.0</version> <!-- Use the relevant version -->
-			<scope>test</scope>
-		</dependency>
-		<!-- Add engine dependency for running tests -->
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.10.0</version>
-			<scope>test</scope>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>${springdoc.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -71,6 +74,136 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.2.5</version>
+				<configuration>
+					<parallel>methods</parallel>
+					<threadCount>4</threadCount>
+					<useUnlimitedThreads>false</useUnlimitedThreads>
+					<excludes>
+						<exclude>main/java/integration/**</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+		<plugin>
+			<groupId>org.jacoco</groupId>
+			<artifactId>jacoco-maven-plugin</artifactId>
+			<version>0.8.14</version>
+			<executions>
+				<execution>
+					<goals>
+						<goal>prepare-agent</goal>
+					</goals>
+				</execution>
+				<execution>
+					<id>report</id>
+					<phase>test</phase>
+					<goals>
+						<goal>report</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>update-instructions</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>python</executable>
+							<arguments>
+								<argument>scripts/update_docs.py</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>integration</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>integration-tests</id>
+								<phase>test</phase>
+								<goals>
+									<goal>test</goal>
+								</goals>
+								<configuration>
+									<excludes>
+										<exclude>none</exclude>
+									</excludes>
+									<includes>
+										<include>main/java/integration/*IntegrationTest.java</include>
+									</includes>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>jacoco</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>check</id>
+								<goals>
+									<goal>check</goal>
+								</goals>
+								<configuration>
+									<rules>
+										<rule>
+											<element>BUNDLE</element>
+											<limits>
+												<limit>
+													<counter>LINE</counter>
+													<value>COVEREDRATIO</value>
+													<minimum>0.80</minimum>
+												</limit>
+												<limit>
+													<counter>BRANCH</counter>
+													<value>COVEREDRATIO</value>
+													<minimum>0.70</minimum>
+												</limit>
+											</limits>
+										</rule>
+									</rules>
+									<excludes>
+										<exclude>main/java/entity/*</exclude>
+										<exclude>main/java/exception/*</exclude>
+										<exclude>main/java/repository/*</exclude>
+										<exclude>main/java/ProTeamRosterApplication.class</exclude>
+										<exclude>main/java/controller/MascotImageController.class</exclude>
+										<exclude>main/java/service/MascotImageService.class</exclude>
+										<exclude>main/java/controller/HealthCheckController.class</exclude>
+									</excludes>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

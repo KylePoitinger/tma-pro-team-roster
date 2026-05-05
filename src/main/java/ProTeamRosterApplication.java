@@ -1,5 +1,9 @@
 package main.java;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TimeZone;
 
 import org.slf4j.Logger;
@@ -8,22 +12,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
+import main.java.entity.ProArenaEntity;
 import main.java.entity.ProMascotEntity;
 import main.java.entity.ProPlayerEntity;
+import main.java.entity.ProScheduleEntity;
 import main.java.entity.ProTeamEntity;
+import main.java.repository.ProArenaRepo;
 import main.java.repository.ProMascotRepo;
 import main.java.repository.ProPlayerRepo;
+import main.java.repository.ProScheduleRepo;
 import main.java.repository.ProTeamRepo;
 
 @SpringBootApplication
 public class ProTeamRosterApplication implements CommandLineRunner {
+	// Static reference to the actual port for access by other components
+	private static int actualPort = 8080;
+
 	public static void main(String[] args) {
 		TimeZone.setDefault(TimeZone.getTimeZone("America/New_York"));
 		SpringApplication.run(ProTeamRosterApplication.class, args);
 	}
 
-	private Logger LOG = LoggerFactory.getLogger("Application");
+	public static int getActualPort() {
+		return actualPort;
+	}
+
+	private static final Logger LOG = LoggerFactory.getLogger(ProTeamRosterApplication.class);
 
 	private final ProTeamRepo proTeamRepo;
 
@@ -31,92 +50,157 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 
 	private final ProMascotRepo proMascotRepo;
 
+	private final ProArenaRepo proArenaRepo;
+
+	private final ProScheduleRepo proScheduleRepo;
+
 	@Autowired
-	public ProTeamRosterApplication(ProTeamRepo proTeamRepo, ProPlayerRepo proPlayerRepo, ProMascotRepo proMascotRepo) {
+	public ProTeamRosterApplication(ProTeamRepo proTeamRepo, ProPlayerRepo proPlayerRepo, ProMascotRepo proMascotRepo,
+			ProArenaRepo proArenaRepo, ProScheduleRepo proScheduleRepo) {
 		this.proTeamRepo = proTeamRepo;
 		this.proPlayerRepo = proPlayerRepo;
 		this.proMascotRepo = proMascotRepo;
+		this.proArenaRepo = proArenaRepo;
+		this.proScheduleRepo = proScheduleRepo;
+	}
+
+	@Bean
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
+	}
+
+	@Bean
+	public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> webServerFactoryCustomizer() {
+		return factory -> {
+			int port = 8080;
+			if (!isPortAvailable(port)) {
+				LOG.info("[Application] Port 8080 is already in use. Switching to a dynamic port.");
+				port = 0;
+			}
+			actualPort = port; // Store port before server starts
+			factory.setPort(port);
+		};
+	}
+
+	private boolean isPortAvailable(int port) {
+		try (ServerSocket socket = new ServerSocket(port)) {
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
-		LOG.info("Inserting team data in DB.");
-		ProTeamEntity team1 = new ProTeamEntity();
-		team1.teamId = 1;
-		team1.city = "Charlotte";
-		team1.name = "Hornets";
-		team1.mascot = "Giant Bee";
-		ProTeamEntity team2 = new ProTeamEntity();
-		team2.teamId = 2;
-		team2.city = "Hickory";
-		team2.name = "Switch";
-		team2.mascot = "A Stick";
-		ProTeamEntity team3 = new ProTeamEntity();
-		team3.teamId = 3;
-		team3.city = "Asheville";
-		team3.name = "Apps";
-		team3.mascot = "Mountain";
-		LOG.info("saving team data in DB.");
-		proTeamRepo.save(team1);
-		proTeamRepo.save(team2);
-		proTeamRepo.save(team3);
-		LOG.info("Inserting player data in DB.");
-		ProPlayerEntity player1 = new ProPlayerEntity();
-		player1.playerId = 1;
-		player1.name = "Kyle";
-		player1.position = "Forward";
-		player1.teamName = "Hornets";
-		player1.age = 24;
-		player1.height = 175.26;
-		player1.weight = 176.4;
-		player1.college = "UNCC";
-		player1.salary = 100000.00;
-		ProPlayerEntity player2 = new ProPlayerEntity();
-		player2.playerId = 2;
-		player2.name = "Max";
-		player2.position = "Defender";
-		player2.teamName = "Apps";
-		player2.age = 24;
-		player2.height = 173.26;
-		player2.weight = 187.4;
-		player2.college = "APP";
-		player2.salary = 100540.00;
-		ProPlayerEntity player3 = new ProPlayerEntity();
-		player3.playerId = 3;
-		player3.name = "Kat";
-		player3.position = "Midfield";
-		player3.teamName = "Switch";
-		player3.age = 25;
-		player3.height = 173.26;
-		player3.weight = 187.4;
-		player3.college = "ASHE";
-		player3.salary = 120547.00;
-		proPlayerRepo.save(player1);
-		proPlayerRepo.save(player2);
-		proPlayerRepo.save(player3);
-		LOG.info("Inserting mascot data in DB.");
-		ProMascotEntity mascot1 = new ProMascotEntity();
-		mascot1.mascotId = 1;
-		mascot1.name = "Hornsby";
-		mascot1.teamName = "Hornets";
-		mascot1.description = "A giant bee mascot";
-		mascot1.costume = "Yellow and black striped";
-		ProMascotEntity mascot2 = new ProMascotEntity();
-		mascot2.mascotId = 2;
-		mascot2.name = "Switchly";
-		mascot2.teamName = "Switch";
-		mascot2.description = "A stick mascot";
-		mascot2.costume = "Brown wood texture";
-		ProMascotEntity mascot3 = new ProMascotEntity();
-		mascot3.mascotId = 3;
-		mascot3.name = "Rocky";
-		mascot3.teamName = "Apps";
-		mascot3.description = "A mountain mascot";
-		mascot3.costume = "Gray boulder suit";
-		LOG.info("saving mascot data in DB.");
-		proMascotRepo.save(mascot1);
-		proMascotRepo.save(mascot2);
-		proMascotRepo.save(mascot3);
-	}
+		LOG.info("[Application] Starting database seeding...");
+		
+		LOG.debug("Inserting arena data in DB.");
+		String[] arenaNames = {"Madison Square Garden", "Staples Center", "United Center", "TD Garden", "Oracle Arena"};
+		String[] cities = {"New York, NY", "Los Angeles, CA", "Chicago, IL", "Boston, MA", "Oakland, CA"};
+		String[] addresses = {"4 Pennsylvania Plaza", "1111 S Figueroa St", "1901 W Madison St", "100 Legends Way", "7000 Coliseum Way"};
 
+		List<ProArenaEntity> arenas = new ArrayList<>();
+		for (int i = 1; i <= 5; i++) {
+			ProArenaEntity arena = new ProArenaEntity();
+			arena.setArenaId(i);
+			arena.setName(arenaNames[i - 1]);
+			arena.setLocation(cities[i - 1]);
+			arena.setCapacity(18000 + (i * 500));
+			arena.setAddress(addresses[i - 1]);
+			arena.setOpenedYear(1990 + (i * 2));
+			arena.setSurface("Hardwood");
+			arena.setAmenities("Concessions, VIP Suites, Pro Shop");
+			arena.setCost(150000000.00 + (i * 20000000));
+			arenas.add(proArenaRepo.save(arena));
+		}
+
+		LOG.debug("Inserting homeTeam data in DB.");
+		List<ProTeamEntity> teams = new ArrayList<>();
+		String[] teamNames = {"Knicks", "Lakers", "Bulls", "Celtics", "Warriors", "Nets", "Clippers", "Heat"};
+		String[] teamCities = {"New York", "Los Angeles", "Chicago", "Boston", "San Francisco", "Brooklyn", "Los Angeles", "Miami"};
+		String[] owners = {"James Dolan", "Jeanie Buss", "Jerry Reinsdorf", "Wyc Grousbeck", "Joe Lacob", "Joe Tsai", "Steve Ballmer", "Micky Arison"};
+
+		for (int i = 1; i <= 8; i++) {
+			ProTeamEntity team = new ProTeamEntity();
+			team.setTeamId(i);
+			team.setName(teamNames[i - 1]);
+			team.setCity(teamCities[i - 1]);
+			team.setMascot(team.getName() + " Mascot");
+			team.setFoundedYear(1946 + (i * 5));
+			team.setArena(arenas.get((i - 1) % 5));
+			team.setChampionships(i % 4);
+			team.setOwner(owners[i - 1]);
+			team.setColors("Primary Color, Secondary Color");
+			team.setWebsite("https://www.nba.com/" + team.getName().toLowerCase());
+			teams.add(proTeamRepo.save(team));
+		}
+
+		LOG.debug("Inserting mascot data in DB.");
+		String[] mascotNames = {"Spike", "Jack", "Benny", "Lucky", "Thunder", "BrooklyKnight", "Chuck", "Burnie"};
+		String[] mascotSpecies = {"Reptile", "Dog", "Bull", "Leprechaun", "Superhero", "Knight", "Pelican", "Sun"};
+		String[] performers = {"John Smith", "Mike Jones", "Chris Rock", "Dave Chappelle", "Bill Burr", "Kevin Hart", "Jerry Seinfeld", "Adam Sandler"};
+
+		for (int i = 0; i < teams.size(); i++) {
+			ProTeamEntity team = teams.get(i);
+			ProMascotEntity mascot = new ProMascotEntity();
+			mascot.setMascotId(i + 1);
+			mascot.setName(mascotNames[i]);
+			mascot.setSpecies(mascotSpecies[i]);
+			mascot.setTeam(team);
+			mascot.setDescription("The energetic and fan-favorite mascot of the " + team.getName());
+			mascot.setCostume(team.getName() + " themed outfit");
+			mascot.setHeight(185.0 + i);
+			mascot.setWeight(80.0 + i);
+			mascot.setPersonality("Highly Energetic");
+			mascot.setFirstAppearance("199" + i + "-10-01");
+			mascot.setPerformerName(performers[i]);
+			proMascotRepo.save(mascot);
+		}
+
+		LOG.debug("Inserting player data in DB.");
+		String[] firstNames = {"LeBron", "Kevin", "Stephen", "Giannis", "Luka", "Joel", "Nikola", "Jayson", "Ja", "Devin", "Zion"};
+		String[] lastNames = {"James", "Durant", "Curry", "Antetokounmpo", "Doncic", "Embiid", "Jokic", "Tatum", "Morant", "Booker", "Williamson"};
+		String[] positions = {"Point Guard", "Shooting Guard", "Small Forward", "Power Forward", "Center"};
+		String[] colleges = {"Kentucky", "Duke", "Kansas", "UCLA", "North Carolina", "Michigan State", "Arizona", "Villanova", "Gonzaga", "Texas", "Virginia"};
+
+		List<ProPlayerEntity> allPlayers = new ArrayList<>();
+		for (int t = 0; t < teams.size(); t++) {
+			ProTeamEntity team = teams.get(t);
+			for (int p = 1; p <= 11; p++) {
+				ProPlayerEntity player = new ProPlayerEntity();
+				player.setPlayerId((long) t * 11 + p);
+				player.setName(firstNames[(p - 1) % 11] + " " + lastNames[(t + p - 1) % 11]);
+				player.setPosition(positions[(p - 1) % 5]);
+				player.setTeam(team);
+				player.setAge(19 + (p % 15));
+				player.setHeight(180.0 + (p * 2));
+				player.setWeight(180.0 + (p * 5));
+				player.setCollege(colleges[(t + p) % 11]);
+				player.setSalary(1000000.00 + (p * 500000));
+				player.setJerseyNumber(p + 10);
+				player.setNationality("International");
+				player.setContractYears(1 + (p % 5));
+				player.setInjuryStatus("Active");
+				player.setStats("PPG: " + (10 + p) + ", RPG: " + (p / 2) + ", APG: " + (p / 3));
+				player.setDebutDate("201" + (p % 10) + "-10-15");
+				allPlayers.add(proPlayerRepo.save(player));
+			}
+		}
+
+		LOG.debug("Inserting schedule data in DB.");
+		for (int i = 0; i < teams.size(); i++) {
+			ProTeamEntity homeTeam = teams.get(i);
+			ProTeamEntity awayTeam = teams.get((i + 1) % teams.size());
+			ProScheduleEntity schedule = new ProScheduleEntity();
+			schedule.setScheduleId(i + 1);
+			schedule.setHomeTeam(homeTeam);
+			schedule.setAwayTeam(awayTeam);
+			schedule.setArena(homeTeam.getArena());
+			schedule.setScheduledDate("2026-05-" + (10 + i));
+			schedule.setTicketPrice(50.00 + (i * 5));
+			proScheduleRepo.save(schedule);
+		}
+		
+		LOG.debug("[Application] Database seeding completed successfully.");
+	}
 }

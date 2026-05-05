@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Pro Team Roster Admin Console</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        header {
+            background: linear-gradient(90deg, #004d40 0%, #00796b 100%);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        h1 { margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; }
+        .container {
+            padding: 20px;
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .panel {
+            background-color: #2d2d2d;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .panel-title {
+            font-size: 18px;
+            border-bottom: 2px solid #00796b;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            color: #4db6ac;
+        }
+        .service-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background: #383838;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .service-name { font-weight: bold; }
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .btn-start { background-color: #2e7d32; color: white; }
+        .btn-start:hover { background-color: #388e3c; }
+        .btn-stop { background-color: #c62828; color: white; }
+        .btn-stop:hover { background-color: #d32f2f; }
+        .health-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #616161;
+        }
+        .status-up { background-color: #4caf50; box-shadow: 0 0 8px #4caf50; }
+        .status-down { background-color: #f44336; box-shadow: 0 0 8px #f44336; }
+        .log-container {
+            grid-column: span 2;
+            background-color: #000;
+            color: #00ff00;
+            font-family: 'Consolas', monospace;
+            padding: 10px;
+            border-radius: 4px;
+            height: 200px;
+            overflow-y: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Pro Team Roster Admin Console</h1>
+    </header>
+
+    <div class="container">
+        <div class="panel">
+            <div class="panel-title">Service Control</div>
+            
+            <div class="service-row">
+                <span class="service-name">Java Backend (Spring Boot)</span>
+                <div>
+                    <button id="btn-java-start" class="btn btn-start" onclick="startService('java')">Start</button>
+                    <button id="btn-java-stop" class="btn btn-stop" style="display:none" onclick="stopService('java')">Stop</button>
+                </div>
+            </div>
+
+            <div class="service-row">
+                <span class="service-name">Analytics Dashboard (Streamlit)</span>
+                <div>
+                    <button id="btn-python-start" class="btn btn-start" onclick="startService('python')">Start</button>
+                    <button id="btn-python-stop" class="btn btn-stop" style="display:none" onclick="stopService('python')">Stop</button>
+                </div>
+            </div>
+
+            <div class="service-row">
+                <span class="service-name">Manager Portal (Node.js)</span>
+                <div>
+                    <button id="btn-node-start" class="btn btn-start" onclick="startService('node')">Start</button>
+                    <button id="btn-node-stop" class="btn btn-stop" style="display:none" onclick="stopService('node')">Stop</button>
+                </div>
+            </div>
+
+            <div class="service-row">
+                <span class="service-name">Kafka Broker</span>
+                <div>
+                    <button id="btn-kafka-start" class="btn btn-start" onclick="startService('kafka')">Start</button>
+                    <button id="btn-kafka-stop" class="btn btn-stop" style="display:none" onclick="stopService('kafka')">Stop</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">Component Health Checks</div>
+            
+            <div class="health-indicator">
+                <div id="java-status" class="status-dot"></div>
+                <span>Backend API (8080):</span>
+                <span id="java-msg">Checking...</span>
+            </div>
+
+            <div class="health-indicator">
+                <div id="node-status" class="status-dot"></div>
+                <span>Manager Portal (3000):</span>
+                <span id="node-msg">Checking...</span>
+            </div>
+
+            <div class="health-indicator">
+                <div id="python-status" class="status-dot"></div>
+                <span>Analytics Dashboard (8501):</span>
+                <span id="python-msg">Checking...</span>
+            </div>
+
+            <div class="health-indicator">
+                <div id="kafka-status" class="status-dot"></div>
+                <span>Kafka Broker (9092):</span>
+                <span id="kafka-msg">Checking...</span>
+            </div>
+
+            <div class="health-indicator">
+                <div id="sqlite-status" class="status-dot"></div>
+                <span>SQLite DB:</span>
+                <span id="sqlite-msg">Checking...</span>
+            </div>
+
+            <button class="btn btn-start" style="margin-top: 20px; width: 100%;" onclick="runHealthChecks()">Run All Checks</button>
+        </div>
+
+        <div class="log-container" id="log-output">
+            [Admin Console] Welcome to the Pro Team Roster Admin Console.
+        </div>
+    </div>
+
+    <script>
+        const logOutput = document.getElementById('log-output');
+
+        function appendLog(msg) {
+            const line = document.createElement('div');
+            line.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logOutput.appendChild(line);
+            logOutput.scrollTop = logOutput.scrollHeight;
+        }
+
+        async function startService(service) {
+            appendLog(`Starting ${service}...`);
+            try {
+                const result = await window.electronAPI.startService(service);
+                if (result.status === 'started') {
+                    document.getElementById(`btn-${service}-start`).style.display = 'none';
+                    document.getElementById(`btn-${service}-stop`).style.display = 'inline-block';
+                    appendLog(`${service} started successfully`);
+                } else if (result.status === 'already_running') {
+                    appendLog(`${service} is already running`);
+                } else {
+                    appendLog(`Error: ${result.message || result.status}`);
+                }
+            } catch (error) {
+                appendLog(`Error starting ${service}: ${error.message}`);
+            }
+        }
+
+        async function stopService(service) {
+            appendLog(`Stopping ${service}...`);
+            const btnStop = document.getElementById(`btn-${service}-stop`);
+            btnStop.disabled = true;
+            btnStop.textContent = 'Stopping...';
+            
+            try {
+                const result = await window.electronAPI.stopService(service);
+                if (result.status === 'stopped' || result.status === 'not_running') {
+                    document.getElementById(`btn-${service}-start`).style.display = 'inline-block';
+                    btnStop.style.display = 'none';
+                    appendLog(`${service} stopped successfully`);
+                } else {
+                    appendLog(`Error stopping ${service}: ${result.message || 'Unknown error'}`);
+                }
+            } catch (error) {
+                appendLog(`Error stopping ${service}: ${error.message}`);
+            } finally {
+                btnStop.disabled = false;
+                btnStop.textContent = 'Stop';
+            }
+        }
+
+        async function runHealthChecks() {
+            // Java Backend
+            updateStatus('java', 'Checking...');
+            window.electronAPI.checkHttp('http://localhost:8080/health').then(res => updateStatus('java', res.message, res.status));
+
+            // Node.js Manager Portal
+            updateStatus('node', 'Checking...');
+            window.electronAPI.checkHttp('http://localhost:3000').then(res => updateStatus('node', res.message, res.status));
+
+            // Analytics Dashboard
+            updateStatus('python', 'Checking...');
+            window.electronAPI.checkHttp('http://localhost:8501').then(res => updateStatus('python', res.message, res.status));
+
+            // Kafka
+            updateStatus('kafka', 'Checking...');
+            window.electronAPI.checkKafka().then(res => updateStatus('kafka', res.message, res.status));
+
+            // SQLite
+            updateStatus('sqlite', 'Checking...');
+            window.electronAPI.checkSqlite().then(res => updateStatus('sqlite', res.message, res.status));
+        }
+
+        function updateStatus(id, msg, status) {
+            const dot = document.getElementById(`${id}-status`);
+            const msgEl = document.getElementById(`${id}-msg`);
+            
+            if (status === 'UP') {
+                dot.className = 'status-dot status-up';
+            } else if (status === 'DOWN') {
+                dot.className = 'status-dot status-down';
+            } else {
+                dot.className = 'status-dot';
+            }
+            msgEl.textContent = msg;
+        }
+
+        window.electronAPI.onServiceStarted(({ service }) => {
+            document.getElementById(`btn-${service}-start`).style.display = 'none';
+            document.getElementById(`btn-${service}-stop`).style.display = 'inline-block';
+        });
+
+        window.electronAPI.onServiceLog(({ service, data }) => {
+            appendLog(`${service}: ${data}`);
+        });
+
+        window.electronAPI.onServiceStopped(({ service, code }) => {
+            appendLog(`${service} stopped with code ${code}`);
+            document.getElementById(`btn-${service}-start`).style.display = 'inline-block';
+            document.getElementById(`btn-${service}-stop`).style.display = 'none';
+        });
+
+        // Initial check
+        runHealthChecks();
+        // Periodic check
+        setInterval(runHealthChecks, 30000);
+    </script>
+</body>
+</html>

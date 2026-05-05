@@ -1,0 +1,11 @@
+{
+  "context": [
+    "copilot-instructions.md",
+    "CHANGELOG.md",
+    "README.md"
+  ],
+  "guidelines-location": "./AGENTS.md",
+  "skill-locations": [
+    "./skills"
+  ]
+}

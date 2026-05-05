@@ -16,7 +16,7 @@ public interface ProMascotRepo extends JpaRepository<ProMascotEntity, Long> {
 
 	ProMascotEntity getOneByMascotId(long mascotId);
 
-	List<ProMascotEntity> getMascotsByTeamName(String teamName);
+	List<ProMascotEntity> findByTeam_TeamId(long teamId);
 
 	List<ProMascotEntity> getMascotsByName(String name);
 
@@ -24,6 +24,9 @@ public interface ProMascotRepo extends JpaRepository<ProMascotEntity, Long> {
 	@Transactional
 	@Query("delete from ProMascotEntity m where m.mascotId=:mascotId")
 	void deleteMascotById(@Param("mascotId") long mascotId);
+
+	@Query(value = "SELECT * FROM pro_mascot_entity ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
+	ProMascotEntity findRandomMascot();
 
 }
 

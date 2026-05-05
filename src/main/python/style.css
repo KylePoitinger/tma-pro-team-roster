@@ -1,0 +1,162 @@
+/* Modern Sports Look CSS */
+
+/* Import High-Energy Sports Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap');
+
+/* Main font application */
+html, body, [class*="st-"] {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Sporty Headings */
+h1, h2, h3, [data-testid="stHeader"] {
+    font-family: 'Big Shoulders Display', cursive !important;
+    text-transform: uppercase;
+    font-weight: 900 !important;
+    letter-spacing: 1px;
+}
+
+/* Page Title Decoration */
+h1 {
+    color: #00d4ff;
+    border-left: 8px solid #00d4ff;
+    padding-left: 15px;
+    margin-bottom: 30px;
+}
+
+/* Metric Cards - The "Trading Card" Look */
+[data-testid="metric-container"] {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 15px 20px !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-bottom: 4px solid #00d4ff !important;
+    transition: transform 0.2s ease-in-out;
+}
+
+[data-testid="metric-container"]:hover {
+    transform: translateY(-5px);
+    border-bottom: 4px solid #ff4b2b !important;
+}
+
+/* Adaptive styles for light mode */
+@media (prefers-color-scheme: light) {
+    [data-testid="metric-container"] {
+        background: #ffffff;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        color: #0e1117;
+    }
+}
+
+/* Metric Values */
+[data-testid="stMetricValue"] {
+    font-family: 'Big Shoulders Display', cursive !important;
+    font-size: 2.5rem !important;
+    line-height: 1.1 !important;
+    color: #00d4ff !important;
+    font-weight: 900 !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+[data-testid="stMetricLabel"] {
+    text-transform: uppercase;
+    font-weight: 700 !important;
+    font-size: 0.85rem !important;
+    letter-spacing: 0.5px;
+    color: #e0e0e0 !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Light Mode Contrast Adjustments */
+@media (prefers-color-scheme: light) {
+    [data-testid="stMetricLabel"] {
+        color: #555555 !important;
+    }
+    [data-testid="stMetricValue"] {
+        color: #0056b3 !important; /* High contrast blue for light mode */
+    }
+    h1 {
+        color: #0056b3;
+        border-left: 8px solid #0056b3;
+    }
+}
+
+/* Sidebar Styling */
+[data-testid="stSidebar"] {
+    background-image: linear-gradient(180deg, #0e1117 0%, #1c2331 100%);
+    border-right: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+[data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2 {
+    color: #00d4ff !important;
+}
+
+/* Modern Buttons */
+.stButton > button {
+    width: 100%;
+    border-radius: 8px !important;
+    background: linear-gradient(90deg, #00d4ff 0%, #007bff 100%) !important;
+    color: white !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    border: none !important;
+    padding: 12px 24px !important;
+    letter-spacing: 1px;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2) !important;
+}
+
+.stButton > button:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4) !important;
+    background: linear-gradient(90deg, #007bff 0%, #00d4ff 100%) !important;
+}
+
+/* Accessible Focus State */
+.stButton > button:focus:not(:active) {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.8), 0 0 0 6px rgba(0, 212, 255, 0.5) !important;
+    outline: none !important;
+}
+
+/* DataTables and Frames */
+[data-testid="stDataFrame"] {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Info boxes and notifications */
+.stAlert {
+    border-radius: 10px !important;
+    border: none !important;
+    background-color: rgba(0, 86, 179, 0.1) !important;
+    color: #0056b3 !important;
+    border-left: 5px solid #0056b3 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    .stAlert {
+        background-color: rgba(0, 212, 255, 0.1) !important;
+        color: #00d4ff !important;
+        border-left: 5px solid #00d4ff !important;
+    }
+}
+
+/* Radio buttons in sidebar */
+[data-testid="stSidebarNav"] {
+    padding-top: 2rem;
+}
+
+/* Tabs */
+button[data-baseweb="tab"] {
+    font-family: 'Big Shoulders Display', cursive !important;
+    text-transform: uppercase;
+    font-size: 1.2rem !important;
+}
