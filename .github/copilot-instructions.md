@@ -19,9 +19,10 @@ Spring Boot REST API managing professional sports teams and player rosters. SQLi
 ## Critical Developer Workflows
 ### Build & Run
 ```bash
-mvn clean install                    # Full build
+mvn clean install                    # Full build (runs Unit Tests only by default)
 mvn spring-boot:run                 # Start server (runs CommandLineRunner, seeds data)
-mvn test                            # Run all tests
+mvn test                            # Run Unit Tests
+mvn test -Pintegration              # Run Unit + Integration Tests
 ```
 ### Database
 - **SQLite** database (default).
@@ -39,7 +40,7 @@ mvn test                            # Run all tests
     - **Thresholds:** Minimum **80% line coverage** and **70% branch coverage** for services and controllers. Build fails if coverage drops below these values.
     - **Command:** `mvn clean install` (automatically runs tests and generates coverage) or `mvn test`.
     - **Report Location:** `target/site/jacoco/index.html`
-- **Integration Tests:** Use `@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)`.
+- **Integration Tests:** Use `@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)`. These tests are toggled via the `integration` profile.
 - **Frontend Logic Tests (Node.js):** 
     - Uses `jest` and `jest-environment-jsdom`.
     - Tests are located in `src/main/nodejs/manager-portal/test/`.
@@ -48,7 +49,7 @@ mvn test                            # Run all tests
     - `EndpointIntegrationTest`: Verifies health and core entity endpoints.
     - `ScaleDataIntegrationTest`: Verifies the requested scale of data (8 teams, 5 arenas, 11 players/team).
     - `trade-modal.test.js`: Verifies trade popup logic, team filtering, and form submission.
-- **Verification:** Always run `mvn test -Dtest="main.java.integration.*Test"` after architectural changes.
+- **Verification:** Always run `mvn test -Pintegration` after architectural changes.
 ---
 ## Package Structure & Naming
 - `main.java.controller` – REST endpoint handlers  

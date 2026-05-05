@@ -77,10 +77,18 @@ Detailed documentation is maintained in the `.github/` directory:
 
 ## 🧪 Testing
 
-```powershell
-mvn test
-```
-- **Java:** JUnit 5, Mockito, Awaitility, JaCoCo.
+### Backend (Java)
+- **Unit Tests:** Run every time with the standard test command.
+  ```powershell
+  mvn test
+  ```
+- **Integration Tests:** Run when toggled by the `integration` profile.
+  ```powershell
+  mvn test -Pintegration
+  ```
+
+### General Info
+- **Java:** JUnit 5, Mockito, Awaitility, JaCoCo (80% Line / 70% Branch coverage required).
 - **Node.js:** Jest & JSDOM.
 - **Kafka:** Embedded Kafka for integration testing.
 
