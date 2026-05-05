@@ -65,7 +65,9 @@ src/main/nodejs/manager-portal/npm-debug.log
 src/main/nodejs/manager-portal/yarn-error.log
 src/main/nodejs/manager-portal/.env.local
 
-# H2 Database
+# Database
+*.db
+*.sqlite
 *.mv.db
 *.trace.db
 

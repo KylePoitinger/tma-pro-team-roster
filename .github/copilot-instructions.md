@@ -24,8 +24,9 @@ mvn spring-boot:run                 # Start server (runs CommandLineRunner, seed
 mvn test                            # Run all tests
 ```
 ### Database
-- **H2 in-memory** database; data resets on restart.
-- **Console:** http://localhost:8080/h2-console (enabled in `application.properties`).
+- **H2 in-memory** or **SQLite** database.
+- **SQLite:** Enabled by default in `application.properties` (file: `pro_team_roster.db`) for external viewing via SQLite GUI tools.
+- **H2 Console:** http://localhost:8080/h2-console (enabled in `application.properties`; accessible when H2 is active).
 - **Swagger Documentation:**
     - **UI:** http://localhost:8080/swagger-ui.html
     - **API Docs (OpenAPI 3):** http://localhost:8080/v3/api-docs
@@ -124,6 +125,8 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
 | Lombok | (Removed) | N/A | Migrated to manual getters/setters |
 | JaCoCo | 0.8.13 | test | Code coverage reporting and enforcement |
 | H2 Database | (inherited) | runtime | In-memory database |
+| SQLite JDBC | 3.45.3.0 | compile | SQLite database driver |
+| Hibernate Community Dialects | 6.4.4.Final | compile | Community dialects (including SQLite) |
 | JUnit 5 | (inherited) | test | Testing framework |
 | Node.js | 16+ | runtime | Manager Portal runtime |
 | npm | 7+ | build | Node.js package manager |
