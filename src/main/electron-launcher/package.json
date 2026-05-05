@@ -1,0 +1,14 @@
+{
+  "name": "tma-pro-team-launcher",
+  "version": "1.0.0",
+  "description": "Electron Launcher for TMA Pro Team Roster",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron": "^28.0.0",
+    "kafkajs": "^2.2.4",
+    "sqlite3": "^5.1.7"
+  }
+}

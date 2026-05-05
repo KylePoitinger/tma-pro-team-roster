@@ -141,6 +141,7 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 		for (int i = 0; i < teams.size(); i++) {
 			ProTeamEntity team = teams.get(i);
 			ProMascotEntity mascot = new ProMascotEntity();
+			mascot.setMascotId(i + 1);
 			mascot.setName(mascotNames[i]);
 			mascot.setSpecies(mascotSpecies[i]);
 			mascot.setTeam(team);
@@ -189,6 +190,7 @@ public class ProTeamRosterApplication implements CommandLineRunner {
 			ProTeamEntity homeTeam = teams.get(i);
 			ProTeamEntity awayTeam = teams.get((i + 1) % teams.size());
 			ProScheduleEntity schedule = new ProScheduleEntity();
+			schedule.setScheduleId(i + 1);
 			schedule.setHomeTeam(homeTeam);
 			schedule.setAwayTeam(awayTeam);
 			schedule.setArena(homeTeam.getArena());

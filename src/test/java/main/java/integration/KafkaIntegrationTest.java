@@ -24,7 +24,8 @@ import static org.mockito.Mockito.atLeastOnce;
 @SpringBootTest(properties = {
     "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}",
     "spring.kafka.enabled=true",
-    "spring.kafka.admin.auto-create=true"
+    "spring.kafka.admin.auto-create=true",
+    "spring.datasource.url=jdbc:h2:mem:kafkadb"
 }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext
 public class KafkaIntegrationTest extends BaseIntegrationTest {

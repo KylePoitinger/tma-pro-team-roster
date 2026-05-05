@@ -14,7 +14,6 @@ This document outlines the process for creating specialized AI agents to assist 
 
 ### Available Agents
 - **Plan**: Researches and outlines multi-step plans for complex tasks
-- **ServiceLauncherAgent**: Automatically runs the Python Dashboard and Manager Portal on startup
 
 ## Creating New Agents
 

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>TMA Pro Team Launcher</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        header {
+            background: linear-gradient(90deg, #004d40 0%, #00796b 100%);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        h1 { margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; }
+        .container {
+            padding: 20px;
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .panel {
+            background-color: #2d2d2d;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .panel-title {
+            font-size: 18px;
+            border-bottom: 2px solid #00796b;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            color: #4db6ac;
+        }
+        .service-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background: #383838;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .service-name { font-weight: bold; }
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .btn-start { background-color: #2e7d32; color: white; }
+        .btn-start:hover { background-color: #388e3c; }
+        .btn-stop { background-color: #c62828; color: white; }
+        .btn-stop:hover { background-color: #d32f2f; }
+        .health-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #616161;
+        }
+        .status-up { background-color: #4caf50; box-shadow: 0 0 8px #4caf50; }
+        .status-down { background-color: #f44336; box-shadow: 0 0 8px #f44336; }
+        .log-container {
+            grid-column: span 2;
+            background-color: #000;
+            color: #00ff00;
+            font-family: 'Consolas', monospace;
+            padding: 10px;
+            border-radius: 4px;
+            height: 200px;
+            overflow-y: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TMA Pro Team Roster Launcher</h1>
+    </header>
+
+    <div class="container">
+        <div class="panel">
+            <div class="panel-title">Service Control</div>
+            
+            <div class="service-row">
+                <span class="service-name">Java Backend (Spring Boot)</span>
+                <div>
+                    <button id="btn-java-start" class="btn btn-start" onclick="startService('java')">Start</button>
+                    <button id="btn-java-stop" class="btn btn-stop" style="display:none" onclick="stopService('java')">Stop</button>
+                </div>
+            </div>
+
+            <div class="service-row">
+                <span class="service-name">Python Dashboard (Streamlit)</span>
+                <div>
+                    <button id="btn-python-start" class="btn btn-start" onclick="startService('python')">Start</button>
+                    <button id="btn-python-stop" class="btn btn-stop" style="display:none" onclick="stopService('python')">Stop</button>
+                </div>
+            </div>
+
+            <div class="service-row">
+                <span class="service-name">Manager Portal (Node.js)</span>
+                <div>
+                    <button id="btn-node-start" class="btn btn-start" onclick="startService('node')">Start</button>
+                    <button id="btn-node-stop" class="btn btn-stop" style="display:none" onclick="stopService('node')">Stop</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">Component Health Checks</div>
+            
+            <div class="health-indicator">
+                <div id="kafka-status" class="status-dot"></div>
+                <span>Kafka Broker:</span>
+                <span id="kafka-msg">Checking...</span>
+            </div>
+
+            <div class="health-indicator">
+                <div id="sqlite-status" class="status-dot"></div>
+                <span>SQLite DB:</span>
+                <span id="sqlite-msg">Checking...</span>
+            </div>
+
+            <button class="btn btn-start" style="margin-top: 20px; width: 100%;" onclick="runHealthChecks()">Run All Checks</button>
+        </div>
+
+        <div class="log-container" id="log-output">
+            [Launcher] Welcome to the TMA Pro Team Roster Launcher.
+        </div>
+    </div>
+
+    <script>
+        const logOutput = document.getElementById('log-output');
+
+        function appendLog(msg) {
+            const line = document.createElement('div');
+            line.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logOutput.appendChild(line);
+            logOutput.scrollTop = logOutput.scrollHeight;
+        }
+
+        async function startService(service) {
+            appendLog(`Starting ${service}...`);
+            const result = await window.electronAPI.startService(service);
+            if (result.status === 'started') {
+                document.getElementById(`btn-${service}-start`).style.display = 'none';
+                document.getElementById(`btn-${service}-stop`).style.display = 'inline-block';
+            } else {
+                appendLog(`Error: ${result.message || result.status}`);
+            }
+        }
+
+        async function stopService(service) {
+            appendLog(`Stopping ${service}...`);
+            const result = await window.electronAPI.stopService(service);
+            if (result.status === 'stopped' || result.status === 'not_running') {
+                document.getElementById(`btn-${service}-start`).style.display = 'inline-block';
+                document.getElementById(`btn-${service}-stop`).style.display = 'none';
+            }
+        }
+
+        async function runHealthChecks() {
+            // Kafka
+            document.getElementById('kafka-status').className = 'status-dot';
+            document.getElementById('kafka-msg').textContent = 'Checking...';
+            const kafkaResult = await window.electronAPI.checkKafka();
+            document.getElementById('kafka-status').className = 'status-dot ' + (kafkaResult.status === 'UP' ? 'status-up' : 'status-down');
+            document.getElementById('kafka-msg').textContent = kafkaResult.message;
+
+            // SQLite
+            document.getElementById('sqlite-status').className = 'status-dot';
+            document.getElementById('sqlite-msg').textContent = 'Checking...';
+            const sqliteResult = await window.electronAPI.checkSqlite();
+            document.getElementById('sqlite-status').className = 'status-dot ' + (sqliteResult.status === 'UP' ? 'status-up' : 'status-down');
+            document.getElementById('sqlite-msg').textContent = sqliteResult.message;
+        }
+
+        window.electronAPI.onServiceLog(({ service, data }) => {
+            appendLog(`${service}: ${data}`);
+        });
+
+        window.electronAPI.onServiceStopped(({ service, code }) => {
+            appendLog(`${service} stopped with code ${code}`);
+            document.getElementById(`btn-${service}-start`).style.display = 'inline-block';
+            document.getElementById(`btn-${service}-stop`).style.display = 'none';
+        });
+
+        // Initial check
+        runHealthChecks();
+        // Periodic check
+        setInterval(runHealthChecks, 30000);
+    </script>
+</body>
+</html>

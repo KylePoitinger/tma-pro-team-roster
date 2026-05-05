@@ -20,7 +20,7 @@ Spring Boot REST API managing professional sports teams and player rosters. In-m
 ### Build & Run
 ```bash
 mvn clean install                    # Full build
-mvn spring-boot:run                 # Start server (runs CommandLineRunner, seeds data, starts agents)
+mvn spring-boot:run                 # Start server (runs CommandLineRunner, seeds data)
 mvn test                            # Run all tests
 ```
 ### Database
@@ -31,7 +31,7 @@ mvn test                            # Run all tests
     - **UI:** http://localhost:8080/swagger-ui.html
     - **API Docs (OpenAPI 3):** http://localhost:8080/v3/api-docs
 - **Changelog:** [.github/CHANGELOG.md](.github/CHANGELOG.md) (Records all notable architectural and feature changes).
-- **Initialization:** Automatic via `ProTeamRosterApplication.run()` and `ServiceLauncherAgent.run()` (implements CommandLineRunner).
+- **Initialization:** Automatic via `ProTeamRosterApplication.run()` (implements CommandLineRunner).
 - **Scale:** Seeds 5 arenas, 8 teams, 11 players per team (88 total), 8 mascots, and 8 schedules on startup.
 - **Timezone:** America/New_York (set in main method)
 ### Testing Strategy
@@ -144,9 +144,6 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
 1. Update field in entity class.
 2. Update `ProTeamRosterApplication.run()` to seed the new field if necessary.
 3. Update Service/Repository if logic depends on the field.
-### Register New Auxiliary Service
-1. Add startup logic to `ServiceLauncherAgent.java` (`src/main/java/agent/`).
-2. Update documentation in `.github/agents/ServiceLauncherAgent.md`.
 ### Update Instructions
 1. Run `python scripts/update_docs.py` to auto-detect new entities and REST endpoints.
 2. Manually verify changes in `.github/copilot-instructions.md`.
@@ -213,6 +210,29 @@ Provides "visually cool" analytics and interactive dashboards for the Team Roste
 
 ### Purpose
 Allows managers to login and perform administrative tasks, such as trading players between teams via the backend REST API.
+
+---
+
+## Electron Launcher
+### Prerequisites
+- **Node.js 16+** and **npm** must be installed.
+- Ensure they are in your system PATH.
+
+### Setup & Run
+1. **Install dependencies:**
+   ```powershell
+   cd src/main/electron-launcher
+   npm install
+   ```
+2. **Run the launcher:**
+   ```powershell
+   npm start
+   ```
+
+### Features
+- **Centralized Control:** Start/Stop Java, Python, and Node.js services.
+- **Health Monitoring:** Real-time Kafka and SQLite connectivity checks.
+- **Log Streaming:** Integrated stdout/stderr logs from all sub-processes.
 
 ---
 

@@ -26,7 +26,7 @@ public abstract class BaseIntegrationTest {
     @LocalServerPort
     protected int port;
 
-    private static boolean isAppReady = false;
+    protected boolean isAppReady = false;
 
     @BeforeEach
     public void waitForApp() {

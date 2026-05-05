@@ -15,9 +15,6 @@ tma-pro-team-roster (Maven Project)
 ├── src/main/java                              # Source Code
 │   ├── ProTeamRosterApplication.java          # Entry point + CommandLineRunner (seeds DB)
 │   │
-│   ├── agent/                             # Management Agents
-│   │   └── ServiceLauncherAgent.java          # Auto-starts auxiliary services
-│   │
 │   ├── config/                            # Configuration beans
 │   │   └── KafkaConfig.java                   # Kafka topic & property config
 │   │
