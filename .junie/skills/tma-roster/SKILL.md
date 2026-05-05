@@ -1,11 +1,11 @@
 ---
 name: tma-roster
-description: Specialized context for the TMA Pro Team Roster project (Spring Boot, Node.js, SQLite)
+description: Specialized context for the Pro Team Roster project (Spring Boot, Node.js, SQLite)
 ---
 
-# TMA Pro Team Roster Skill
+# Pro Team Roster Skill
 
-Use this skill when working on the TMA Pro Team Roster project, especially for backend (Java/Spring) and frontend (Node.js/Electron) tasks.
+Use this skill when working on the Pro Team Roster project, especially for backend (Java/Spring) and frontend (Node.js/Electron) tasks.
 
 ## Key Principles
 - **Readability first**: This is legacy-style code intended for maintainability. Avoid overly complex abstractions.
@@ -29,7 +29,7 @@ Use this skill when working on the TMA Pro Team Roster project, especially for b
 
 ### Frontend (Node.js)
 - **Manager Portal**: `src/main/nodejs/manager-portal`.
-- **Electron Launcher**: `src/main/electron-launcher`.
+- **Admin Console**: `src/main/electron-launcher`.
 - **ADA Compliance**: UI must follow WCAG AA standards (high contrast, alt text, focus states).
 
 ## Code Patterns

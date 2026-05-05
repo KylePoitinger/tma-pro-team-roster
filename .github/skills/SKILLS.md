@@ -1,5 +1,5 @@
 # SKILLS.md - Project Architecture Analysis & Hierarchy
-## Codebase Analysis: TMA Pro Team Roster
+## Codebase Analysis: Pro Team Roster
 
 ---
 
@@ -10,54 +10,54 @@
 ```
 tma-pro-team-roster (Maven Project)
 |
-+-- pom.xml                                    # Maven configuration (Java 21, Spring Boot 3.3.0)
++-- pom.xml                                       # Maven configuration (Java 21, Spring Boot 3.3.0)
 |
-+-- src/main/java                              # Source Code
-|   +-- ProTeamRosterApplication.java          # Entry point + seeds DB
++-- src/main/java                                 # Source Code
+|   +-- ProTeamRosterApplication.java             # Entry point + seeds DB
 |   |
-|   +-- config/                                # Configuration beans
-|   |   +-- KafkaConfig.java                   # Kafka topic & property config
+|   +-- config/                                   # Configuration beans
+|   |   +-- KafkaConfig.java                      # Kafka topic & property config
 |   |
-|   +-- controller/                            # Layer 1: REST Endpoints
-|   |   +-- ProTeamController.java             # Team endpoints
-|   |   +-- ProPlayerController.java           # Player endpoints
-|   |   +-- ProMascotController.java           # Mascot endpoints
-|   |   +-- ProArenaController.java            # Arena endpoints
-|   |   +-- ProScheduleController.java         # Schedule endpoints
-|   |   +-- HealthCheckController.java          # Health check endpoint
-|   |   +-- MascotImageController.java          # Mascot image handling
+|   +-- controller/                               # Layer 1: REST Endpoints
+|   |   +-- ProTeamController.java                # Team endpoints
+|   |   +-- ProPlayerController.java              # Player endpoints
+|   |   +-- ProMascotController.java              # Mascot endpoints
+|   |   +-- ProArenaController.java               # Arena endpoints
+|   |   +-- ProScheduleController.java            # Schedule endpoints
+|   |   +-- HealthCheckController.java            # Health check endpoint
+|   |   +-- MascotImageController.java            # Mascot image handling
 |   |
-|   +-- service/                               # Layer 2: Business Logic
-|   |   +-- ProTeamService.java                # Team service
-|   |   +-- ProPlayerService.java              # Player service
-|   |   +-- ProMascotService.java              # Mascot service
-|   |   +-- ProArenaService.java               # Arena service
-|   |   +-- ProScheduleService.java            # Schedule service
-|   |   +-- ProKafkaProducer.java              # Kafka producer
-|   |   +-- ProKafkaConsumer.java              # Kafka consumer
-|   |   +-- MascotImageService.java            # Image service
+|   +-- service/                                  # Layer 2: Business Logic
+|   |   +-- ProTeamService.java                   # Team service
+|   |   +-- ProPlayerService.java                 # Player service
+|   |   +-- ProMascotService.java                 # Mascot service
+|   |   +-- ProArenaService.java                  # Arena service
+|   |   +-- ProScheduleService.java               # Schedule service
+|   |   +-- ProKafkaProducer.java                 # Kafka producer
+|   |   +-- ProKafkaConsumer.java                 # Kafka consumer
+|   |   +-- MascotImageService.java               # Image service
 |   |
-|   +-- repository/                            # Layer 3: Data Access (JPA)
-|   |   +-- ProTeamRepo.java                   # Team repository
-|   |   +-- ProPlayerRepo.java                 # Player repository
-|   |   +-- ProMascotRepo.java                 # Mascot repository
-|   |   +-- ProArenaRepo.java                  # Arena repository
-|   |   +-- ProScheduleRepo.java               # Schedule repository
+|   +-- repository/                               # Layer 3: Data Access (JPA)
+|   |   +-- ProTeamRepo.java                      # Team repository
+|   |   +-- ProPlayerRepo.java                    # Player repository
+|   |   +-- ProMascotRepo.java                    # Mascot repository
+|   |   +-- ProArenaRepo.java                     # Arena repository
+|   |   +-- ProScheduleRepo.java                  # Schedule repository
 |   |
-|   +-- entity/                                # Data Models (JPA Entities)
-|       +-- ProTeamEntity.java                 # Team entity
-|       +-- ProPlayerEntity.java               # Player entity
-|       +-- ProMascotEntity.java               # Mascot entity
-|       +-- ProArenaEntity.java                # Arena entity
-|       +-- ProScheduleEntity.java              # Schedule entity
+|   +-- entity/                                   # Data Models (JPA Entities)
+|       +-- ProTeamEntity.java                    # Team entity
+|       +-- ProPlayerEntity.java                  # Player entity
+|       +-- ProMascotEntity.java                  # Mascot entity
+|       +-- ProArenaEntity.java                   # Arena entity
+|       +-- ProScheduleEntity.java                # Schedule entity
 |
-+-- src/test/java                              # Functional Tests
++-- src/test/java                                 # Functional Tests
 |   +-- main/java/integration/
-|       +-- EndpointIntegrationTest.java       # Integration tests
-|       +-- ScaleDataIntegrationTest.java      # Scale verification
+|       +-- EndpointIntegrationTest.java          # Integration tests
+|       +-- ScaleDataIntegrationTest.java         # Scale verification
 |
 +-- src/main/resources
-    +-- application.properties                 # Spring Boot config (H2)
+    +-- application.properties                    # Spring Boot config (H2)
 ```
 
 ---
@@ -87,10 +87,10 @@ tma-pro-team-roster (Maven Project)
          |  }                                                          |
          |                                                             |
          |  Methods:                                                   |
-         |  * Receive HTTP requests via @GetMapping, etc.             |
-         |  * Extract path/query parameters                           |
-         |  * Call Service layer                                      |
-         |  * Return Entity or List response                          |
+         |  * Receive HTTP requests via @GetMapping, etc.              |
+         |  * Extract path/query parameters                            |
+         |  * Call Service layer                                       |
+         |  * Return Entity or List response                           |
          +------------------------+------------------------------------+
                                   |
                     Service Layer Invocation
@@ -113,10 +113,10 @@ tma-pro-team-roster (Maven Project)
          |  }                                                          |
          |                                                             |
          |  Design Pattern: Spring Beans                               |
-         |  * standard @Service components                            |
-         |  * Repositories autowired                                  |
-         |  * Handles data transformation/validation                  |
-         |  * Implements custom business logic                        |
+         |  * standard @Service components                             |
+         |  * Repositories autowired                                   |
+         |  * Handles data transformation/validation                   |
+         |  * Implements custom business logic                         |
          +------------------------+------------------------------------+
                                   |
                 Repository Method Invocation
@@ -124,7 +124,7 @@ tma-pro-team-roster (Maven Project)
                                   |
                                   V
          +-------------------------------------------------------------+
-         |  LAYER 3: REPOSITORY (Data Access Layer - JPA)               |
+         |  LAYER 3: REPOSITORY (Data Access Layer - JPA)              |
          |  -----------------------------------------------------------|
          |  Example: ProTeamRepo.java                                  |
          |                                                             |
@@ -144,8 +144,8 @@ tma-pro-team-roster (Maven Project)
          |  Features:                                                  |
          |  * Spring Data JPA interface (auto-implemented)             |
          |  * Auto-derived queries from method names                   |
-         |  * Custom @Query annotations for complex ops               |
-         |  * Transactional support for writes                        |
+         |  * Custom @Query annotations for complex ops                |
+         |  * Transactional support for writes                         |
          +------------------------+------------------------------------+
                                   |
                     Database Query Execution
@@ -153,7 +153,7 @@ tma-pro-team-roster (Maven Project)
                                  |
                                  V
          +-------------------------------------------------------------+
-         |  DATA MODELS: ENTITIES (JPA Persistence)                     |
+         |  DATA MODELS: ENTITIES (JPA Persistence)                    |
          |  -----------------------------------------------------------|
          |  Example: ProTeamEntity.java                                |
          |                                                             |
@@ -169,15 +169,15 @@ tma-pro-team-roster (Maven Project)
          |                                                             |
          |    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)    |
          |    @JsonManagedReference                                    |
-         |    public List<ProPlayerEntity> proPlayers;                |
+         |    public List<ProPlayerEntity> proPlayers;                 |
          |  }                                                          |
          |                                                             |
          |  Features:                                                  |
-         |  * Manual methods: getters, setters, toString()            |
-         |  * @Entity: JPA persistence mapping                        |
-         |  * OneToMany: team has multiple players                    |
-         |  * LAZY loading: optimal query performance                 |
-         |  * Proper JPA relationships                                |
+         |  * Manual methods: getters, setters, toString()             |
+         |  * @Entity: JPA persistence mapping                         |
+         |  * OneToMany: team has multiple players                     |
+         |  * LAZY loading: optimal query performance                  |
+         |  * Proper JPA relationships                                 |
          +------------------------+------------------------------------+
                                   |
                      SQLite Database Table
@@ -193,7 +193,7 @@ tma-pro-team-roster (Maven Project)
          |  DATABASE: SQLITE                                           |
          |  -----------------------------------------------------------|
          |  * Persistence via pro_team_roster.db                       |
-         |  * External viewing via SQLite GUI tools enabled           |
+         |  * External viewing via SQLite GUI tools enabled            |
          |  * Seed data loaded via CommandLineRunner                   |
          |  * Schema managed by Hibernate (ddl-auto=update)            |
          |  * Kafka: Disabled by default (spring.kafka.enabled)        |
@@ -228,7 +228,7 @@ tma-pro-team-roster (Maven Project)
 
 ## Quick Reference
 
-- **Skill 3:** Detailed Controller   Service   Repository Flow
+- **Skill 3:** Detailed Controller Service Repository Flow
 - **Skill 4:** Test Suite Architecture
 - **Skill 5:** Request Flow by Entity Type
 - **Skill 6:** Entity Relationships & String-Based Foreign Keys

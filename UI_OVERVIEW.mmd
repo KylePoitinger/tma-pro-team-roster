@@ -1,0 +1,91 @@
+graph TD
+    subgraph Launcher ["🚀 Admin Console"]
+        L_Header["Header: Pro Team Roster Admin Console"]
+        
+        subgraph L_Control ["Service Control Panel"]
+            L_S1["Java Backend (Start/Stop)"]
+            L_S2["Analytics Dashboard (Start/Stop)"]
+            L_S3["Manager Portal (Start/Stop)"]
+            L_S4["Kafka Broker (Start/Stop)"]
+        end
+        
+        subgraph L_Health ["Health Checks Panel"]
+            L_H1["Backend API Status"]
+            L_H2["Portal Status"]
+            L_H3["Analytics Dashboard Status"]
+            L_H4["Kafka Status"]
+            L_H5["SQLite DB Status"]
+            L_HB["Run All Checks Button"]
+        end
+        
+        L_Log["Log Console (Real-time output)"]
+    end
+
+    subgraph Portal ["🌐 Manager Portal"]
+        subgraph P_Login ["Login Page"]
+            P_L1["Username/Password Form"]
+            P_L2["Theme Toggle (Light/Dark)"]
+            P_L3["Login Button"]
+        end
+        
+        subgraph P_Dash ["Dashboard Page"]
+            P_D_Header["Header: Actions (Theme, Logout)"]
+            subgraph P_TeamGrid ["Team Grid"]
+                P_T1["Team Section (City + Name)"]
+                P_T2["Player Table (Name, Pos)"]
+                P_T3["Trade Button"]
+            end
+            
+            subgraph P_Modal ["Trade Modal"]
+                P_M1["Destination Team Selection"]
+                P_M2["Confirm Trade"]
+            end
+        end
+        
+        P_L3 --> P_Dash
+        P_T3 --> P_Modal
+    end
+
+    subgraph Dashboard ["📊 Analytics Dashboard (Streamlit)"]
+        subgraph D_Sidebar ["Sidebar Navigation"]
+            D_S1["Backend Status Indicator"]
+            D_S2["Page Selector (Radio)"]
+            D_S3["Mascot Spotlight (Random Fetch)"]
+        end
+        
+        subgraph D_Team ["Team Analytics Page"]
+            D_T1["Team Metrics (City, Year, etc.)"]
+            D_T2["Mascot Details + Image"]
+            D_T3["Roster Table"]
+            D_T4["Visuals: Age Dist., Salaries, H vs W"]
+        end
+        
+        subgraph D_Arena ["Arena Overview Page"]
+            D_A1["Arenas Data Table"]
+            D_A2["Capacity Bar Chart"]
+            D_A3["Cost Distribution Pie Chart"]
+        end
+        
+        subgraph D_Sched ["Schedule Explorer Page"]
+            D_Sc1["Game Schedule Table"]
+            D_Sc2["Ticket Price Trend Line Chart"]
+        end
+        
+        D_S2 -- "Team Analytics" --> D_Team
+        D_S2 -- "Arena Overview" --> D_Arena
+        D_S2 -- "Schedule Explorer" --> D_Sched
+    end
+
+    %% Styling
+    style Launcher fill:#1a1a1a,color:#f0f0f0,stroke:#00796b,stroke-width:2px
+    style Portal fill:#f5f5f5,color:#333,stroke:#007bff,stroke-width:2px
+    style Dashboard fill:#0e1117,color:#fff,stroke:#ff4b2b,stroke-width:2px
+    
+    classDef control fill:#383838,stroke:#00796b,color:#4db6ac
+    class L_Control,L_Health,L_Log control
+    
+    classDef portalPage fill:#fff,stroke:#ddd,color:#333
+    class P_Login,P_Dash,P_TeamGrid,P_Modal portalPage
+    
+    classDef dashPage fill:#262730,stroke:#444,color:#eee
+    class D_Team,D_Arena,D_Sched,D_Sidebar dashPage

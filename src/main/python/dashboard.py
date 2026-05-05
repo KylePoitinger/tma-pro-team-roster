@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 print("STATUS: RUNNING")
 print("URL: http://localhost:8501")
 
-st.set_page_config(page_title="Pro Team Roster Dashboard", layout="wide")
+st.set_page_config(page_title="Analytics Dashboard", layout="wide")
 
 def load_css():
     """Loads custom CSS from the style.css file."""
@@ -104,7 +104,7 @@ st.sidebar.header("Navigation")
 page = st.sidebar.radio("Go to", ["Team Analytics", "Arena Overview", "Schedule Explorer"])
 logger.info(f"User navigated to: {page}")
 
-st.title("🏀 Pro Team Roster Analytics")
+st.title("🏀 Analytics Dashboard")
 
 if health_status == "OFFLINE":
     st.warning(f"Please ensure the Spring Boot backend is running (currently trying {BASE_URL})")

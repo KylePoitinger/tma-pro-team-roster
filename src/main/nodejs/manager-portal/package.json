@@ -1,7 +1,7 @@
 {
   "name": "manager-portal",
   "version": "1.0.0",
-  "description": "Manager Portal for TMA Pro Team Roster",
+  "description": "Manager Portal for Pro Team Roster",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",

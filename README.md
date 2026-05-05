@@ -1,6 +1,6 @@
-# TMA Pro Team Roster
+# Pro Team Roster
 
-A modern Spring Boot application for managing professional sports teams, rosters, and game schedules. This project features a robust Java backend, a Node.js Manager Portal, and a Python Analytics Dashboard.
+A modern Spring Boot application for managing professional sports teams, rosters, and game schedules. This project features a robust Java backend, a Manager Portal, and an Analytics Dashboard.
 
 ## 🚀 Quick Start
 
@@ -19,15 +19,15 @@ A modern Spring Boot application for managing professional sports teams, rosters
    ```powershell
    mvn spring-boot:run
    ```
-   *This will start the Spring Boot backend. Use the Electron Launcher to start auxiliary services.*
+   *This will start the Spring Boot backend. Use the Admin Console to start auxiliary services.*
 
-3. **Electron Launcher:**
+3. **Admin Console:**
    ```powershell
    cd src/main/electron-launcher
    npm install
    npm start
    ```
-   *The Electron Launcher provides a GUI to manage all services and monitor system health.*
+   *The Admin Console provides a GUI to manage all services and monitor system health.*
 
 ### Access Points
 - **Backend API:** [http://localhost:8080](http://localhost:8080)
@@ -35,7 +35,7 @@ A modern Spring Boot application for managing professional sports teams, rosters
 - **Manager Portal:** [http://localhost:3000](http://localhost:3000) (Credentials: `manager` / `password`)
 - **Analytics Dashboard:** [http://localhost:8501](http://localhost:8501)
 - **H2 Console:** [http://localhost:8080/h2-console](http://localhost:8080/h2-console)
-- **Electron Launcher:** `src/main/electron-launcher` (GUI)
+- **Admin Console:** `src/main/electron-launcher` (GUI)
 
 ---
 
@@ -48,7 +48,7 @@ The project follows a clean **Three-Layer Architecture**:
 
 ### Key Features
 - **Event-Driven:** Entity changes are published to Kafka topics (configurable).
-- **Centralized Management:** GUI-based service management via the Electron Launcher.
+- **Centralized Management:** GUI-based service management via the Admin Console.
 - **ADA Compliant:** UI components follow WCAG AA standards.
 - **Automated Documentation:** Up-to-date documentation index in `.github/`.
 
@@ -70,7 +70,7 @@ Detailed documentation is maintained in the `.github/` directory:
 - **Backend:** Spring Boot 3.3.0, Java 21, Spring Data JPA, Apache Kafka.
 - **Frontend (Manager):** Node.js, Express, EJS, Jest.
 - **Analytics:** Python, Streamlit, Pandas.
-- **Desktop Launcher:** Electron, Node.js, KafkaJS, SQLite3.
+- **Desktop Admin Console:** Electron, Node.js, KafkaJS, SQLite3.
 - **Database:** H2 In-Memory / SQLite.
 
 ---
@@ -86,4 +86,4 @@ mvn test
 
 ---
 
-© 2026 TMA Pro Team Roster Project.
+© 2026 Pro Team Roster Project.

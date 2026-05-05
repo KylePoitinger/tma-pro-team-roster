@@ -1,4 +1,4 @@
-# GitHub Copilot Instructions – AI Coding Guide for tma-pro-team-roster
+# GitHub Copilot Instructions – AI Coding Guide for pro-team-roster
 ## Project Overview
 Spring Boot REST API managing professional sports teams and player rosters. SQLite database with a three-layer architecture (Controller → Service → Repository). Primary goal: readability and maintainability for legacy code scenarios.
 **Build/Test:** Maven (pom.xml) | **Language:** Java 21 | **Framework:** Spring Boot 3.3.0
@@ -152,9 +152,9 @@ Repository methods use Spring's naming conventions + custom `@Query` annotations
 1. **H2 transient** – All data lost on restart; no persistence.
 2. **Java 21+** – Modern version; uses Jakarta EE 10.
 3. **Testing** – Ensure tests are run with Maven to avoid environment-specific issues.
-4. **Python Integration** – A separate Python dashboard is located in `src/main/python`. It uses Streamlit for data visualization.
+4. **Analytics Dashboard** – A separate Analytics Dashboard is located in `src/main/python`. It uses Streamlit for data visualization.
 ---
-## Python Analytics (Experimental)
+## Analytics Dashboard (Experimental)
 ### Prerequisites
 - **Python 3.7+** must be installed (download from [python.org](https://www.python.org/downloads/)).
 - Ensure Python and pip are in your system PATH.
@@ -213,7 +213,7 @@ Allows managers to login and perform administrative tasks, such as trading playe
 
 ---
 
-## Electron Launcher
+## Admin Console
 ### Prerequisites
 - **Node.js 16+** and **npm** must be installed.
 - Ensure they are in your system PATH.
@@ -224,7 +224,7 @@ Allows managers to login and perform administrative tasks, such as trading playe
    cd src/main/electron-launcher
    npm install
    ```
-2. **Run the launcher:**
+2. **Run the Admin Console:**
    ```powershell
    npm start
    ```

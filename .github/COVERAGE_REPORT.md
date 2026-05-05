@@ -1,5 +1,5 @@
 # JaCoCo Coverage Improvement Report
-## tma-pro-team-roster Project
+## Pro Team Roster Project
 
 ### Summary
 Successfully implemented comprehensive JaCoCo code coverage with an 80% threshold on services and controllers. All 95 tests pass with 100% line coverage for all production services and controllers.
@@ -227,7 +227,7 @@ To maintain coverage:
 ---
 
 Generated: April 25, 2026
-Project: tma-pro-team-roster
+Project: Pro Team Roster
 Coverage Tool: JaCoCo 0.8.12
 Test Framework: JUnit 5
 Mock Framework: Mockito

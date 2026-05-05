@@ -1,7 +1,7 @@
 {
   "name": "tma-pro-team-launcher",
   "version": "1.0.0",
-  "description": "Electron Launcher for TMA Pro Team Roster",
+  "description": "Admin Console for Pro Team Roster",
   "main": "main.js",
   "scripts": {
     "start": "electron ."

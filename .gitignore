@@ -190,3 +190,4 @@ logs/
 .#*
 *.orig
 
+/.junie/memory/

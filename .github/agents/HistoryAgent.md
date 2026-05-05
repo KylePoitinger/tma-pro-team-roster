@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The **HistoryAgent** maintains a chronological, structured log of all code changes made by Copilot agents within the TMA Pro Team Roster project. Every time an agent creates, modifies, or deletes a file, the HistoryAgent appends a timestamped entry to `.github/CHANGELOG.md`, ensuring full traceability of automated work across the codebase.
+The **HistoryAgent** maintains a chronological, structured log of all code changes made by Copilot agents within the Pro Team Roster project. Every time an agent creates, modifies, or deletes a file, the HistoryAgent appends a timestamped entry to `.github/CHANGELOG.md`, ensuring full traceability of automated work across the codebase.
 
 ### Goals
 

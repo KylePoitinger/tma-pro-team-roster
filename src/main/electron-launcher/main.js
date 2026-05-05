@@ -23,7 +23,7 @@ function createWindow() {
       nodeIntegration: false,
       contextIsolation: true
     },
-    title: "TMA Pro Team Launcher"
+    title: "Pro Team Roster Admin Console"
   });
 
   mainWindow.loadFile('index.html');
@@ -89,7 +89,7 @@ function startService(service) {
     case 'node':
       // Auto-start Kafka if requested (as per user requirement)
       if (!processes['kafka']) {
-        console.log('[Launcher] Auto-starting Kafka for Manager Portal...');
+        console.log('[Admin Console] Auto-starting Kafka for Manager Portal...');
         startService('kafka');
       }
       command = 'node';
@@ -124,7 +124,7 @@ function startService(service) {
         setTimeout(() => {
           mainWindow.webContents.send('service-log', { 
             service: 'kafka', 
-            data: '[Launcher] WARNING: KAFKA_HOME environment variable is not set. Kafka might fail to start if it is not in your PATH.' 
+            data: '[Admin Console] WARNING: KAFKA_HOME environment variable is not set. Kafka might fail to start if it is not in your PATH.' 
           });
         }, 100);
       }
@@ -142,7 +142,7 @@ function startService(service) {
     
     processes[service] = p;
     mainWindow.webContents.send('service-started', { service });
-    mainWindow.webContents.send('service-log', { service, data: `[Launcher] Started with PID: ${p.pid}` });
+    mainWindow.webContents.send('service-log', { service, data: `[Admin Console] Started with PID: ${p.pid}` });
 
     p.stdout.on('data', (data) => {
       console.log(`[${service}] stdout: ${data}`);
@@ -180,8 +180,8 @@ ipcMain.handle('stop-service', (event, service) => {
       // Using SIGKILL on Windows ensures taskkill /F is used for forceful termination
       const signal = process.platform === 'win32' ? 'SIGKILL' : 'SIGTERM';
       
-      console.log(`[Launcher] Stopping ${service} (PID: ${proc.pid}) with ${signal}`);
-      mainWindow.webContents.send('service-log', { service, data: `[Launcher] Stopping service (PID: ${proc.pid})...` });
+      console.log(`[Admin Console] Stopping ${service} (PID: ${proc.pid}) with ${signal}`);
+      mainWindow.webContents.send('service-log', { service, data: `[Admin Console] Stopping service (PID: ${proc.pid})...` });
 
       treeKill(proc.pid, signal, (err) => {
         if (err) {
@@ -201,7 +201,7 @@ ipcMain.handle('stop-service', (event, service) => {
 // Health Checks
 ipcMain.handle('check-kafka', async () => {
   const kafka = new Kafka({
-    clientId: 'launcher-health-check',
+    clientId: 'admin-console-health-check',
     brokers: ['127.0.0.1:9092'],
     connectionTimeout: 3000,
     requestTimeout: 3000,

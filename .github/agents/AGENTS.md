@@ -1,8 +1,8 @@
-# AGENTS.md – Agent Creation Guide for TMA Pro Team Roster
+# AGENTS.md – Agent Creation Guide for Pro Team Roster
 
 ## Overview
 
-This document outlines the process for creating specialized AI agents to assist with development tasks in the TMA Pro Team Roster project. Agents are designed to automate complex workflows, enforce project patterns, and improve productivity by delegating tasks to focused AI specialists.
+This document outlines the process for creating specialized AI agents to assist with development tasks in the Pro Team Roster project. Agents are designed to automate complex workflows, enforce project patterns, and improve productivity by delegating tasks to focused AI specialists.
 
 ## Agent Architecture
 

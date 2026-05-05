@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>TMA Pro Team Launcher</title>
+    <title>Pro Team Roster Admin Console</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -91,7 +91,7 @@
 </head>
 <body>
     <header>
-        <h1>TMA Pro Team Roster Launcher</h1>
+        <h1>Pro Team Roster Admin Console</h1>
     </header>
 
     <div class="container">
@@ -107,7 +107,7 @@
             </div>
 
             <div class="service-row">
-                <span class="service-name">Python Dashboard (Streamlit)</span>
+                <span class="service-name">Analytics Dashboard (Streamlit)</span>
                 <div>
                     <button id="btn-python-start" class="btn btn-start" onclick="startService('python')">Start</button>
                     <button id="btn-python-stop" class="btn btn-stop" style="display:none" onclick="stopService('python')">Stop</button>
@@ -168,7 +168,7 @@
         </div>
 
         <div class="log-container" id="log-output">
-            [Launcher] Welcome to the TMA Pro Team Roster Launcher.
+            [Admin Console] Welcome to the Pro Team Roster Admin Console.
         </div>
     </div>
 
@@ -232,7 +232,7 @@
             updateStatus('node', 'Checking...');
             window.electronAPI.checkHttp('http://localhost:3000').then(res => updateStatus('node', res.message, res.status));
 
-            // Python Dashboard
+            // Analytics Dashboard
             updateStatus('python', 'Checking...');
             window.electronAPI.checkHttp('http://localhost:8501').then(res => updateStatus('python', res.message, res.status));
 

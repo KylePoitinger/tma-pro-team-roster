@@ -1,12 +1,12 @@
-# TMA Pro Team Launcher
+# Pro Team Roster Admin Console
 
-This is an Electron-based launcher for the TMA Pro Team Roster project. It allows you to start and stop the Java Backend, Python Dashboard, and Node.js Manager Portal from a single interface, and provides real-time health checks for Kafka and SQLite.
+This is an Electron-based Admin Console for the Pro Team Roster project. It allows you to start and stop the Java Backend, Analytics Dashboard, and Manager Portal from a single interface, and provides real-time health checks for Kafka and SQLite.
 
 ## Prerequisites
 
 - **Node.js 16+** and **npm** must be installed.
 - **Java 17+** and **Maven** (for the backend).
-- **Python 3.7+** (for the dashboard).
+- **Python 3.7+** (for the Analytics Dashboard).
 
 ## Setup
 
@@ -36,7 +36,7 @@ npm start
 
 ## Features
 
-- **Service Control**: Start and stop Java, Python, and Node.js services with a single click.
+- **Service Control**: Start and stop Java, Analytics Dashboard, and Manager Portal services with a single click.
 - **Log Monitoring**: View stdout/stderr from all services directly in the launcher.
 - **Health Checks**: 
   - **Kafka**: Verifies connectivity to the local Kafka broker (default: `127.0.0.1:9092`).

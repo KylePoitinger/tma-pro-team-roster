@@ -5,6 +5,8 @@
 	<groupId>tma-pro-team-roster</groupId>
 	<artifactId>tma-pro-team-roster</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<name>Pro Team Roster</name>
+	<description>Pro Team Roster Backend</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
